@@ -32,7 +32,7 @@ class FilterCategoriesWidget extends StatelessWidget {
                 )),
           ),
         ),
-        SizedBox(width: 8),
+        const SizedBox(width: 8),
       ],
     );
   }
