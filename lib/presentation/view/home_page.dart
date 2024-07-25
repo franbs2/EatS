@@ -1,9 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:eats/presentation/style/strings_app.dart';
 import 'package:eats/presentation/widget/filter_categories_widget.dart';
+import 'package:eats/presentation/widget/img_perfil_widget.dart';
+import 'package:eats/presentation/widget/list_filter_category_widget.dart';
 import 'package:eats/presentation/widget/search_bar_widget.dart';
 import 'package:flutter/material.dart';
 import '../style/color.dart';
+import '../widget/carousel_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -35,14 +38,14 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(30.0),
+                  child: const Padding(
+                    padding:  EdgeInsets.all(30.0),
                     child: Column(
                       children: [
-                        const SizedBox(height: 30),
+                         SizedBox(height: 30),
                         Row(
                           children: [
-                            const Column(
+                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
@@ -64,20 +67,12 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ],
                             ),
-                            const Spacer(),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(14.0),
-                              child: Image.asset(
-                                'assets/img_perfil.png',
-                                width: 52,
-                                height: 52,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                             Spacer(),
+                            ImgPerfilWidget(),
                           ],
                         ),
-                        const SizedBox(height: 24),
-                        const SearchBarWidget(),
+                         SizedBox(height: 24),
+                         SearchBarWidget(),
                       ],
                     ),
                   ),
@@ -87,21 +82,9 @@ class _HomePageState extends State<HomePage> {
                   child: Column(children: [
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.05,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15, right: 15),
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: StringsApp.listFilterCategories.length,
-                            itemBuilder: (context, index) {
-                              var category =
-                                  StringsApp.listFilterCategories[index];
-                              return FilterCategoriesWidget(
-                                text: category,
-                                colorBackground: AppTheme.secondaryColor,
-                                fontWeight: FontWeight.normal,
-                                textColor: Colors.black,
-                              );
-                            }),
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 15, right: 15),
+                        child: ListFilterCategoryWidget(),
                       ),
                     )
                   ]),
@@ -113,26 +96,7 @@ class _HomePageState extends State<HomePage> {
             top: MediaQuery.of(context).size.height * 0.25,
             left: 0,
             right: 0,
-            child: CarouselSlider(
-              items: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Image.asset(
-                    'assets/banner.png',
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ],
-              options: CarouselOptions(
-                height: MediaQuery.of(context).size.height * 0.2,
-                aspectRatio: 16 / 9,
-                viewportFraction: 1,
-                initialPage: 0,
-                enableInfiniteScroll: true,
-                enlargeCenterPage: true,
-                enlargeFactor: 0.3,
-              ),
-            ),
+            child: const CarouselWidget(),
           ),
         ],
       ),
