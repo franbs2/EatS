@@ -1,6 +1,7 @@
 import 'package:eats/presentation/view/initial_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'presentation/view/home_page.dart';
 
@@ -15,8 +16,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomePage(),
+    return MaterialApp(
+      theme: ThemeData(
+        textTheme: GoogleFonts.soraTextTheme(
+          Theme.of(context).textTheme,
+        ),
+      ),
+      home: const HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }
