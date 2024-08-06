@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Recipes> listRecipes = Recipes.recipes;
+  List<Recipes> listRecipes = Recipes.recipes; //TODO: pegar receitas do banco de dados (firebase)
   List<String> categories = StringsApp.listFilterCategories;
 
   @override
