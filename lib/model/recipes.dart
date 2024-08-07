@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
 class Recipes {
   final String name;
   final List<String> category;
@@ -18,4 +21,18 @@ class Recipes {
     required this.rating,
     required this.value,
   });
+
+  factory Recipes.fromFirestore(DocumentSnapshot doc) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    return Recipes(
+      name: data['name'] ?? '',
+      category: List<String>.from(data['category']),
+      image: data['image'] ?? '',
+      description: data['description'] ?? '',
+      ingredients: List<String>.from(data['ingredients']),
+      steps: List<String>.from(data['steps']),
+      rating: (data['rating'] ?? 0.0).toDouble(),
+      value: (data['value'] ?? 0.0).toDouble(),
+    );
+  }
 }

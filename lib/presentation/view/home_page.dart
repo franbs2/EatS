@@ -1,4 +1,4 @@
-import 'package:eats/model/Recipes.dart';
+import 'package:eats/model/recipes.dart';
 import 'package:eats/presentation/style/strings_app.dart';
 import 'package:eats/presentation/widget/filter_categories_recipes_widget.dart';
 import 'package:eats/presentation/widget/grid_view_recipes_widget.dart';
@@ -7,6 +7,8 @@ import 'package:eats/presentation/widget/search_bar_widget.dart';
 import 'package:flutter/material.dart';
 import '../style/color.dart';
 import '../widget/carousel_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,8 +18,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Recipes> listRecipes = Recipes.recipes; //TODO: pegar receitas do banco de dados (firebase)
+  List<Recipes> listRecipes = []; // Usando a lista de receitas estática
   List<String> categories = StringsApp.listFilterCategories;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchRecipes();
+  }
+
+  Future<void> fetchRecipes() async {
+    var recipesCollection = FirebaseFirestore.instance.collection('recipes');
+    var querySnapshot = await recipesCollection.get();
+    setState(() {
+      listRecipes = querySnapshot.docs.map((doc) => Recipes.fromFirestore(doc)).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

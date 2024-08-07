@@ -1,4 +1,5 @@
-import 'package:eats/model/Recipes.dart';
+import 'package:eats/model/recipes.dart';
+import 'package:eats/resources/storage_methods.dart';
 import 'package:flutter/material.dart';
 
 class CardRecipeWidget extends StatelessWidget {
@@ -8,6 +9,7 @@ class CardRecipeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final StorageMethods storageMethods = StorageMethods();
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -17,11 +19,32 @@ class CardRecipeWidget extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              recipe.image,
-              fit: BoxFit.fill,
-              height: MediaQuery.of(context).size.height * 0.18,
-              width: double.infinity,
+            child: FutureBuilder<String>(
+              future: storageMethods.loadImageAtStorage(recipe.image), // Use a função loadImage
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container(
+                    height: MediaQuery.of(context).size.height * 0.18,
+                    width: double.infinity,
+                    color: Colors.grey.shade200,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                } else if (snapshot.hasError) {
+                  return Container(
+                    height: MediaQuery.of(context).size.height * 0.18,
+                    width: double.infinity,
+                    color: Colors.grey.shade200,
+                    child: Center(child: Text('Erro ao carregar imagem')),
+                  );
+                } else {
+                  return Image.network(
+                    snapshot.data ?? '',
+                    fit: BoxFit.fill,
+                    height: MediaQuery.of(context).size.height * 0.18,
+                    width: double.infinity,
+                  );
+                }
+              },
             ),
           ),
           Padding(

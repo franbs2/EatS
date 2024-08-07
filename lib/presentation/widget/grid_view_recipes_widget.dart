@@ -1,4 +1,4 @@
-import 'package:eats/model/Recipes.dart';
+import 'package:eats/model/recipes.dart';
 import 'package:eats/presentation/widget/card_recipe_widget.dart';
 import 'package:flutter/material.dart';
 
