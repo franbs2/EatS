@@ -1,8 +1,8 @@
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:eats/model/Recipes.dart';
 import 'package:eats/presentation/style/strings_app.dart';
-import 'package:eats/presentation/widget/filter_categories_widget.dart';
+import 'package:eats/presentation/widget/filter_categories_recipes_widget.dart';
+import 'package:eats/presentation/widget/grid_view_recipes_widget.dart';
 import 'package:eats/presentation/widget/img_perfil_widget.dart';
-import 'package:eats/presentation/widget/list_filter_category_widget.dart';
 import 'package:eats/presentation/widget/search_bar_widget.dart';
 import 'package:flutter/material.dart';
 import '../style/color.dart';
@@ -16,6 +16,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<Recipes> listRecipes = Recipes.recipes; //TODO: pegar receitas do banco de dados (firebase)
+  List<String> categories = StringsApp.listFilterCategories;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,13 +42,13 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   child: const Padding(
-                    padding:  EdgeInsets.all(30.0),
+                    padding: EdgeInsets.all(30.0),
                     child: Column(
                       children: [
-                         SizedBox(height: 30),
+                        SizedBox(height: 30),
                         Row(
                           children: [
-                             Column(
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
@@ -58,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 SizedBox(height: 4),
                                 Text(
-                                  'Santarém, Pará',
+                                  'Santarém, Pará', //TODO: pegar localização do usuário
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: AppTheme.secondaryColor,
@@ -67,27 +70,22 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ],
                             ),
-                             Spacer(),
+                            Spacer(),
                             ImgPerfilWidget(),
                           ],
                         ),
-                         SizedBox(height: 24),
-                         SearchBarWidget(),
+                        SizedBox(height: 24),
+                        SearchBarWidget(),
                       ],
                     ),
                   ),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.12),
+                FilterCategoriesRecipesWidget(categories: categories),
                 Expanded(
-                  child: Column(children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: 15, right: 15),
-                        child: ListFilterCategoryWidget(),
-                      ),
-                    )
-                  ]),
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: GridViewRecipesWidget(listRecipes: listRecipes)),
                 ),
               ],
             ),
