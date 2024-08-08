@@ -12,33 +12,22 @@ class AuthMethods {
   Future<String> signUpUser({
     required String email,
     required String password,
-    required String username,
-    required Uint8List file,
   }) async {
     String res = "Some error occurred";
     try {
-      if (email.isNotEmpty ||
-          password.isNotEmpty ||
-          username.isNotEmpty ||
-          file != null) {
-
-        // register user
+      if (email.isNotEmpty && password.isNotEmpty) {
+        // Register user
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
 
-        String photoURL = await StorageMethods()
-          .uploadImageToStorage('profilePics', file, false);
-
-        // add user to our database
+        // Add user to our database with minimal initial data
         await _firestore.collection('users').doc(cred.user!.uid).set({
-          'username': username,
           'uid': cred.user!.uid,
           'email': email,
           'dietaryRestrictions': [],
           'foodNiches': [],
-          'photoURL': photoURL,
         });
 
         res = "success";
@@ -49,8 +38,62 @@ class AuthMethods {
       } else if (err.code == 'weak-password') {
         res = 'A senha deve ter pelo menos 6 caracteres.';
       }
+    } catch (err) {
+      res = err.toString();
     }
-    catch (err) {
+    return res;
+  }
+
+  // update user profile
+  Future<String> updateUserProfile({
+    required String uid,
+    String? username,
+    Uint8List? file,
+  }) async {
+    String res = "Some error occurred";
+    try {
+      Map<String, dynamic> updateData = {};
+
+      if (username != null && username.isNotEmpty) {
+        updateData['username'] = username;
+      }
+
+      if (file != null) {
+        String photoURL = await StorageMethods()
+            .uploadImageToStorage('profilePics', file, false);
+        updateData['photoURL'] = photoURL;
+      }
+
+      if (updateData.isNotEmpty) {
+        await _firestore.collection('users').doc(uid).update(updateData);
+        res = "success";
+      }
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
+  // logging in user
+  Future<String> loginUser(
+      {required String email, required String password}) async {
+    String res = "Some error occurred";
+
+    try {
+      if (email.isNotEmpty || password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
+        res = "success";
+      } else {
+        res = "Por favor, preencha todos os campos";
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        res = 'Usuário não encontrado.';
+      } else if (e.code == 'wrong-password') {
+        res = 'Senha incorreta.';
+      }
+    } catch (err) {
       res = err.toString();
     }
     return res;
