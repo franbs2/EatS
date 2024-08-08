@@ -1,50 +1,58 @@
 import 'package:flutter/material.dart';
 
-import '../style/color.dart';
-
 class PageDefaultAuth extends StatelessWidget {
   final Widget body;
-  final String title;
-  final String subtitle;
 
-  const PageDefaultAuth(
-      {super.key,
-      required this.body,
-      required this.title,
-      required this.subtitle});
+  const PageDefaultAuth({
+    super.key,
+    required this.body,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-      child: Center(
-        child: Column(
+      body: SafeArea(
+          child: SingleChildScrollView(
+        child: Stack(
+          alignment: Alignment.topCenter,
           children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
-            ),
-            Image.asset('assets/eats_logo.png'),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 20,
-                color: Color(0xff2F2D2C),
-                fontWeight: FontWeight.bold,
+            Container(
+              height: MediaQuery.of(context).size.height * 0.3,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.bottomLeft,
+                    colors: [Color(0xffEFC136), Color(0xff539F33)]),
+              ),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  child: Image.asset('assets/logo_white.png'),
+                ),
               ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              subtitle,
-              style: const TextStyle(
-                fontSize: 16,
-                color: AppTheme.textInitial,
-                fontWeight: FontWeight.normal,
+            Container(
+              margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.2),
+              padding: const EdgeInsets.all(20),
+              height: MediaQuery.of(context).size.height * 0.7,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
               ),
-            ),
-            body,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [body],
+              ),
+            )
           ],
         ),
-      ),
-    ));
+      )),
+    );
   }
 }

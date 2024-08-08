@@ -8,12 +8,10 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const PageDefaultAuth(
-        title: StringsApp.welcome,
-        subtitle: StringsApp.happy,
         body: Column(
-          children: [
-            //TODO: implementar formulário de cadastro
-          ],
-        ));
+      children: [
+        //TODO: implementar formulário de cadastro
+      ],
+    ));
   }
 }
