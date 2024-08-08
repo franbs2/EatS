@@ -10,7 +10,7 @@ class StringsApp {
   static const String forgotPassword = 'Esqueceu a senha?';
   static const String confirmPassword = 'Confirme a senha';
   static const String userString = 'Usuário';
-  static const String welcome = 'Seja bem-vindo ao Eats!';
+  static const String welcome = 'Seja bem-vindo!';
   static const String happy = 'Estamos felizes em te ver por aqui';
   static const String welcomeLogin = 'Bem-vindo de volta!';
 

@@ -1,3 +1,4 @@
+import 'package:eats/presentation/view/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-      home: const HomePage(),
+      home: const RegisterPage(),
       debugShowCheckedModeBanner: false,
     );
   }
