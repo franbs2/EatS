@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eats/model/user.dart' as model;
 import 'package:eats/resources/storage_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,15 @@ import 'package:flutter/material.dart';
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // get user details
+  Future<model.User> getUserDetails() async {
+    User currentUser = _auth.currentUser!;
+
+    DocumentSnapshot snap = await _firestore.collection('users').doc(currentUser.uid).get();
+  
+    return model.User.fromSnap(snap);
+  }
 
   // sign up user
   Future<String> signUpUser({
@@ -21,14 +31,18 @@ class AuthMethods {
           email: email,
           password: password,
         );
-
         // Add user to our database with minimal initial data
-        await _firestore.collection('users').doc(cred.user!.uid).set({
-          'uid': cred.user!.uid,
-          'email': email,
-          'dietaryRestrictions': [],
-          'foodNiches': [],
-        });
+
+        model.User user = model.User(
+          uid: cred.user!.uid,
+          username: '',
+          photoURL: 'profilePics/default.png',
+          email: email,
+          foodNiches: [],
+          dietaryRestrictions: [],
+        );
+
+        await _firestore.collection('users').doc(cred.user!.uid).set(user.toJson(),);
 
         res = "success";
       }
