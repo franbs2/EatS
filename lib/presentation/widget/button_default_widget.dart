@@ -1,11 +1,14 @@
 import 'package:eats/presentation/style/color.dart';
 import 'package:flutter/material.dart';
 
-class ButtonInitialWidget extends StatelessWidget {
+class ButtonDefaultlWidget extends StatelessWidget {
   final String text;
-  const ButtonInitialWidget({
+  final Color color;
+
+  const ButtonDefaultlWidget({
     super.key,
     required this.text,
+    this.color = AppTheme.primaryColor,
   });
 
   @override
@@ -13,7 +16,7 @@ class ButtonInitialWidget extends StatelessWidget {
     return ElevatedButton(
       onPressed: () {},
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppTheme.primaryColor,
+        backgroundColor: color,
         padding: EdgeInsets.symmetric(
             horizontal: MediaQuery.of(context).size.width * 0.3, vertical: 20),
         shape: RoundedRectangleBorder(
