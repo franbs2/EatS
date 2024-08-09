@@ -1,6 +1,7 @@
 import 'package:eats/presentation/style/color.dart' as color;
 import 'package:eats/providers/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:eats/presentation/view/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -62,7 +63,7 @@ class MyApp extends StatelessWidget {
               );
             }
 
-            return const HomePage();
+            return RegisterPage();
           },
         ),
       )
