@@ -10,16 +10,37 @@ import '../widget/button_default_widget.dart';
 import '../widget/text_button_have_account_widget.dart';
 import '../widget/text_password_input_widget.dart';
 import '../widget/title_initial_widget.dart';
+import 'package:eats/resources/auth_methods.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({super.key});
 
   final _formKey = GlobalKey<FormState>();
-  // final TextEditingController _nomeController = TextEditingController();
-  // final TextEditingController _emailController = TextEditingController();
-  // final TextEditingController _senhaController = TextEditingController();
-  // final TextEditingController _confirmarSenhaController =
-  // TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _senhaController = TextEditingController();
+  final TextEditingController _confirmarSenhaController = TextEditingController();
+  final AuthMethods _authMethods = AuthMethods();
+
+
+  void _registerUser(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        await _authMethods.signUpUser(
+          email: _emailController.text,
+          password: _senhaController.text,
+          confirmPassword: _confirmarSenhaController.text,
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Usuário registrado com sucesso!')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString())),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,20 +67,47 @@ class RegisterPage extends StatelessWidget {
             const SizedBox(height: 40),
             Form(
                 key: _formKey,
-                child: const Column(children: [
-                  TextInputWidget(hint: StringsApp.labelEmail),
-                  SizedBox(height: 40),
-                  TextPasswordInputWidget(hint: StringsApp.labelPassword),
-                  SizedBox(height: 40),
+                child: Column(children: [
+                  TextInputWidget(
+                    hint: StringsApp.labelEmail,
+                    controller: _emailController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, insira um email';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 40),
                   TextPasswordInputWidget(
-                      hint: StringsApp.labelConfirmPassword),
+                    hint: StringsApp.labelPassword,
+                    controller: _senhaController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, insira uma senha';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 40),
+                  TextPasswordInputWidget(
+                    hint: StringsApp.labelConfirmPassword,
+                    controller: _confirmarSenhaController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, confirme sua senha';
+                      }
+                      return null;
+                    },
+                  ),
                 ])),
             const SizedBox(height: 20),
             const TextButtonHaveAccountWidget(),
             const SizedBox(height: 20),
-            const ButtonDefaultlWidget(
+            ButtonDefaultlWidget(
               text: StringsApp.register,
               color: Color(0xffE1AA1E),
+              onPressed: () => _registerUser(context),
             ),
           ],
         ),

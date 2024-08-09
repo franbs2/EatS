@@ -1,6 +1,7 @@
 import 'package:eats/presentation/style/color.dart';
 import 'package:eats/presentation/style/strings_app.dart';
 import 'package:flutter/material.dart';
+import 'package:eats/resources/auth_methods.dart';
 
 class ButtonGoogleWidget extends StatelessWidget {
   const ButtonGoogleWidget({super.key});
@@ -8,7 +9,9 @@ class ButtonGoogleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        AuthMethods().signInWithGoogle(context);
+      },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
