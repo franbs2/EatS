@@ -1,5 +1,4 @@
-import 'package:eats/presentation/style/color.dart';
-import 'package:eats/presentation/style/strings_app.dart';
+import 'package:eats/core/style/strings_app.dart';
 import 'package:eats/presentation/widget/button_google_widget.dart';
 import 'package:eats/presentation/widget/continue_with_widget.dart';
 import 'package:eats/presentation/widget/page_default_auth.dart';
@@ -10,7 +9,7 @@ import '../widget/button_default_widget.dart';
 import '../widget/text_button_have_account_widget.dart';
 import '../widget/text_password_input_widget.dart';
 import '../widget/title_initial_widget.dart';
-import 'package:eats/resources/auth_methods.dart';
+import 'package:eats/data/datasources/auth_methods.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({super.key});
@@ -18,9 +17,9 @@ class RegisterPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
-  final TextEditingController _confirmarSenhaController = TextEditingController();
+  final TextEditingController _confirmarSenhaController =
+      TextEditingController();
   final AuthMethods _authMethods = AuthMethods();
-
 
   void _registerUser(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
@@ -32,7 +31,7 @@ class RegisterPage extends StatelessWidget {
         );
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Usuário registrado com sucesso!')),
+          const SnackBar(content: Text('Usuário registrado com sucesso!')),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -106,7 +105,7 @@ class RegisterPage extends StatelessWidget {
             const SizedBox(height: 20),
             ButtonDefaultlWidget(
               text: StringsApp.register,
-              color: Color(0xffE1AA1E),
+              color: const Color(0xffE1AA1E),
               onPressed: () => _registerUser(context),
             ),
           ],

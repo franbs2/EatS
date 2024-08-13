@@ -1,12 +1,12 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eats/model/user.dart' as model;
-import 'package:eats/resources/storage_methods.dart';
-import 'package:eats/utils/utils.dart';
+import 'package:eats/data/model/user.dart' as model;
+import 'package:eats/data/datasources/storage_methods.dart';
+import 'package:eats/core/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../resources/exceptions/auth_exceptions.dart'; // corrected import statement
+import '../../core/exceptions/auth_exceptions.dart'; // corrected import statement
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;

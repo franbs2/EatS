@@ -1,4 +1,4 @@
-import 'package:eats/presentation/style/color.dart';
+import 'package:eats/core/style/color.dart';
 import 'package:flutter/material.dart';
 
 class ButtonDefaultlWidget extends StatelessWidget {

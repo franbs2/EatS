@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../style/strings_app.dart';
+import '../../core/style/strings_app.dart';
 
 class ContinueWithWidget extends StatelessWidget {
   const ContinueWithWidget({super.key});

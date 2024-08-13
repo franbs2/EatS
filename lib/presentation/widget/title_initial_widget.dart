@@ -1,5 +1,4 @@
-import 'package:eats/presentation/style/color.dart';
-import 'package:eats/presentation/style/strings_app.dart';
+import 'package:eats/core/style/color.dart';
 import 'package:flutter/material.dart';
 
 class TitleInitialWidget extends StatelessWidget {

@@ -1,6 +1,6 @@
-import 'package:eats/presentation/style/strings_app.dart';
+import 'package:eats/core/style/strings_app.dart';
 import 'package:flutter/material.dart';
-import '../style/color.dart';
+import '../../core/style/color.dart';
 import '../widget/button_default_widget.dart';
 
 class InitialPage extends StatelessWidget {

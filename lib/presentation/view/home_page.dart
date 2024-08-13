@@ -1,11 +1,11 @@
-import 'package:eats/model/recipes.dart';
-import 'package:eats/presentation/style/strings_app.dart';
+import 'package:eats/data/model/recipes.dart';
+import 'package:eats/core/style/strings_app.dart';
 import 'package:eats/presentation/widget/filter_categories_recipes_widget.dart';
 import 'package:eats/presentation/widget/grid_view_recipes_widget.dart';
 import 'package:eats/presentation/widget/img_perfil_widget.dart';
 import 'package:eats/presentation/widget/search_bar_widget.dart';
 import 'package:flutter/material.dart';
-import '../style/color.dart';
+import '../../core/style/color.dart';
 import '../widget/carousel_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

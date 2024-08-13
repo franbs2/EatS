@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../style/color.dart';
+import '../../core/style/color.dart';
 
 class TextPasswordInputWidget extends StatefulWidget {
   final String hint;

@@ -1,7 +1,7 @@
-import 'package:eats/presentation/style/color.dart';
-import 'package:eats/presentation/style/strings_app.dart';
+import 'package:eats/core/style/color.dart';
+import 'package:eats/core/style/strings_app.dart';
 import 'package:flutter/material.dart';
-import 'package:eats/resources/auth_methods.dart';
+import 'package:eats/data/datasources/auth_methods.dart';
 
 class ButtonGoogleWidget extends StatelessWidget {
   const ButtonGoogleWidget({super.key});

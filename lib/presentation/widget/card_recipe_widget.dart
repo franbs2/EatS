@@ -1,5 +1,5 @@
-import 'package:eats/model/recipes.dart';
-import 'package:eats/resources/storage_methods.dart';
+import 'package:eats/data/model/recipes.dart';
+import 'package:eats/data/datasources/storage_methods.dart';
 import 'package:flutter/material.dart';
 
 class CardRecipeWidget extends StatelessWidget {

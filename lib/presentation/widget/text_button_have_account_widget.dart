@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../style/strings_app.dart';
+import '../../core/style/strings_app.dart';
 
 class TextButtonHaveAccountWidget extends StatelessWidget {
   const TextButtonHaveAccountWidget({super.key});

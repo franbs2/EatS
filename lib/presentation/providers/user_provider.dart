@@ -1,5 +1,5 @@
-import "package:eats/model/user.dart";
-import "package:eats/resources/auth_methods.dart";
+import "package:eats/data/model/user.dart";
+import "package:eats/data/datasources/auth_methods.dart";
 import "package:flutter/material.dart";
 
 class UserProvider with ChangeNotifier {
