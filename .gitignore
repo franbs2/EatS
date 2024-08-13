@@ -1,3 +1,11 @@
+#Pastas para serem ignoradas
+/linux
+/windows
+/macos
+/ios
+/macos
+/lib/firebase
+
 # Miscellaneous
 *.class
 *.log
@@ -47,4 +55,3 @@ android/app/google-services.json
 ios/firebase_app_id_file.json
 ios/Runner/GoogleServices-Info.plist
 lib/firebase_options.dart
-.firebase
