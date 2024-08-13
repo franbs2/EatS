@@ -1,7 +1,7 @@
 import 'package:eats/core/style/color.dart' as color;
 import 'package:eats/presentation/providers/user_provider.dart';
+import 'package:eats/presentation/view/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:eats/presentation/view/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,47 +26,42 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) => UserProvider()
-        ),
-      ],
-      child: MaterialApp(
-        theme: ThemeData(
-          textTheme: GoogleFonts.soraTextTheme(
-            Theme.of(context).textTheme,
+        providers: [
+          ChangeNotifierProvider(create: (_) => UserProvider()),
+        ],
+        child: MaterialApp(
+          theme: ThemeData(
+            textTheme: GoogleFonts.soraTextTheme(
+              Theme.of(context).textTheme,
+            ),
           ),
-        ),
-        // home: const HomePage(),
-        // debugShowCheckedModeBanner: false,
+          // home: const HomePage(),
+          // debugShowCheckedModeBanner: false,
 
-        //To configure the Firebase Persisting Auth State, use the following code:
-        
-        home: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if(snapshot.connectionState == ConnectionState.active) {
-              if(snapshot.hasData) {
-                return const HomePage();
+          //To configure the Firebase Persisting Auth State, use the following code:
 
-              } else if(snapshot.hasError) {
-                return Center(
-                  child: Text('${snapshot.error}'),
-                );
+          home: StreamBuilder(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.active) {
+                if (snapshot.hasData) {
+                  return const HomePage();
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('${snapshot.error}'),
+                  );
+                }
               }
-            }
-            if(snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                    child: CircularProgressIndicator(
                   color: color.AppTheme.primaryColor,
-                )
-              );
-            }
+                ));
+              }
 
-            return RegisterPage();
-          },
-        ),
-      )
-    );
+              return LoginPage();
+            },
+          ),
+        ));
   }
 }

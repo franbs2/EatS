@@ -28,9 +28,9 @@ class ButtonDefaultlWidget extends StatelessWidget {
       child: Text(
         text,
         style: const TextStyle(
-          fontSize: 16,
-          color: AppTheme.secondaryColor,
-        ),
+            fontSize: 16,
+            color: AppTheme.secondaryColor,
+            fontWeight: FontWeight.bold),
       ),
     );
   }
