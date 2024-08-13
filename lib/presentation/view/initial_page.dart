@@ -1,7 +1,6 @@
-import 'package:eats/core/style/strings_app.dart';
 import 'package:flutter/material.dart';
-import '../../core/style/color.dart';
-import '../widget/button_default_widget.dart';
+import '../style/color.dart';
+import '../widget/button_initial_widget.dart';
 
 class InitialPage extends StatelessWidget {
   const InitialPage({super.key});
@@ -25,7 +24,7 @@ class InitialPage extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      StringsApp.initilText,
+                      'O sabor de um mundo melhor',
                       style: TextStyle(
                         fontSize: 16,
                         color: AppTheme.textInitial,
@@ -33,7 +32,9 @@ class InitialPage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 28),
-                    ButtonDefaultlWidget(text: StringsApp.startNow),
+                    ButtonInitialWidget(
+                      text: 'Começar já',
+                    ),
                     SizedBox(height: 32),
                   ],
                 ),
