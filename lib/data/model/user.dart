@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
@@ -15,28 +14,28 @@ class User {
     required this.username,
     required this.photoURL,
     required this.dietaryRestrictions,
-    required this.foodNiches
+    required this.foodNiches,
   });
 
   Map<String, dynamic> toJson() => {
-    "uid": uid,
-    "email": email,
-    "photoURL": photoURL,
-    "username": username,
-    "dietaryRestrictions": dietaryRestrictions,
-    "foodNiches": foodNiches
-  };
+        "uid": uid,
+        "email": email,
+        "photoURL": photoURL,
+        "username": username,
+        "dietaryRestrictions": dietaryRestrictions,
+        "foodNiches": foodNiches,
+      };
 
   static User fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
 
     return User(
-      uid: snapshot['uid'],
-      email: snapshot['email'],
-      username: snapshot['username'],
-      photoURL: snapshot['photoURL'],
-      dietaryRestrictions: snapshot['dietaryRestrictions'],
-      foodNiches: snapshot['foodNiches'],
+      uid: snapshot['uid'] ?? '',
+      email: snapshot['email'] ?? '',
+      username: snapshot['username'] ?? '',
+      photoURL: snapshot['photoURL'] ?? '',
+      dietaryRestrictions: List<String>.from(snapshot['dietaryRestrictions'] ?? []),
+      foodNiches: List<String>.from(snapshot['foodNiches'] ?? []),
     );
   }
 }

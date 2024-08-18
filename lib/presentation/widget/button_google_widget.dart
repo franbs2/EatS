@@ -2,6 +2,7 @@ import 'package:eats/core/style/color.dart';
 import 'package:eats/core/style/strings_app.dart';
 import 'package:flutter/material.dart';
 import 'package:eats/data/datasources/auth_methods.dart';
+import 'package:provider/provider.dart';
 
 class ButtonGoogleWidget extends StatelessWidget {
   const ButtonGoogleWidget({super.key});
@@ -10,7 +11,7 @@ class ButtonGoogleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        AuthMethods().signInWithGoogle(context);
+        context.read<AuthMethods>().signInWithGoogle(context);
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.transparent,
