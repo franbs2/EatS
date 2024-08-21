@@ -4,13 +4,13 @@ import 'package:eats/data/model/user.dart' as model;
 import 'package:eats/data/datasources/storage_methods.dart';
 import 'package:eats/core/utils/utils.dart';
 import 'package:eats/presentation/providers/user_provider.dart';
+import 'package:eats/presentation/view/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import '../../core/exceptions/auth_exceptions.dart'; // corrected import statement
 import 'package:eats/presentation/view/home_page.dart';
-import 'package:eats/presentation/view/register_page.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -206,7 +206,7 @@ class AuthWrapper extends StatelessWidget {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     if (user == null) {
-      return RegisterPage();
+      return LoginPage();
     } else {
       return FutureBuilder(
         future: userProvider.refreshUser(),
