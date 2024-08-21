@@ -36,7 +36,6 @@ class AuthMethods {
       } else {
         throw Exception("Usuário não autenticado");
       }
-
     } catch (e) {
       print("Erro ao buscar detalhes do usuário: $e");
       rethrow;
@@ -130,7 +129,8 @@ class AuthMethods {
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
 
       if (googleAuth?.accessToken != null && googleAuth?.idToken != null) {
         // Criar credencial do Google
@@ -138,14 +138,16 @@ class AuthMethods {
           accessToken: googleAuth?.accessToken,
           idToken: googleAuth?.idToken,
         );
-        
+
         // Autenticar com Firebase
-        UserCredential userCredential = await _auth.signInWithCredential(credential);
+        UserCredential userCredential =
+            await _auth.signInWithCredential(credential);
         User? user = userCredential.user;
 
         if (user != null) {
           // Verificar se o usuário já existe no Firestore
-          DocumentSnapshot userDoc = await _firestore.collection('users').doc(user.uid).get();
+          DocumentSnapshot userDoc =
+              await _firestore.collection('users').doc(user.uid).get();
 
           if (!userDoc.exists) {
             // Se o usuário não existir no Firestore, cria um novo registro
@@ -168,7 +170,6 @@ class AuthMethods {
       showSnackBar(e.message!, context);
     }
   }
-
 
   // logging in user
   Future<String> loginUser(
@@ -197,18 +198,34 @@ class AuthMethods {
 }
 
 class AuthWrapper extends StatelessWidget {
-  const AuthWrapper({Key? key}) : super(key: key);
+  const AuthWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final firebaseUser = context.watch<User?>();
+    final user = Provider.of<User?>(context);
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    userProvider.refreshUser();
+    if (user == null) {
+      return RegisterPage();
+    } else {
+      return FutureBuilder(
+        future: userProvider.refreshUser(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(
+                  child: CircularProgressIndicator(
+                      color: Color(0xff529536))),
+            );
+          } else if (snapshot.hasError) {
+            return const Scaffold(
+              body: Center(child: Text('Erro ao carregar os dados do usuário')),
+            );
+          }
 
-    if (firebaseUser != null) {
-      return const HomePage();
+          return const HomePage();
+        },
+      );
     }
-    return RegisterPage();
   }
 }
