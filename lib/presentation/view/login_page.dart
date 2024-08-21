@@ -1,7 +1,7 @@
+import 'package:eats/data/datasources/auth_methods.dart';
 import 'package:eats/presentation/widget/text_password_input_widget.dart';
 import 'package:eats/presentation/widget/text_widget.dart';
 import 'package:flutter/material.dart';
-
 import '../../core/style/strings_app.dart';
 import '../widget/button_default_widget.dart';
 import '../widget/button_google_widget.dart';
@@ -16,6 +16,26 @@ class LoginPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
+  final AuthMethods _authMethods = AuthMethods();
+
+  void _loginUser(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        await _authMethods.loginUser(
+          email: _emailController.text,
+          password: _senhaController.text,
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Usuário conectado com sucesso!')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString())),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +65,23 @@ class LoginPage extends StatelessWidget {
                   TextInputWidget(
                     hint: StringsApp.email,
                     controller: _emailController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, insira seu email';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 40),
                   TextPasswordInputWidget(
                     hint: StringsApp.password,
                     controller: _senhaController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, insira sua senha';
+                      }
+                      return null;
+                    }
                   ),
                 ],
               ),
@@ -61,7 +93,7 @@ class LoginPage extends StatelessWidget {
               text: StringsApp.login,
               color: const Color(0xffE1AA1E),
               onPressed: () {
-                // _registerUser(context);
+                _loginUser(context);
               },
             ),
           ],

@@ -25,3 +25,10 @@ class GenericAuthException implements Exception {
   @override
   String toString() => message;
 }
+
+class EmailPassException implements Exception {
+  final String message;
+  EmailPassException([this.message = 'Email ou senha inválidos.']);
+  @override
+  String toString() => message;
+}

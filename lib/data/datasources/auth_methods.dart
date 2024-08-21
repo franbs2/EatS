@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eats/data/model/user.dart' as model;
@@ -172,28 +173,15 @@ class AuthMethods {
   }
 
   // logging in user
-  Future<String> loginUser(
+  Future<void> loginUser(
       {required String email, required String password}) async {
-    String res = "Some error occurred";
-
     try {
-      if (email.isNotEmpty || password.isNotEmpty) {
-        await _auth.signInWithEmailAndPassword(
-            email: email, password: password);
-        res = "success";
-      } else {
-        res = "Por favor, preencha todos os campos";
-      }
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        res = 'Usuário não encontrado.';
-      } else if (e.code == 'wrong-password') {
-        res = 'Senha incorreta.';
-      }
+      throw GenericAuthException(e.message!);
     } catch (err) {
-      res = err.toString();
+      throw EmailPassException();
     }
-    return res;
   }
 }
 
@@ -214,8 +202,7 @@ class AuthWrapper extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Scaffold(
               body: Center(
-                  child: CircularProgressIndicator(
-                      color: Color(0xff529536))),
+                  child: CircularProgressIndicator(color: Color(0xff529536))),
             );
           } else if (snapshot.hasError) {
             return const Scaffold(
