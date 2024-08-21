@@ -130,23 +130,45 @@ class AuthMethods {
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
       if (googleAuth?.accessToken != null && googleAuth?.idToken != null) {
-        // Create a new credential
+        // Criar credencial do Google
         final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth?.accessToken,
           idToken: googleAuth?.idToken,
         );
-        UserCredential userCredential =
-            await _auth.signInWithCredential(credential);
+        
+        // Autenticar com Firebase
+        UserCredential userCredential = await _auth.signInWithCredential(credential);
+        User? user = userCredential.user;
+
+        if (user != null) {
+          // Verificar se o usuário já existe no Firestore
+          DocumentSnapshot userDoc = await _firestore.collection('users').doc(user.uid).get();
+
+          if (!userDoc.exists) {
+            // Se o usuário não existir no Firestore, cria um novo registro
+            model.User newUser = model.User(
+              uid: user.uid,
+              username: user.displayName ?? '',
+              photoURL: user.photoURL ?? 'profilePics/default.jpg',
+              email: user.email ?? '',
+              foodNiches: [],
+              dietaryRestrictions: [],
+            );
+
+            await _firestore.collection('users').doc(user.uid).set(
+                  newUser.toJson(),
+                );
+          }
+        }
       }
     } on FirebaseAuthException catch (e) {
       showSnackBar(e.message!, context);
     }
   }
+
 
   // logging in user
   Future<String> loginUser(

@@ -25,23 +25,47 @@ class ImgPerfilWidget extends StatelessWidget {
       return _buildPlaceholder();
     }
 
+    if (user.photoURL.startsWith('https://lh3.googleusercontent.com/')) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(14.0),
+        child: Image.network(
+          user.photoURL,
+          width: 52,
+          height: 52,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            print("Erro ao carregar a imagem do Google: $error");
+            return _buildPlaceholder();
+          },
+        ),
+      );
+    } 
+
     return FutureBuilder<String>(
-      future: StorageMethods().loadImageAtStorage(user.photoURL),
+      future: StorageMethods().loadImageAtStorage(user.photoURL), 
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting || snapshot.hasError || snapshot.data?.isEmpty == true) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return _buildPlaceholder();
+        } else if (snapshot.hasError) {
+          print("Erro ao carregar a imagem do Firebase: ${snapshot.error}");
+          return _buildPlaceholder();
+        } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(14.0),
+            child: Image.network(
+              snapshot.data!,
+              width: 52,
+              height: 52,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                print("Erro ao exibir a imagem do Firebase: $error");
+                return _buildPlaceholder();
+              },
+            ),
+          );
+        } else {
           return _buildPlaceholder();
         }
-
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(14.0),
-          child: Image.network(
-            snapshot.data!,
-            width: 52,
-            height: 52,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => _buildPlaceholder(),
-          ),
-        );
       },
     );
   }
