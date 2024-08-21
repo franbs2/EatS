@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 class PageDefaultAuth extends StatelessWidget {
+  final double size;
   final Widget body;
 
   const PageDefaultAuth({
     super.key,
-    required this.body,
+    required this.body, this.size = 0.3,
   });
 
   @override
@@ -15,7 +16,7 @@ class PageDefaultAuth extends StatelessWidget {
         alignment: Alignment.topCenter,
         children: [
           Container(
-            height: MediaQuery.of(context).size.height * 0.3,
+            height: MediaQuery.of(context).size.height * size,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                   begin: Alignment.bottomLeft,

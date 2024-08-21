@@ -1,17 +1,12 @@
-import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eats/data/model/user.dart' as model;
 import 'package:eats/data/datasources/storage_methods.dart';
 import 'package:eats/core/utils/utils.dart';
-import 'package:eats/presentation/providers/user_provider.dart';
-import 'package:eats/presentation/view/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:provider/provider.dart';
 import '../../core/exceptions/auth_exceptions.dart'; // corrected import statement
-import 'package:eats/presentation/view/home_page.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -181,38 +176,6 @@ class AuthMethods {
       throw GenericAuthException(e.message!);
     } catch (err) {
       throw EmailPassException();
-    }
-  }
-}
-
-class AuthWrapper extends StatelessWidget {
-  const AuthWrapper({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final user = Provider.of<User?>(context);
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-
-    if (user == null) {
-      return LoginPage();
-    } else {
-      return FutureBuilder(
-        future: userProvider.refreshUser(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(
-                  child: CircularProgressIndicator(color: Color(0xff529536))),
-            );
-          } else if (snapshot.hasError) {
-            return const Scaffold(
-              body: Center(child: Text('Erro ao carregar os dados do usuário')),
-            );
-          }
-
-          return const HomePage();
-        },
-      );
     }
   }
 }
