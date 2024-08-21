@@ -5,6 +5,7 @@ import 'package:eats/presentation/widget/page_default_auth.dart';
 import 'package:eats/presentation/widget/text_widget.dart';
 import 'package:flutter/material.dart';
 
+import '../../core/routes/routes.dart';
 import '../widget/button_default_widget.dart';
 import '../widget/text_button_have_account_widget.dart';
 import '../widget/text_password_input_widget.dart';
@@ -101,7 +102,11 @@ class RegisterPage extends StatelessWidget {
                   ),
                 ])),
             const SizedBox(height: 20),
-            const TextButtonHaveAccountWidget(),
+            TextButtonHaveAccountWidget(
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(RoutesApp.loginPage),
+              title: StringsApp.haveAccount,
+            ),
             const SizedBox(height: 20),
             ButtonDefaultlWidget(
               text: StringsApp.register,

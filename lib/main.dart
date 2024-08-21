@@ -1,12 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eats/data/datasources/auth_methods.dart';
+import 'package:eats/data/datasources/recipes_repository.dart';
+import 'package:eats/presentation/auth_wrapper_widget.dart';
+import 'package:eats/presentation/providers/recipes_provider.dart';
 import 'package:eats/presentation/providers/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'core/routes/routes.dart';
 import 'firebase/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+import 'presentation/view/detail_recipe_page.dart';
+import 'presentation/view/edit_perfil_page.dart';
+import 'presentation/view/home_page.dart';
+import 'presentation/view/initial_page.dart';
+import 'presentation/view/login_page.dart';
+import 'presentation/view/perfil_page.dart';
+import 'presentation/view/register_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,10 +27,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  
-  // await FirebaseAppCheck.instance.activate(
-  //   androidProvider: AndroidProvider.debug,
-  // );
 
   runApp(const MyApp());
 }
@@ -39,6 +48,17 @@ class MyApp extends StatelessWidget {
           create: (context) => context.read<AuthMethods>().authState,
           initialData: null,
         ),
+        Provider<RecipesRepository>(
+          create: (_) => RecipesRepository(
+            FirebaseFirestore.instance,
+          ), 
+        ),
+        ChangeNotifierProxyProvider<RecipesRepository, RecipesProvider>(
+          create: (context) =>
+              RecipesProvider(context.read<RecipesRepository>()),
+          update: (context, repository, previous) =>
+              previous!..updateRepository(repository),
+        ),
       ],
       child: MaterialApp(
         theme: ThemeData(
@@ -46,7 +66,17 @@ class MyApp extends StatelessWidget {
             Theme.of(context).textTheme,
           ),
         ),
-        home: const AuthWrapper(), // Usa o AuthWrapper
+        home:
+            const AuthWrapperWidget(), // Usando AuthWrapper para controle de autenticação
+        routes: {
+          RoutesApp.initialPage: (context) => const InitialPage(),
+          RoutesApp.registerPage: (context) => RegisterPage(),
+          RoutesApp.loginPage: (context) => LoginPage(),
+          RoutesApp.homePage: (context) => const HomePage(),
+          RoutesApp.detailRecipePage: (context) => const DetailRecipePage(),
+          RoutesApp.perfilPage: (context) => const PerfilPage(),
+          RoutesApp.editPefilPage: (context) => const EditPerfilPage(),
+        },
       ),
     );
   }

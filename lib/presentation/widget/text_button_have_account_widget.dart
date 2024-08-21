@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../core/style/strings_app.dart';
-
 class TextButtonHaveAccountWidget extends StatelessWidget {
-  const TextButtonHaveAccountWidget({super.key});
+  final String title;
+  final VoidCallback? onPressed;
+
+  const TextButtonHaveAccountWidget(
+      {super.key, required this.onPressed, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +30,10 @@ class TextButtonHaveAccountWidget extends StatelessWidget {
           ),
         ),
         TextButton(
-          onPressed: () {},
-          child: const Text(
-            StringsApp.haveAccount,
-            style: TextStyle(
+          onPressed: onPressed,
+          child: Text(
+            title,
+            style: const TextStyle(
               color: Color(0xff8D8D8D),
               fontSize: 14,
             ),

@@ -1,3 +1,4 @@
+import 'package:eats/core/routes/routes.dart';
 import 'package:eats/data/datasources/auth_methods.dart';
 import 'package:eats/presentation/widget/text_password_input_widget.dart';
 import 'package:eats/presentation/widget/text_widget.dart';
@@ -74,20 +75,23 @@ class LoginPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 40),
                   TextPasswordInputWidget(
-                    hint: StringsApp.password,
-                    controller: _senhaController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, insira sua senha';
-                      }
-                      return null;
-                    }
-                  ),
+                      hint: StringsApp.password,
+                      controller: _senhaController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira sua senha';
+                        }
+                        return null;
+                      }),
                 ],
               ),
             ),
             const SizedBox(height: 48),
-            const TextButtonHaveAccountWidget(),
+            TextButtonHaveAccountWidget(
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(RoutesApp.registerPage),
+              title: StringsApp.dontHaveAccount,
+            ),
             const SizedBox(height: 24),
             ButtonDefaultlWidget(
               text: StringsApp.login,
