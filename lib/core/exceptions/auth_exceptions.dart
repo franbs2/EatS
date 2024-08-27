@@ -32,3 +32,10 @@ class EmailPassException implements Exception {
   @override
   String toString() => message;
 }
+
+class LogOutException implements Exception {
+  final String message;
+  LogOutException([this.message = 'Ocorreu um erro ao sair.']);
+  @override
+  String toString() => message;
+}
