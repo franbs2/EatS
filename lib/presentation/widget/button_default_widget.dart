@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 class ButtonDefaultlWidget extends StatelessWidget {
   final String text;
   final Color color;
+  final double width;
+  final double height;
   final VoidCallback? onPressed;
 
   const ButtonDefaultlWidget({
@@ -11,6 +13,8 @@ class ButtonDefaultlWidget extends StatelessWidget {
     required this.text,
     this.color = AppTheme.primaryColor,
     this.onPressed,
+    this.width = 0.3,
+    this.height = 20,
   });
 
   @override
@@ -20,7 +24,8 @@ class ButtonDefaultlWidget extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
         padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.3, vertical: 20),
+            horizontal: MediaQuery.of(context).size.width * width,
+            vertical: height),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),

@@ -13,6 +13,7 @@ import 'core/routes/routes.dart';
 import 'firebase/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'presentation/providers/preferences_provider.dart';
 import 'presentation/view/detail_recipe_page.dart';
 import 'presentation/view/edit_perfil_page.dart';
 import 'presentation/view/home_page.dart';
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
         Provider<RecipesRepository>(
           create: (_) => RecipesRepository(
             FirebaseFirestore.instance,
-          ), 
+          ),
         ),
         ChangeNotifierProxyProvider<RecipesRepository, RecipesProvider>(
           create: (context) =>
@@ -59,6 +60,7 @@ class MyApp extends StatelessWidget {
           update: (context, repository, previous) =>
               previous!..updateRepository(repository),
         ),
+        ChangeNotifierProvider(create: (_) => PreferencesProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(
