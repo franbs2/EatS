@@ -43,7 +43,10 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: height * 0.12),
               const FilterCategoriesRecipesWidget(categories: categories),
               if (recipesProvider.recipes.isEmpty)
-                const Center(child: CircularProgressIndicator(color: AppTheme.primaryColor),),
+                const Center(
+                  child:
+                      CircularProgressIndicator(color: AppTheme.primaryColor),
+                ),
               if (recipesProvider.errorMessage != null)
                 Center(
                   child: Text(
@@ -65,7 +68,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           Positioned(
-            top: height * 0.25,
+            top: height * 0.35 - 80,
             left: 0,
             right: 0,
             child: const CarouselWidget(),

@@ -20,6 +20,7 @@ class StringsApp {
   static const String orContinue = 'ou continue com';
   static const String haveAccount = 'Já possuo uma conta';
   static const String dontHaveAccount = 'Não possuo uma conta';
+  static const String username = 'Nome de usuário';
 
   static const List<String> listFilterCategories = [
     'Todos',
