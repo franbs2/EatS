@@ -7,6 +7,7 @@ import '../widget/location_widget.dart';
 import '../widget/preference_options_widget.dart';
 import '../widget/text_username_widget.dart';
 import '../widget/upload_widget.dart';
+import '../../core/style/color.dart';
 
 class PerfilPage extends StatelessWidget {
   const PerfilPage({super.key});
@@ -16,7 +17,7 @@ class PerfilPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => PreferencesProvider(),
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppTheme.secondaryColor,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -58,7 +59,7 @@ class PerfilPage extends StatelessWidget {
                                   text: 'Salvar',
                                   width: 0.1,
                                   height: 16,
-                                  color: const Color(0xffFBBE21),
+                                  color: AppTheme.perfilYellow,
                                   onPressed: () {},
                                 ),
                               ])
@@ -79,7 +80,7 @@ class PerfilPage extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       elevation: 50,
-      backgroundColor: Colors.white,
+      backgroundColor: AppTheme.secondaryColor,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(42.0)),

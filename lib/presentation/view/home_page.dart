@@ -86,8 +86,8 @@ class _HomePageState extends State<HomePage> {
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
           colors: [
-            Color(0xff93B884),
-            Color(0xff529536),
+            AppTheme.homeColorOne,
+            AppTheme.homeColorTwo,
           ],
         ),
       ),
@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                       StringsApp.local,
                       style: TextStyle(
                         fontSize: 16,
-                        color: Color(0xffB7B7B7),
+                        color: AppTheme.homeColorText,
                         fontWeight: FontWeight.normal,
                       ),
                     ),

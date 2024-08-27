@@ -10,6 +10,7 @@ import '../widget/continue_with_widget.dart';
 import '../widget/page_default_auth.dart';
 import '../widget/text_button_have_account_widget.dart';
 import '../widget/title_initial_widget.dart';
+import '../../core/style/color.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -95,7 +96,7 @@ class LoginPage extends StatelessWidget {
             const SizedBox(height: 24),
             ButtonDefaultlWidget(
               text: StringsApp.login,
-              color: const Color(0xffE1AA1E),
+              color: AppTheme.loginYellow,
               onPressed: () {
                 _loginUser(context);
               },

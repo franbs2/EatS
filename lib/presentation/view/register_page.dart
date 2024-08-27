@@ -4,6 +4,7 @@ import 'package:eats/presentation/widget/continue_with_widget.dart';
 import 'package:eats/presentation/widget/page_default_auth.dart';
 import 'package:eats/presentation/widget/text_widget.dart';
 import 'package:flutter/material.dart';
+import '../../core/style/color.dart';
 
 import '../../core/routes/routes.dart';
 import '../widget/button_default_widget.dart';
@@ -110,7 +111,7 @@ class RegisterPage extends StatelessWidget {
             const SizedBox(height: 20),
             ButtonDefaultlWidget(
               text: StringsApp.register,
-              color: const Color(0xffE1AA1E),
+              color: AppTheme.loginYellow,
               onPressed: () => _registerUser(context),
             ),
           ],
