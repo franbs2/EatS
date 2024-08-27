@@ -6,56 +6,46 @@ import 'package:eats/core/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../../core/exceptions/auth_exceptions.dart'; // corrected import statement
+import '../../core/exceptions/auth_exceptions.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  //State Persistence
-  Stream<User?> get authState => FirebaseAuth.instance.authStateChanges();
+  // Persistência de estado
+  Stream<User?> get authState => _auth.authStateChanges();
 
-  // get user details
+  // Obter detalhes do usuário
   Future<model.User> getUserDetails() async {
     try {
-      User? currentUser = FirebaseAuth.instance.currentUser;
+      final currentUser = _auth.currentUser;
 
-      if (currentUser != null) {
-        DocumentSnapshot snap =
-            await _firestore.collection('users').doc(currentUser.uid).get();
-
-        if (snap.exists) {
-          return model.User.fromSnap(snap);
-        } else {
-          throw Exception("Documento não encontrado");
-        }
-      } else {
+      if (currentUser == null) {
         throw Exception("Usuário não autenticado");
       }
+
+      final snap = await _firestore.collection('users').doc(currentUser.uid).get();
+
+      if (!snap.exists) {
+        throw Exception("Documento não encontrado");
+      }
+
+      return model.User.fromSnap(snap);
     } catch (e) {
-      print("Erro ao buscar detalhes do usuário: $e");
-      rethrow;
+      throw Exception("Erro ao obter detalhes do usuário: $e");
     }
   }
 
-  // sign up user
+  // Cadastro de usuário
   Future<void> signUpUser({
     required String email,
     required String password,
     required String confirmPassword,
   }) async {
-    String res = "Some error occurred";
     try {
-      if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
-        throw GenericAuthException('Por favor, preencha todos os campos.');
-      }
+      _validateSignUpFields(email, password, confirmPassword);
 
-      if (password != confirmPassword) {
-        throw PasswordsDoNotMatchException();
-      }
-
-      // Register user
-      UserCredential cred = await _auth.createUserWithEmailAndPassword(
+      final cred = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -64,9 +54,7 @@ class AuthMethods {
         throw GenericAuthException('Erro ao criar o usuário.');
       }
 
-      // Add user to our database with minimal initial data
-
-      model.User user = model.User(
+      final user = model.User(
         uid: cred.user!.uid,
         username: '',
         photoURL: 'profilePics/default.jpg',
@@ -75,101 +63,62 @@ class AuthMethods {
         dietaryRestrictions: [],
       );
 
-      await _firestore.collection('users').doc(cred.user!.uid).set(
-            user.toJson(),
-          );
+      await _firestore.collection('users').doc(cred.user!.uid).set(user.toJson());
+
     } on FirebaseAuthException catch (err) {
-      if (err.code == 'invalid-email') {
-        throw InvalidEmailException();
-      } else if (err.code == 'weak-password') {
-        throw WeakPasswordException();
-      } else {
-        throw GenericAuthException(err.message ?? 'Erro desconhecido.');
-      }
+      _handleFirebaseSignUpError(err);
     } catch (err) {
       throw GenericAuthException(err.toString());
     }
   }
 
-  // update user profile
+  // Atualizar perfil de usuário
   Future<String> updateUserProfile({
     required String uid,
     String? username,
     Uint8List? file,
   }) async {
-    String res = "Some error occurred";
     try {
-      Map<String, dynamic> updateData = {};
-
-      if (username != null && username.isNotEmpty) {
-        updateData['username'] = username;
-      }
-
-      if (file != null) {
-        String photoURL = await StorageMethods()
-            .uploadImageToStorage('profilePics', file, false);
-        updateData['photoURL'] = photoURL;
-      }
+      final updateData = await _prepareUpdateData(username, file);
 
       if (updateData.isNotEmpty) {
         await _firestore.collection('users').doc(uid).update(updateData);
-        res = "success";
+        return "success";
       }
+      return "Nenhuma alteração detectada.";
     } catch (err) {
-      res = err.toString();
+      return "Erro ao atualizar perfil: $err";
     }
-    return res;
   }
 
-  // Google sign in
+  // Login com Google
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+      final googleUser = await _signInWithGoogle();
+      if (googleUser == null) return;
 
-      if (googleAuth?.accessToken != null && googleAuth?.idToken != null) {
-        // Criar credencial do Google
-        final credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth?.accessToken,
-          idToken: googleAuth?.idToken,
-        );
+      final googleAuth = await googleUser.authentication;
+      final userCredential = await _auth.signInWithCredential(
+        GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        ),
+      );
 
-        // Autenticar com Firebase
-        UserCredential userCredential =
-            await _auth.signInWithCredential(credential);
-        User? user = userCredential.user;
-
-        if (user != null) {
-          // Verificar se o usuário já existe no Firestore
-          DocumentSnapshot userDoc =
-              await _firestore.collection('users').doc(user.uid).get();
-
-          if (!userDoc.exists) {
-            // Se o usuário não existir no Firestore, cria um novo registro
-            model.User newUser = model.User(
-              uid: user.uid,
-              username: user.displayName ?? '',
-              photoURL: user.photoURL ?? 'profilePics/default.jpg',
-              email: user.email ?? '',
-              foodNiches: [],
-              dietaryRestrictions: [],
-            );
-
-            await _firestore.collection('users').doc(user.uid).set(
-                  newUser.toJson(),
-                );
-          }
-        }
-      }
+      await _checkAndCreateUserInFirestore(userCredential.user);
+      
     } on FirebaseAuthException catch (e) {
-      showSnackBar(e.message!, context);
+      if (context.mounted) {
+        showSnackBar(e.message!, context);
+      }
     }
   }
 
-  // logging in user
-  Future<void> loginUser(
-      {required String email, required String password}) async {
+  // Login do usuário com email e senha
+  Future<void> loginUser({
+    required String email,
+    required String password,
+  }) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
@@ -177,5 +126,76 @@ class AuthMethods {
     } catch (err) {
       throw EmailPassException();
     }
+  }
+
+  // Logout do usuário
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      throw LogOutException();
+    }
+  }
+
+  // Métodos auxiliares privados
+
+  // Validação dos campos de cadastro
+  void _validateSignUpFields(String email, String password, String confirmPassword) {
+    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      throw GenericAuthException('Por favor, preencha todos os campos.');
+    }
+    if (password != confirmPassword) {
+      throw PasswordsDoNotMatchException();
+    }
+  }
+
+  // Preparar dados de atualização do perfil
+  Future<Map<String, dynamic>> _prepareUpdateData(String? username, Uint8List? file) async {
+    final updateData = <String, dynamic>{};
+
+    if (username != null && username.isNotEmpty) {
+      updateData['username'] = username;
+    }
+
+    if (file != null) {
+      final photoURL = await StorageMethods().uploadImageToStorage('profilePics', file, false);
+      updateData['photoURL'] = photoURL;
+    }
+
+    return updateData;
+  }
+
+  // Lidar com erros de cadastro do Firebase
+  void _handleFirebaseSignUpError(FirebaseAuthException err) {
+    if (err.code == 'invalid-email') {
+      throw InvalidEmailException();
+    } else if (err.code == 'weak-password') {
+      throw WeakPasswordException();
+    } else {
+      throw GenericAuthException(err.message ?? 'Erro desconhecido.');
+    }
+  }
+
+  // Verificar e criar usuário no Firestore se necessário
+  Future<void> _checkAndCreateUserInFirestore(User? user) async {
+    if (user == null) return;
+
+    final userDoc = await _firestore.collection('users').doc(user.uid).get();
+    if (!userDoc.exists) {
+      final newUser = model.User(
+        uid: user.uid,
+        username: user.displayName ?? '',
+        photoURL: user.photoURL ?? 'profilePics/default.jpg',
+        email: user.email ?? '',
+        foodNiches: [],
+        dietaryRestrictions: [],
+      );
+      await _firestore.collection('users').doc(user.uid).set(newUser.toJson());
+    }
+  }
+
+  // Fazer login com Google
+  Future<GoogleSignInAccount?> _signInWithGoogle() async {
+    return await GoogleSignIn().signIn();
   }
 }

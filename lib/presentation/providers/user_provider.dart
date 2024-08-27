@@ -16,6 +16,7 @@ class UserProvider with ChangeNotifier {
     } catch (e) {
       print("Erro ao atualizar o usuário: $e");
       _user = null;
+      notifyListeners(); 
     }
   }
 
