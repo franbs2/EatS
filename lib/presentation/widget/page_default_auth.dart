@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../../core/style/images_app.dart';
+
 class PageDefaultAuth extends StatelessWidget {
   final double size;
   final Widget body;
 
   const PageDefaultAuth({
     super.key,
-    required this.body, this.size = 0.3,
+    required this.body,
+    this.size = 0.3,
   });
 
   @override
@@ -26,7 +29,7 @@ class PageDefaultAuth extends StatelessWidget {
               alignment: Alignment.topCenter,
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.2,
-                child: Image.asset('assets/logo_white.png'),
+                child: Image.asset(ImageApp.logoWhite),
               ),
             ),
           ),

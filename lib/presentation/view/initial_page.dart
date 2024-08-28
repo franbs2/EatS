@@ -1,6 +1,7 @@
 import 'package:eats/core/style/strings_app.dart';
 import 'package:flutter/material.dart';
 import '../../core/style/color.dart';
+import '../../core/style/images_app.dart';
 import '../widget/button_default_widget.dart';
 
 class InitialPage extends StatelessWidget {
@@ -17,7 +18,7 @@ class InitialPage extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.15,
             ),
             Image.asset(
-              'assets/eats_logo.png',
+              ImageApp.logo,
             ),
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,
