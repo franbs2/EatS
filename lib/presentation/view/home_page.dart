@@ -7,6 +7,7 @@ import 'package:eats/presentation/widget/grid_view_recipes_widget.dart';
 import 'package:eats/presentation/widget/img_perfil_widget.dart';
 import 'package:eats/presentation/widget/search_bar_widget.dart';
 import 'package:eats/core/style/color.dart';
+import '../../core/routes/routes.dart';
 import '../widget/carousel_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -91,14 +92,14 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      child: const Padding(
-        padding: EdgeInsets.all(30.0),
+      child: Padding(
+        padding: const EdgeInsets.all(30.0),
         child: Column(
           children: [
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Row(
               children: [
-                Column(
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -120,12 +121,17 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                Spacer(),
-                ImgPerfilWidget(),
+                const Spacer(),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, RoutesApp.perfilPage);
+                  },
+                  child: const ImgPerfilWidget(),
+                ),
               ],
             ),
-            SizedBox(height: 24),
-            SearchBarWidget(),
+            const SizedBox(height: 24),
+            const SearchBarWidget(),
           ],
         ),
       ),

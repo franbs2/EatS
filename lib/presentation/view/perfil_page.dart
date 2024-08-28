@@ -1,14 +1,16 @@
+import 'package:eats/presentation/providers/preferences_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/preferences_provider.dart'; // Importe o PreferencesProvider
+
+import '../../core/style/color.dart';
+import '../../core/style/images_app.dart';
 import '../widget/alergies_list_widget.dart';
-import '../widget/button_default_widget.dart';
 import '../widget/diets_list_widget.dart';
 import '../widget/location_widget.dart';
 import '../widget/preference_options_widget.dart';
+import '../widget/text_username_input_widget.dart';
 import '../widget/text_username_widget.dart';
 import '../widget/upload_widget.dart';
-import '../../core/style/color.dart';
 
 class PerfilPage extends StatelessWidget {
   const PerfilPage({super.key});
@@ -25,11 +27,77 @@ class PerfilPage extends StatelessWidget {
             Expanded(
               child: Stack(
                 children: [
-                  UploadWidget(
-                    ontap: () {},
+                  SizedBox(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height * 0.55,
+                    child: Image.asset(
+                      ImageApp.imagePerfil,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 36),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            size: 28,
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          color: Colors.white,
+                        ),
+                        PopupMenuButton(
+                            shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(16),
+                                    bottomLeft: Radius.circular(16),
+                                    bottomRight: Radius.circular(16))),
+                            icon: const Icon(
+                              Icons.menu_sharp,
+                              size: 28,
+                              color: Colors.white,
+                            ),
+                            itemBuilder: (context) {
+                              return [
+                                PopupMenuItem(
+                                  child: TextButton(
+                                    onPressed: () {},
+                                    child: const Text(
+                                      'Editar Perfil',
+                                      style: TextStyle(
+                                          color: AppTheme.primaryColor,
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  child: TextButton(
+                                    onPressed: () {},
+                                    child: const Text('Meus dados',
+                                        style: TextStyle(
+                                            color: AppTheme.primaryColor,
+                                            fontWeight: FontWeight.normal)),
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  child: TextButton(
+                                    onPressed: () {},
+                                    child: const Text('Sair',
+                                        style: TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 229, 85, 74),
+                                            fontWeight: FontWeight.normal)),
+                                  ),
+                                ),
+                              ];
+                            }),
+                      ],
+                    ),
                   ),
                   Positioned(
-                    top: MediaQuery.of(context).size.height * 0.47,
+                    top: MediaQuery.of(context).size.height * 0.52,
                     left: 0,
                     right: 0,
                     child: Padding(
@@ -38,8 +106,9 @@ class PerfilPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const LocationWidget(),
+                          const SizedBox(height: 12),
                           const TextUsernameWidget(),
-                          const SizedBox(height: 18),
+                          const SizedBox(height: 20),
                           PreferenceOptionsWidget(
                             title: 'Alergias',
                             onTap: () => _showAllergiesModal(context),
@@ -52,18 +121,7 @@ class PerfilPage extends StatelessWidget {
                           const SizedBox(height: 18),
                           PreferenceOptionsWidget(
                               title: 'Preferências', onTap: () => ()),
-                          const SizedBox(height: 20),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                ButtonDefaultlWidget(
-                                  text: 'Salvar',
-                                  width: 0.1,
-                                  height: 16,
-                                  color: AppTheme.perfilYellow,
-                                  onPressed: () {},
-                                ),
-                              ])
+                          const SizedBox(height: 18),
                         ],
                       ),
                     ),

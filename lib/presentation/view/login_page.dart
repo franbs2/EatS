@@ -101,6 +101,9 @@ class LoginPage extends StatelessWidget {
                 _loginUser(context);
               },
             ),
+            const SizedBox(
+              height: 16,
+            )
           ],
         ),
       ),

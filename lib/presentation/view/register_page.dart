@@ -114,6 +114,9 @@ class RegisterPage extends StatelessWidget {
               color: AppTheme.loginYellow,
               onPressed: () => _registerUser(context),
             ),
+            const SizedBox(
+              height: 16,
+            ),
           ],
         ),
       ),
