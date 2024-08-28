@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/preferences_provider.dart'; // Importe o PreferencesProvider
 import '../widget/alergies_list_widget.dart';
 import '../widget/button_default_widget.dart';
+import '../widget/diets_list_widget.dart';
 import '../widget/location_widget.dart';
 import '../widget/preference_options_widget.dart';
 import '../widget/text_username_widget.dart';
@@ -46,7 +47,7 @@ class PerfilPage extends StatelessWidget {
                           const SizedBox(height: 18),
                           PreferenceOptionsWidget(
                             title: 'Dietas',
-                            onTap: () => (),
+                            onTap: () => _showDietsModal(context),
                           ),
                           const SizedBox(height: 18),
                           PreferenceOptionsWidget(
@@ -94,19 +95,24 @@ class PerfilPage extends StatelessWidget {
     );
   }
 
-  // // Função para exibir o modal de dietas
-  // void _showDietsModal(BuildContext context) {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     backgroundColor: Colors.white,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
-  //     ),
-  //     builder: (context) {
-  //       return const DietsListWidget();
-  //     },
-  //   );
-  // }
+  //  Função para exibir o modal de dietas
+  void _showDietsModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      elevation: 50,
+      backgroundColor: AppTheme.secondaryColor,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(42.0)),
+      ),
+      builder: (context) {
+        return const Padding(
+          padding: EdgeInsets.only(top: 24),
+          child: SingleChildScrollView(child: DietsListWidget()),
+        );
+      },
+    );
+  }
 
   // // Função para exibir o modal de preferências
   // void _showPreferencesModal(BuildContext context) {
