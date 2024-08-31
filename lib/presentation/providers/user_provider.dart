@@ -8,17 +8,19 @@ class UserProvider with ChangeNotifier {
 
   model.User? get getUser => _user;
 
+  // Método para verificar se o usuário está carregado
+  bool get isUserLoaded => _user != null;
+
+  // Atualiza os dados do usuário e notifica listeners
   Future<void> refreshUser() async {
     try {
-      model.User user = await _authMethods.getUserDetails();
+      final user = await _authMethods.getUserDetails();
       _user = user;
-      notifyListeners(); 
     } catch (e) {
-      print("Erro ao atualizar o usuário: $e");
       _user = null;
-      notifyListeners(); 
+      debugPrint("Erro ao atualizar o usuário: $e");
+    } finally {
+      notifyListeners(); // Chama notifyListeners uma vez após a atualização
     }
   }
-
-  bool get isUserLoaded => _user != null;
 }

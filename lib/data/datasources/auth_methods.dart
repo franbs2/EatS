@@ -24,7 +24,8 @@ class AuthMethods {
         throw Exception("Usuário não autenticado");
       }
 
-      final snap = await _firestore.collection('users').doc(currentUser.uid).get();
+      final snap =
+          await _firestore.collection('users').doc(currentUser.uid).get();
 
       if (!snap.exists) {
         throw Exception("Documento não encontrado");
@@ -63,8 +64,10 @@ class AuthMethods {
         dietaryRestrictions: [],
       );
 
-      await _firestore.collection('users').doc(cred.user!.uid).set(user.toJson());
-
+      await _firestore
+          .collection('users')
+          .doc(cred.user!.uid)
+          .set(user.toJson());
     } on FirebaseAuthException catch (err) {
       _handleFirebaseSignUpError(err);
     } catch (err) {
@@ -98,7 +101,7 @@ class AuthMethods {
       if (googleUser == null) return;
 
       final googleAuth = await googleUser.authentication;
-      final userCredential = await _auth.signInWithCredential(
+      var userCredential = await _auth.signInWithCredential(
         GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
@@ -106,7 +109,7 @@ class AuthMethods {
       );
 
       await _checkAndCreateUserInFirestore(userCredential.user);
-      
+      //dados do usuário
     } on FirebaseAuthException catch (e) {
       if (context.mounted) {
         showSnackBar(e.message!, context);
@@ -140,7 +143,8 @@ class AuthMethods {
   // Métodos auxiliares privados
 
   // Validação dos campos de cadastro
-  void _validateSignUpFields(String email, String password, String confirmPassword) {
+  void _validateSignUpFields(
+      String email, String password, String confirmPassword) {
     if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
       throw GenericAuthException('Por favor, preencha todos os campos.');
     }
@@ -150,7 +154,8 @@ class AuthMethods {
   }
 
   // Preparar dados de atualização do perfil
-  Future<Map<String, dynamic>> _prepareUpdateData(String? username, Uint8List? file) async {
+  Future<Map<String, dynamic>> _prepareUpdateData(
+      String? username, Uint8List? file) async {
     final updateData = <String, dynamic>{};
 
     if (username != null && username.isNotEmpty) {
@@ -158,7 +163,8 @@ class AuthMethods {
     }
 
     if (file != null) {
-      final photoURL = await StorageMethods().uploadImageToStorage('profilePics', file, false);
+      final photoURL = await StorageMethods()
+          .uploadImageToStorage('profilePics', file, false);
       updateData['photoURL'] = photoURL;
     }
 

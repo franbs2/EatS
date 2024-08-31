@@ -26,7 +26,7 @@ class ButtonGoogleWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Image(
-            image: AssetImage('assets/google_icon.png'),
+            image: AssetImage('assets/icons/google_icon.png'),
             fit: BoxFit.fill,
             height: 24,
           ),
