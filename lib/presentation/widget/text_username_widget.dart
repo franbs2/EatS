@@ -1,49 +1,19 @@
-import 'package:eats/core/style/strings_app.dart';
 import 'package:flutter/material.dart';
 
-class TextUsernameWidget extends StatefulWidget {
-  const TextUsernameWidget({
-    super.key,
-  });
+class TextUsernameWidget extends StatelessWidget {
+  final String username;
 
-  @override
-  State<TextUsernameWidget> createState() => _TextUsernameWidget();
-}
-
-class _TextUsernameWidget extends State<TextUsernameWidget> {
-  final TextEditingController _controller = TextEditingController();
-  bool _isEmpty = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller.addListener(() {
-      setState(() {
-        _isEmpty = _controller.text.isEmpty;
-      });
-    });
-  }
+  const TextUsernameWidget({super.key, this.username = 'Username'});
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.centerLeft,
-      children: [
-        if (_isEmpty)
-          const Text(
-            StringsApp.username,
-            style: TextStyle(
-                color: Colors.grey, fontSize: 20, fontWeight: FontWeight.w600),
-          ),
-        TextFormField(
-          controller: _controller,
-          decoration: const InputDecoration(
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-          ),
-        ),
-      ],
+    return Text(
+      username,
+      style: const TextStyle(
+        color: Color(0xff624242),
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:eats/core/style/color.dart';
+import 'package:eats/core/style/images_app.dart';
 import 'package:eats/core/style/strings_app.dart';
 import 'package:flutter/material.dart';
 import 'package:eats/data/datasources/auth_methods.dart';
@@ -26,7 +27,7 @@ class ButtonGoogleWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Image(
-            image: AssetImage('assets/icons/google_icon.png'),
+            image: AssetImage(ImageApp.googleIcon),
             fit: BoxFit.fill,
             height: 24,
           ),
