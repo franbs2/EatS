@@ -52,6 +52,13 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: Container(
                   color: AppTheme.backgroundColor,
+                  child: Padding(
+                    padding:
+                        EdgeInsets.only(left: 24, right: 24, top: height * 0.2),
+                    child: GridViewRecipesWidget(
+                      listRecipes: recipesProvider.recipes,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -124,12 +131,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: GridViewRecipesWidget(
-                      listRecipes: recipesProvider.recipes,
-                    ),
-                  ),
                 ],
               ),
             ),
