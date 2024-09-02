@@ -63,7 +63,10 @@ class DietsListWidget extends StatelessWidget {
                     ),
                   )),
               TextButton(
-                onPressed: () {},
+                onPressed: () async {
+                  preferencesProvider.saveDiets();
+                  Navigator.of(context).pop();
+                },
                 child: const Text(
                   'Salvar',
                   style: TextStyle(
@@ -72,7 +75,7 @@ class DietsListWidget extends StatelessWidget {
                     fontWeight: FontWeight.normal,
                   ),
                 ),
-              ),
+              )
             ],
           ),
         ],

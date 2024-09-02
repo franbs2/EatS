@@ -24,17 +24,22 @@ class LoginPage extends StatelessWidget {
     if (_formKey.currentState!.validate()) {
       try {
         await _authMethods.loginUser(
+          context: context,
           email: _emailController.text,
           password: _senhaController.text,
         );
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Usuário conectado com sucesso!')),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Usuário conectado com sucesso!')),
+          );
+        }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString())),
+          );
+        }
       }
     }
   }

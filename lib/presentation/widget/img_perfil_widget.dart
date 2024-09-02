@@ -1,4 +1,3 @@
-import 'package:eats/data/datasources/storage_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:eats/presentation/providers/user_provider.dart';
@@ -19,54 +18,23 @@ class ImgPerfilWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider?>(context)?.getUser;
+    final profileImage = Provider.of<UserProvider>(context).profileImage;
 
-    if (user?.photoURL == null || user!.photoURL.isEmpty) {
+    if (profileImage == null) {
       return _buildPlaceholder();
     }
 
-    if (user.photoURL.startsWith('https://lh3.googleusercontent.com/')) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(14.0),
-        child: Image.network(
-          user.photoURL,
-          width: 52,
-          height: 52,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            print("Erro ao carregar a imagem do Google: $error");
-            return _buildPlaceholder();
-          },
-        ),
-      );
-    } 
-
-    return FutureBuilder<String>(
-      future: StorageMethods().loadImageAtStorage(user.photoURL), 
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(14.0),
+      child: Image.memory(
+        profileImage,
+        width: 52,
+        height: 52,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
           return _buildPlaceholder();
-        } else if (snapshot.hasError) {
-          print("Erro ao carregar a imagem do Firebase: ${snapshot.error}");
-          return _buildPlaceholder();
-        } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(14.0),
-            child: Image.network(
-              snapshot.data!,
-              width: 52,
-              height: 52,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                print("Erro ao exibir a imagem do Firebase: $error");
-                return _buildPlaceholder();
-              },
-            ),
-          );
-        } else {
-          return _buildPlaceholder();
-        }
-      },
+        },
+      ),
     );
   }
 }

@@ -27,6 +27,7 @@ class RegisterPage extends StatelessWidget {
     if (_formKey.currentState!.validate()) {
       try {
         await _authMethods.signUpUser(
+          context: context,
           email: _emailController.text,
           password: _senhaController.text,
           confirmPassword: _confirmarSenhaController.text,
