@@ -1,16 +1,14 @@
-import 'package:eats/presentation/providers/preferences_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/style/color.dart';
 import '../../core/style/images_app.dart';
+import '../providers/preferences_provider.dart';
 import '../widget/alergies_list_widget.dart';
 import '../widget/diets_list_widget.dart';
 import '../widget/location_widget.dart';
 import '../widget/preference_options_widget.dart';
-import '../widget/text_username_input_widget.dart';
 import '../widget/text_username_widget.dart';
-import '../widget/upload_widget.dart';
 
 class PerfilPage extends StatelessWidget {
   const PerfilPage({super.key});
