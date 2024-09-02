@@ -24,6 +24,7 @@ dependencies:
   google_sign_in: ^6.2.1
   firebase_app_check: ^0.3.0+4
   geocoding: ^3.0.0
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:
@@ -42,3 +43,6 @@ flutter:
     - assets/icons/google_icon.png
     - assets/icons/upload_icon.png
     - assets/icons/stat_minus_icon.png
+    - assets/google_icon.png
+    - assets/food_img.jpg
+    - assets/star.png
