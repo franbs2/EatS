@@ -1,25 +1,42 @@
+import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eats/data/model/user.dart' as model;
 import 'package:eats/data/datasources/storage_methods.dart';
 import 'package:eats/core/utils/utils.dart';
+import 'package:eats/presentation/providers/user_provider.dart';
+import 'package:eats/presentation/view/edit_perfil_page.dart';
+import 'package:eats/presentation/view/home_page.dart';
+import 'package:eats/presentation/view/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 import '../../core/exceptions/auth_exceptions.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // Persistência de estado
   Stream<User?> get authState => _auth.authStateChanges();
+  User? get currentUser => _auth.currentUser;
+
+  bool isUserLoggedIn() {
+    return currentUser != null;
+  }
 
   // Obter detalhes do usuário
-  Future<model.User> getUserDetails() async {
+  Future<model.User?> getUserDetails() async {
     try {
-      final currentUser = _auth.currentUser;
+      // Esperar até que o currentUser esteja disponível
+      while (_auth.currentUser == null) {
+        debugPrint("esperando currentUser");
+        await Future.delayed(const Duration(milliseconds: 500));
+      }
 
+      final currentUser = _auth.currentUser;
       if (currentUser == null) {
         throw Exception("Usuário não autenticado");
       }
@@ -28,7 +45,7 @@ class AuthMethods {
           await _firestore.collection('users').doc(currentUser.uid).get();
 
       if (!snap.exists) {
-        throw Exception("Documento não encontrado");
+        return null;
       }
 
       return model.User.fromSnap(snap);
@@ -37,8 +54,19 @@ class AuthMethods {
     }
   }
 
+  Future<Object?> getUserAtribute(String atribute) async {
+    final userDoc =
+        await _firestore.collection('users').doc(_auth.currentUser!.uid).get();
+
+    if (userDoc.exists) {
+      return userDoc.data()![atribute];
+    }
+    return null;
+  }
+
   // Cadastro de usuário
   Future<void> signUpUser({
+    required BuildContext context,
     required String email,
     required String password,
     required String confirmPassword,
@@ -62,12 +90,16 @@ class AuthMethods {
         email: email,
         foodNiches: [],
         dietaryRestrictions: [],
+        onboarding: false,
       );
 
       await _firestore
           .collection('users')
           .doc(cred.user!.uid)
           .set(user.toJson());
+      if (context.mounted) {
+        await loginUser(context: context, email: email, password: password);
+      }
     } on FirebaseAuthException catch (err) {
       _handleFirebaseSignUpError(err);
     } catch (err) {
@@ -75,14 +107,56 @@ class AuthMethods {
     }
   }
 
+  // Login com Google
+  Future<void> signInWithGoogle(BuildContext context) async {
+    try {
+      final googleUser = await _signInWithGoogle();
+      if (googleUser == null) return;
+
+      final googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await _auth.signInWithCredential(credential);
+
+      // Atualize o estado do UserProvider
+      if (context.mounted) {
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        await userProvider.refreshUser();
+
+        // Verifique se o usuário foi atualizado no UserProvider
+        debugPrint("Usuário autenticado e atualizado: ${userProvider.user?.uid}");
+      }
+
+      // Redirecione para a tela adequada
+
+      if (context.mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomePage()),
+          (Route<dynamic> route) => false,
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      if (context.mounted) {
+        showSnackBar(e.message!, context);
+      }
+    }
+  }
+
   // Atualizar perfil de usuário
   Future<String> updateUserProfile({
-    required String uid,
     String? username,
     Uint8List? file,
+    List<String>? foodNiches,
+    List<String>? dietaryRestrictions,
+    Bool? onboarding,
   }) async {
+    final uid = _auth.currentUser!.uid;
     try {
-      final updateData = await _prepareUpdateData(username, file);
+      final updateData = await _prepareUpdateData(
+          username, file, foodNiches, dietaryRestrictions, onboarding);
 
       if (updateData.isNotEmpty) {
         await _firestore.collection('users').doc(uid).update(updateData);
@@ -94,36 +168,32 @@ class AuthMethods {
     }
   }
 
-  // Login com Google
-  Future<void> signInWithGoogle(BuildContext context) async {
-    try {
-      final googleUser = await _signInWithGoogle();
-      if (googleUser == null) return;
-
-      final googleAuth = await googleUser.authentication;
-      var userCredential = await _auth.signInWithCredential(
-        GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        ),
-      );
-
-      await _checkAndCreateUserInFirestore(userCredential.user);
-      //dados do usuário
-    } on FirebaseAuthException catch (e) {
-      if (context.mounted) {
-        showSnackBar(e.message!, context);
-      }
-    }
-  }
-
   // Login do usuário com email e senha
   Future<void> loginUser({
+    required BuildContext context,
     required String email,
     required String password,
   }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      userProvider.refreshUser();
+
+      if (userProvider.user!.onboarding) {
+        if (context.mounted) {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => EditPerfilPage()),
+            (Route<dynamic> route) => false,
+          );
+        }
+      } else {
+        if (context.mounted) {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const HomePage()),
+            (Route<dynamic> route) => false,
+          );
+        }
+      }
     } on FirebaseAuthException catch (e) {
       throw GenericAuthException(e.message!);
     } catch (err) {
@@ -132,11 +202,22 @@ class AuthMethods {
   }
 
   // Logout do usuário
-  Future<void> signOut() async {
+  Future<void> logOut(context) async {
     try {
+      // se for logado pelo google
+      if (await _googleSignIn.isSignedIn()) {
+        await _googleSignIn.signOut();
+      }
+
       await _auth.signOut();
+      // Redirecione para a tela adequada
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => LoginPage()),
+        (Route<dynamic> route) => false,
+      );
     } catch (e) {
-      throw LogOutException();
+      // Aqui você pode adicionar detalhes do erro
+      throw LogOutException('Falha ao fazer logout. Tente novamente.');
     }
   }
 
@@ -155,20 +236,64 @@ class AuthMethods {
 
   // Preparar dados de atualização do perfil
   Future<Map<String, dynamic>> _prepareUpdateData(
-      String? username, Uint8List? file) async {
+    String? username,
+    Uint8List? file,
+    List<String>? foodNiches,
+    List<String>? dietaryRestrictions,
+    Bool? onboarding,
+  ) async {
+    final RegExp regex = RegExp(r'^[a-zA-Z0-9\-]+$');
     final updateData = <String, dynamic>{};
 
     if (username != null && username.isNotEmpty) {
-      updateData['username'] = username;
+      if (await _usernameExists(username)) {
+        throw UsernameAlreadyInUseException();
+      } else if (username.length < 3) {
+        throw InvalidTooShortException();
+      } else if (username.length > 20) {
+        throw UsernameTooLongException();
+      } else if (regex.hasMatch(username)) {
+        throw InvalidUsernameException();
+      } else {
+        updateData['username'] = username;
+      }
     }
 
     if (file != null) {
       final photoURL = await StorageMethods()
           .uploadImageToStorage('profilePics', file, false);
+
       updateData['photoURL'] = photoURL;
     }
 
+    if (foodNiches != null && foodNiches.isNotEmpty) {
+      updateData['foodNiches'] = foodNiches;
+    }
+
+    if (dietaryRestrictions != null && dietaryRestrictions.isNotEmpty) {
+      updateData['dietaryRestrictions'] = dietaryRestrictions;
+    }
+
+    if (onboarding != null) {
+      updateData['onboarding'] = onboarding;
+    }
+
     return updateData;
+  }
+
+  // verificar se um username já existe
+  Future<bool> _usernameExists(String username) async {
+    try {
+      final snap = await _firestore
+          .collection('users')
+          .where('username', isEqualTo: username)
+          .limit(1)
+          .get();
+      return snap.docs.isNotEmpty;
+    } catch (err) {
+      debugPrint(err.toString());
+      return false;
+    }
   }
 
   // Lidar com erros de cadastro do Firebase
@@ -183,25 +308,36 @@ class AuthMethods {
   }
 
   // Verificar e criar usuário no Firestore se necessário
-  Future<void> _checkAndCreateUserInFirestore(User? user) async {
-    if (user == null) return;
+  Future<model.User?> createUserInFirestoreIfNotExists() async {
+    final currentUser = _auth.currentUser;
 
-    final userDoc = await _firestore.collection('users').doc(user.uid).get();
-    if (!userDoc.exists) {
+    if (currentUser == null) return null;
+
+    final snap =
+        await _firestore.collection('users').doc(currentUser.uid).get();
+
+    if (!snap.exists) {
       final newUser = model.User(
-        uid: user.uid,
-        username: user.displayName ?? '',
-        photoURL: user.photoURL ?? 'profilePics/default.jpg',
-        email: user.email ?? '',
+        uid: currentUser.uid,
+        username: currentUser.displayName ?? '',
+        photoURL: currentUser.photoURL ?? 'profilePics/default.jpg',
+        email: currentUser.email ?? '',
         foodNiches: [],
         dietaryRestrictions: [],
+        onboarding: true,
       );
-      await _firestore.collection('users').doc(user.uid).set(newUser.toJson());
+      await _firestore
+          .collection('users')
+          .doc(currentUser.uid)
+          .set(newUser.toJson());
+      return newUser;
     }
+
+    return model.User.fromSnap(snap);
   }
 
   // Fazer login com Google
   Future<GoogleSignInAccount?> _signInWithGoogle() async {
-    return await GoogleSignIn().signIn();
+    return await _googleSignIn.signIn();
   }
 }

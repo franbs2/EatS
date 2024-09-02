@@ -60,7 +60,12 @@ class MyApp extends StatelessWidget {
           update: (context, repository, previous) =>
               previous!..updateRepository(repository),
         ),
-        ChangeNotifierProvider(create: (_) => PreferencesProvider()),
+        ChangeNotifierProxyProvider<UserProvider, PreferencesProvider>(
+          create: (context) => PreferencesProvider(
+              Provider.of<UserProvider>(context, listen: false)),
+          update: (context, userProvider, previousPreferencesProvider) =>
+              previousPreferencesProvider!..updateUserProvider(userProvider),
+        ),
       ],
       child: MaterialApp(
         theme: ThemeData(

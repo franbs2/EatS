@@ -28,7 +28,7 @@ class CardRecipeWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               child: FutureBuilder<String>(
                 future: storageMethods
-                    .loadImageAtStorage(recipe.image), // Use a função loadImage
+                    .loadImageInURL(recipe.image, true), // Use a função loadImage
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Container(

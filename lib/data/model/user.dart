@@ -7,6 +7,7 @@ class User {
   final String photoURL;
   final List<String> dietaryRestrictions;
   final List<String> foodNiches;
+  final bool onboarding;
 
   const User({
     required this.uid,
@@ -15,6 +16,7 @@ class User {
     required this.photoURL,
     required this.dietaryRestrictions,
     required this.foodNiches,
+    required this.onboarding,
   });
 
   Map<String, dynamic> toJson() => {
@@ -24,6 +26,7 @@ class User {
         "username": username,
         "dietaryRestrictions": dietaryRestrictions,
         "foodNiches": foodNiches,
+        "onboarding": onboarding,
       };
 
   static User fromSnap(DocumentSnapshot snap) {
@@ -36,6 +39,7 @@ class User {
       photoURL: snapshot['photoURL'] ?? '',
       dietaryRestrictions: List<String>.from(snapshot['dietaryRestrictions'] ?? []),
       foodNiches: List<String>.from(snapshot['foodNiches'] ?? []),
+      onboarding: snapshot['onboarding'] ?? false,
     );
   }
 }

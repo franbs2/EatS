@@ -27,18 +27,22 @@ class RegisterPage extends StatelessWidget {
     if (_formKey.currentState!.validate()) {
       try {
         await _authMethods.signUpUser(
+          context: context,
           email: _emailController.text,
           password: _senhaController.text,
           confirmPassword: _confirmarSenhaController.text,
         );
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Usuário registrado com sucesso!')),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Usuário registrado com sucesso!')),
+          );
+        }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString())),
+          );
+        }
       }
     }
   }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/preferences_provider.dart'; // Importe o PreferencesProvider
 import '../widget/alergies_list_widget.dart';
 import '../widget/button_default_widget.dart';
 import '../widget/diets_list_widget.dart';
@@ -18,69 +16,67 @@ class EditPerfilPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => PreferencesProvider(),
-      child: Scaffold(
-        backgroundColor: AppTheme.secondaryColor,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Stack(
-                children: [
-                  UploadWidget(
-                    ontap: () {},
-                  ),
-                  Positioned(
-                    top: MediaQuery.of(context).size.height * 0.47,
-                    left: 0,
-                    right: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const LocationWidget(),
-                          Form(
+
+    return Scaffold(
+      backgroundColor: AppTheme.secondaryColor,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Stack(
+              children: [
+                UploadWidget(
+                  ontap: () {},
+                ),
+                Positioned(
+                  top: MediaQuery.of(context).size.height * 0.47,
+                  left: 0,
+                  right: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const LocationWidget(),
+                        Form(
                             key: _formKey,
                             child: TextUsernameInputWidget(
                               controller: username,
                             ),
                           ),
-                          const SizedBox(height: 18),
-                          PreferenceOptionsWidget(
-                            title: 'Alergias',
-                            onTap: () => _showAllergiesModal(context),
-                          ),
-                          const SizedBox(height: 18),
-                          PreferenceOptionsWidget(
-                            title: 'Dietas',
-                            onTap: () => _showDietsModal(context),
-                          ),
-                          const SizedBox(height: 18),
-                          PreferenceOptionsWidget(
-                              title: 'Preferências', onTap: () => ()),
-                          const SizedBox(height: 20),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                ButtonDefaultlWidget(
-                                  text: 'Salvar',
-                                  width: 0.1,
-                                  height: 16,
-                                  color: AppTheme.perfilYellow,
-                                  onPressed: () {},
-                                ),
-                              ])
-                        ],
-                      ),
+                        const SizedBox(height: 18),
+                        PreferenceOptionsWidget(
+                          title: 'Alergias',
+                          onTap: () => _showAllergiesModal(context),
+                        ),
+                        const SizedBox(height: 18),
+                        PreferenceOptionsWidget(
+                          title: 'Dietas',
+                          onTap: () => _showDietsModal(context),
+                        ),
+                        const SizedBox(height: 18),
+                        PreferenceOptionsWidget(
+                            title: 'Preferências', onTap: () => ()),
+                        const SizedBox(height: 20),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              ButtonDefaultlWidget(
+                                text: 'Salvar',
+                                width: 0.1,
+                                height: 16,
+                                color: AppTheme.perfilYellow,
+                                onPressed: () {},
+                              ),
+                            ])
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
