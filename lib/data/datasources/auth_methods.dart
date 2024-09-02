@@ -97,8 +97,9 @@ class AuthMethods {
           .collection('users')
           .doc(cred.user!.uid)
           .set(user.toJson());
-
-      await loginUser(context: context, email: email, password: password);
+      if (context.mounted) {
+        await loginUser(context: context, email: email, password: password);
+      }
     } on FirebaseAuthException catch (err) {
       _handleFirebaseSignUpError(err);
     } catch (err) {
@@ -121,17 +122,22 @@ class AuthMethods {
       await _auth.signInWithCredential(credential);
 
       // Atualize o estado do UserProvider
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
-      await userProvider.refreshUser();
+      if (context.mounted) {
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        await userProvider.refreshUser();
 
-      // Verifique se o usuário foi atualizado no UserProvider
-      debugPrint("Usuário autenticado e atualizado: ${userProvider.user?.uid}");
+        // Verifique se o usuário foi atualizado no UserProvider
+        debugPrint("Usuário autenticado e atualizado: ${userProvider.user?.uid}");
+      }
 
       // Redirecione para a tela adequada
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const HomePage()),
-        (Route<dynamic> route) => false,
-      );
+
+      if (context.mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomePage()),
+          (Route<dynamic> route) => false,
+        );
+      }
     } on FirebaseAuthException catch (e) {
       if (context.mounted) {
         showSnackBar(e.message!, context);
@@ -197,7 +203,6 @@ class AuthMethods {
 
   // Logout do usuário
   Future<void> logOut(context) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
     try {
       // se for logado pelo google
       if (await _googleSignIn.isSignedIn()) {

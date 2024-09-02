@@ -89,7 +89,7 @@ class _AuthWrapperWidgetState extends State<AuthWrapperWidget> {
 
   void _navigateToEditPerfil() {
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const EditPerfilPage()),
+      MaterialPageRoute(builder: (context) => EditPerfilPage()),
     );
   }
 }
