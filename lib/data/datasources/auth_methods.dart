@@ -176,7 +176,7 @@ class AuthMethods {
       if (userProvider.user!.onboarding) {
         if (context.mounted) {
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const EditPerfilPage()),
+            MaterialPageRoute(builder: (context) => EditPerfilPage()),
             (Route<dynamic> route) => false,
           );
         }

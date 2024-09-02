@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/style/color.dart';
+import '../../core/style/images_app.dart';
+import '../providers/preferences_provider.dart';
 import '../widget/alergies_list_widget.dart';
 import '../widget/diets_list_widget.dart';
 import '../widget/location_widget.dart';
@@ -76,16 +78,15 @@ class PerfilPage extends StatelessWidget {
                               PopupMenuItem(
                                 onTap: () => {},
                                 child: const Text('Meus dados',
-                                      style: TextStyle(
-                                          color: AppTheme.primaryColor,
-                                          fontWeight: FontWeight.normal)),
-                                ),
+                                    style: TextStyle(
+                                        color: AppTheme.primaryColor,
+                                        fontWeight: FontWeight.normal)),
+                              ),
                               PopupMenuItem(
                                 onTap: () => authmethods.logOut(context),
                                 child: const Text('Sair',
                                     style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 229, 85, 74),
+                                        color: Color.fromARGB(255, 229, 85, 74),
                                         fontWeight: FontWeight.normal)),
                               ),
                             ];

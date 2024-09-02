@@ -9,7 +9,10 @@ import '../widget/upload_widget.dart';
 import '../../core/style/color.dart';
 
 class EditPerfilPage extends StatelessWidget {
-  const EditPerfilPage({super.key});
+  EditPerfilPage({super.key});
+
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController username = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,12 @@ class EditPerfilPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const LocationWidget(),
-                        const TextUsernameInputWidget(),
+                        Form(
+                            key: _formKey,
+                            child: TextUsernameInputWidget(
+                              controller: username,
+                            ),
+                          ),
                         const SizedBox(height: 18),
                         PreferenceOptionsWidget(
                           title: 'Alergias',

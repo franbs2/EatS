@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
           RoutesApp.homePage: (context) => const HomePage(),
           RoutesApp.detailRecipePage: (context) => const DetailRecipePage(),
           RoutesApp.perfilPage: (context) => const PerfilPage(),
-          RoutesApp.editPefilPage: (context) => const EditPerfilPage(),
+          RoutesApp.editPefilPage: (context) => EditPerfilPage(),
         },
       ),
     );
