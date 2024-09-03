@@ -50,6 +50,5 @@ flutter:
     - assets/icons/google_icon.png
     - assets/icons/upload_icon.png
     - assets/icons/stat_minus_icon.png
-    - assets/google_icon.png
     - assets/food_img.jpg
     - assets/star.png
