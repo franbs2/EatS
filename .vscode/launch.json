@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "eats",
+            "name": "EatS",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "eats (profile mode)",
+            "name": "EatS (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "eats (release mode)",
+            "name": "EatS (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

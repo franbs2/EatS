@@ -54,10 +54,10 @@ class _AuthWrapperWidgetState extends State<AuthWrapperWidget> {
   Future<void> _loadUserData(UserProvider userProvider) async {
     try {
       await userProvider.refreshUser();
-      debugPrint('Dados do usuário carregados: ${userProvider.user}');
+      debugPrint('AuthWrapperWidget: Dados do usuário carregados: ${userProvider.user}');
       _navigateToNextScreen(userProvider);
     } catch (e) {
-      debugPrint('Erro ao carregar dados do usuário: $e');
+      debugPrint('AuthWrapperWidget: Erro ao carregar dados do usuário: $e');
     }
   }
 
@@ -66,10 +66,13 @@ class _AuthWrapperWidgetState extends State<AuthWrapperWidget> {
 
     hasNavigated = true; // Marcar que a navegação ocorreu
     if (userProvider.user == null) {
+      debugPrint('AuthWrapperWidget: Nenhum usuário encontrado. Navegando para a página de login...');
       _navigateToLogin();
     } else if (userProvider.user!.onboarding) {
+      debugPrint('AuthWrapperWidget: Usuário concluiu o onboarding. Navegando para a página inicial...');
       _navigateToHome();
     } else {
+      debugPrint('AuthWrapperWidget: Usuário não concluiu o onboarding. Navegando para a página de edição de perfil...');
       _navigateToEditPerfil();
     }
   }

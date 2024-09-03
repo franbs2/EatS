@@ -107,6 +107,5 @@ class PreferencesProvider with ChangeNotifier {
     _allergies = [..._selectedAllergies];
     await _userProvider.refreshUser();
     notifyListeners();
-    debugPrint(_allergies.toString());
   }
 }

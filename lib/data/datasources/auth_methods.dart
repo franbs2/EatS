@@ -32,7 +32,7 @@ class AuthMethods {
     try {
       // Esperar até que o currentUser esteja disponível
       while (_auth.currentUser == null) {
-        debugPrint("esperando currentUser");
+        debugPrint("AuthMethods: esperando currentUser");
         await Future.delayed(const Duration(milliseconds: 500));
       }
 
@@ -127,11 +127,10 @@ class AuthMethods {
         await userProvider.refreshUser();
 
         // Verifique se o usuário foi atualizado no UserProvider
-        debugPrint("Usuário autenticado e atualizado: ${userProvider.user?.uid}");
+        debugPrint("AuthMethods: Usuário autenticado e atualizado: ${userProvider.user?.uid}");
       }
 
       // Redirecione para a tela adequada
-
       if (context.mounted) {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const HomePage()),
@@ -266,11 +265,11 @@ class AuthMethods {
       updateData['photoURL'] = photoURL;
     }
 
-    if (foodNiches != null && foodNiches.isNotEmpty) {
+    if (foodNiches != null) {
       updateData['foodNiches'] = foodNiches;
     }
 
-    if (dietaryRestrictions != null && dietaryRestrictions.isNotEmpty) {
+    if (dietaryRestrictions != null) {
       updateData['dietaryRestrictions'] = dietaryRestrictions;
     }
 
