@@ -57,7 +57,7 @@ class AllergiesListWidget extends StatelessWidget {
                   )),
               TextButton(
                 onPressed: () {
-                  preferencesProvider.saveAllergies();
+                  preferencesProvider.saveAllergies(context);
                   Navigator.of(context).pop();
                 },
                 child: const Text(

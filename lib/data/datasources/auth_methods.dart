@@ -127,7 +127,8 @@ class AuthMethods {
         await userProvider.refreshUser();
 
         // Verifique se o usuário foi atualizado no UserProvider
-        debugPrint("AuthMethods: Usuário autenticado e atualizado: ${userProvider.user?.uid}");
+        debugPrint(
+            "AuthMethods: Usuário autenticado e atualizado: ${userProvider.user?.uid}");
       }
 
       // Redirecione para a tela adequada
@@ -151,11 +152,12 @@ class AuthMethods {
     List<String>? foodNiches,
     List<String>? dietaryRestrictions,
     Bool? onboarding,
+    required BuildContext context,
   }) async {
     final uid = _auth.currentUser!.uid;
     try {
       final updateData = await _prepareUpdateData(
-          username, file, foodNiches, dietaryRestrictions, onboarding);
+          username, file, foodNiches, dietaryRestrictions, onboarding, context);
 
       if (updateData.isNotEmpty) {
         await _firestore.collection('users').doc(uid).update(updateData);
@@ -163,7 +165,7 @@ class AuthMethods {
       }
       return "Nenhuma alteração detectada.";
     } catch (err) {
-      return "Erro ao atualizar perfil: $err";
+      throw Exception(err.toString());
     }
   }
 
@@ -240,29 +242,47 @@ class AuthMethods {
     List<String>? foodNiches,
     List<String>? dietaryRestrictions,
     Bool? onboarding,
+    BuildContext context,
   ) async {
-    final RegExp regex = RegExp(r'^[a-zA-Z0-9\-]+$');
+    final RegExp regex = RegExp(r'^[a-zA-Z0-9\- ]*$');
     final updateData = <String, dynamic>{};
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     if (username != null && username.isNotEmpty) {
-      if (await _usernameExists(username)) {
-        throw UsernameAlreadyInUseException();
-      } else if (username.length < 3) {
+      debugPrint("AuthMethods: Validando username");
+      debugPrint("username: $username");
+      if (!regex.hasMatch(username)) {
+        debugPrint("AuthMethods: username inválido");
+        throw InvalidUsernameException();
+      } else if (username.length <= 5) {
+        debugPrint("AuthMethods: username muito curto");
         throw InvalidTooShortException();
       } else if (username.length > 20) {
+        debugPrint("AuthMethods: username muito longo");
         throw UsernameTooLongException();
-      } else if (regex.hasMatch(username)) {
-        throw InvalidUsernameException();
+      } else if (await _usernameExists(username)) {
+        debugPrint("AuthMethods: username em uso");
+        throw UsernameAlreadyInUseException();
       } else {
+        debugPrint("AuthMethods: Atualizando username");
         updateData['username'] = username;
       }
     }
 
     if (file != null) {
-      final photoURL = await StorageMethods()
-          .uploadImageToStorage('profilePics', file, false);
+      final user = await getUserDetails();
+      final photoURL = user!.photoURL;
 
-      updateData['photoURL'] = photoURL;
+      if (photoURL != 'profilePics/default.jpg' &&
+          !photoURL.startsWith("http")) {
+        debugPrint("AuthMethods: trocando imagem do perfil no Storage");
+        await StorageMethods().replaceImageAtStorage(photoURL, file);
+      } else {
+        debugPrint("AuthMethods: Adicionando imagem do perfil no Storage");
+        await StorageMethods()
+            .uploadImageToStorage('profilePics', _auth.currentUser!.uid, file);
+        updateData['photoURL'] = 'profilePics/${_auth.currentUser!.uid}';
+      }
     }
 
     if (foodNiches != null) {
@@ -277,6 +297,7 @@ class AuthMethods {
       updateData['onboarding'] = onboarding;
     }
 
+    userProvider.refreshUser();
     return updateData;
   }
 

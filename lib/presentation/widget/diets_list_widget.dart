@@ -64,7 +64,7 @@ class DietsListWidget extends StatelessWidget {
                   )),
               TextButton(
                 onPressed: () async {
-                  preferencesProvider.saveDiets();
+                  preferencesProvider.saveDiets(context);
                   Navigator.of(context).pop();
                 },
                 child: const Text(

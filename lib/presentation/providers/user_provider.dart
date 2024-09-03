@@ -49,6 +49,7 @@ class UserProvider with ChangeNotifier {
 
       _user = newUser; // Atualize diretamente o usuário
       await _updateUserProfileImage(newUser);
+      await _updateUsername(newUser);
 
       debugPrint(
           'UserProvider: Refresh do usuário completo. Usuário: ${_user?.uid}');
@@ -85,7 +86,19 @@ class UserProvider with ChangeNotifier {
       _profileImage = newProfileImage;
       notifyListeners();
     } else {
-      debugPrint('Nenhuma mudança na imagem de perfil.');
+      debugPrint('UserProvider: Nenhuma mudança na imagem de perfil.');
     }
   }
+
+
+  Future<void> _updateUsername(model.User newUser) async {
+    if (_user?.username != newUser.username) {
+      debugPrint('UserProvider: Username atualizado.');
+      _user = _user!.copyWith(username: newUser.username);
+      notifyListeners();
+    } else {
+      debugPrint('UserProvider: Nenhuma mudança no username.');
+    }
+  }
+
 }

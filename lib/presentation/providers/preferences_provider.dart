@@ -91,18 +91,20 @@ class PreferencesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> saveDiets() async {
+  Future<void> saveDiets(BuildContext context) async {
     await AuthMethods().updateUserProfile(
       foodNiches: [..._selectedDiets],
+      context: context,
     );
     _diets = [..._selectedDiets];
     await _userProvider.refreshUser();
     notifyListeners();
   }
 
-  Future<void> saveAllergies() async {
+  Future<void> saveAllergies(BuildContext context) async {
     await AuthMethods().updateUserProfile(
       dietaryRestrictions: [..._selectedAllergies],
+      context: context,
     );
     _allergies = [..._selectedAllergies];
     await _userProvider.refreshUser();

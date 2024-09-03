@@ -1,4 +1,12 @@
+import 'dart:typed_data';
+
+import 'package:eats/core/utils/utils.dart';
+import 'package:eats/data/datasources/auth_methods.dart';
+import 'package:eats/presentation/providers/user_provider.dart';
+import 'package:eats/presentation/view/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import '../widget/alergies_list_widget.dart';
 import '../widget/button_default_widget.dart';
 import '../widget/diets_list_widget.dart';
@@ -8,14 +16,33 @@ import '../widget/text_username_input_widget.dart';
 import '../widget/upload_widget.dart';
 import '../../core/style/color.dart';
 
-class EditPerfilPage extends StatelessWidget {
+class EditPerfilPage extends StatefulWidget {
   EditPerfilPage({super.key});
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController username = TextEditingController();
 
   @override
+  _EditPerfilPageState createState() => _EditPerfilPageState();
+}
+
+class _EditPerfilPageState extends State<EditPerfilPage> {
+  Uint8List? imageBytes;
+
+  void _uploadImage() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final bytes = await image!.readAsBytes();
+    setState(() {
+      imageBytes = bytes;
+    });
+    debugPrint("bytes: $bytes");
+    debugPrint("imageBytes: $imageBytes");
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final profileImage = userProvider.profileImage;
 
     return Scaffold(
       backgroundColor: AppTheme.secondaryColor,
@@ -26,7 +53,10 @@ class EditPerfilPage extends StatelessWidget {
             child: Stack(
               children: [
                 UploadWidget(
-                  ontap: () {},
+                  backgroundImage: imageBytes ?? profileImage,
+                  ontap: () async {
+                    _uploadImage();
+                  },
                 ),
                 Positioned(
                   top: MediaQuery.of(context).size.height * 0.47,
@@ -39,11 +69,11 @@ class EditPerfilPage extends StatelessWidget {
                       children: [
                         const LocationWidget(),
                         Form(
-                            key: _formKey,
-                            child: TextUsernameInputWidget(
-                              controller: username,
-                            ),
+                          key: widget._formKey,
+                          child: TextUsernameInputWidget(
+                            controller: widget.username,
                           ),
+                        ),
                         const SizedBox(height: 18),
                         PreferenceOptionsWidget(
                           title: 'Alergias',
@@ -66,7 +96,47 @@ class EditPerfilPage extends StatelessWidget {
                                 width: 0.1,
                                 height: 16,
                                 color: AppTheme.perfilYellow,
-                                onPressed: () {},
+                                onPressed: () async {
+                                  if (userProvider.user!.onboarding) {
+                                    try {
+                                      await AuthMethods().updateUserProfile(
+                                        username: widget.username.text,
+                                        file: imageBytes,
+                                        context: context,
+                                      );
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const HomePage()),
+                                        (Route<dynamic> route) => false,
+                                      );
+                                    } catch (e) {
+                                      showSnackBar(e.toString(), context);
+                                    }
+                                  } else {
+                                    if (widget.username.text.isNotEmpty) {
+                                      try {
+                                        await AuthMethods().updateUserProfile(
+                                          username: widget.username.text,
+                                          file: imageBytes,
+                                          context: context,
+                                        );
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const HomePage()),
+                                          (Route<dynamic> route) => false,
+                                        );
+                                      } catch (e) {
+                                        showSnackBar(e.toString(), context);
+                                      }
+                                    } else {
+                                      showSnackBar("Preencha o nome de usuário",
+                                          context);
+                                    }
+                                  }
+                                },
                               ),
                             ])
                       ],
@@ -99,7 +169,7 @@ class EditPerfilPage extends StatelessWidget {
     );
   }
 
-  //  Função para exibir o modal de dietas
+  //  Fun o para exibir o modal de dietas
   void _showDietsModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -118,7 +188,7 @@ class EditPerfilPage extends StatelessWidget {
     );
   }
 
-  // // Função para exibir o modal de preferências
+  // // Fun o para exibir o modal de prefer ncias
   // void _showPreferencesModal(BuildContext context) {
   //   showModalBottomSheet(
   //     context: context,
