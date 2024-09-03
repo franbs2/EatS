@@ -1,3 +1,4 @@
+import 'package:eats/core/routes/routes.dart';
 import 'package:eats/data/datasources/auth_methods.dart';
 import 'package:eats/presentation/providers/preferences_provider.dart';
 import 'package:eats/presentation/providers/user_provider.dart';
@@ -63,7 +64,8 @@ class PerfilPage extends StatelessWidget {
                           itemBuilder: (context) {
                             return [
                               PopupMenuItem(
-                                onTap: () => {},
+                                onTap: () => Navigator.pushNamed(
+                                    context, RoutesApp.editPefilPage),
                                 child: const SizedBox(
                                   child: Text(
                                     'Editar Perfil',

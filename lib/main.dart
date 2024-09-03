@@ -14,7 +14,7 @@ import 'firebase/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'presentation/providers/preferences_provider.dart';
-import 'presentation/view/detail_recipe_page.dart';
+import 'presentation/view/detail_recipes_page.dart';
 import 'presentation/view/edit_perfil_page.dart';
 import 'presentation/view/home_page.dart';
 import 'presentation/view/initial_page.dart';
@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
           RoutesApp.registerPage: (context) => RegisterPage(),
           RoutesApp.loginPage: (context) => LoginPage(),
           RoutesApp.homePage: (context) => const HomePage(),
-          RoutesApp.detailRecipePage: (context) => const DetailRecipePage(),
+          RoutesApp.detailRecipePage: (context) => const DetailRecipesPage(),
           RoutesApp.perfilPage: (context) => const PerfilPage(),
           RoutesApp.editPefilPage: (context) => EditPerfilPage(),
         },
