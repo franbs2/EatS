@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 class UserProvider with ChangeNotifier {
   model.User? _user;
   Uint8List? _profileImage;
+  Uint8List? _image;
 
   final AuthMethods _authMethods = AuthMethods();
 
@@ -90,7 +91,6 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-
   Future<void> _updateUsername(model.User newUser) async {
     if (_user?.username != newUser.username) {
       debugPrint('UserProvider: Username atualizado.');
@@ -101,4 +101,10 @@ class UserProvider with ChangeNotifier {
     }
   }
 
+  void clearUser() {
+    debugPrint('UserProvider: Limpando dados do usuário...');
+    _user = null;
+    _profileImage = null;
+    notifyListeners();
+  }
 }

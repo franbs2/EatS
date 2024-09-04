@@ -40,6 +40,13 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
   }
 
   @override
+  void dispose() {
+    debugPrint("EditPerfilPage: Disposing...");
+    imageBytes = null;
+    super.dispose();
+  }
+  
+  @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final profileImage = userProvider.profileImage;
@@ -120,6 +127,7 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
                                           username: widget.username.text,
                                           file: imageBytes,
                                           context: context,
+                                          onboarding: true,
                                         );
                                         Navigator.of(context)
                                             .pushAndRemoveUntil(

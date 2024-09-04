@@ -17,8 +17,8 @@ class StorageMethods {
     // checar se já existe esse nome no firebase
     debugPrint("StorageMethods: iniciando uploadImageToStorage...");
     try {
-      _storage.ref().child(childName).child(name);
-      debugPrint("StorageMethods: Imagem existe");
+       var ref = await _storage.ref().child(childName).child(name).getDownloadURL();
+      debugPrint("StorageMethods: Imagem existe: $ref");
 
       return "";
     } catch (e) {
@@ -28,7 +28,7 @@ class StorageMethods {
           _storage.ref().child(childName).child(name);
       debugPrint("StorageMethods: ref: $ref");
       UploadTask uploadTask = ref.putData(file);
-      TaskSnapshot snap = await uploadTask;
+      await uploadTask.whenComplete(() => null);
 
       return "$childName/$name";
     }  

@@ -151,7 +151,7 @@ class AuthMethods {
     Uint8List? file,
     List<String>? foodNiches,
     List<String>? dietaryRestrictions,
-    Bool? onboarding,
+    bool? onboarding,
     required BuildContext context,
   }) async {
     final uid = _auth.currentUser!.uid;
@@ -178,9 +178,9 @@ class AuthMethods {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      userProvider.refreshUser();
-
-      if (userProvider.user!.onboarding) {
+      await userProvider.refreshUser();
+      debugPrint("{userProvider.user!.onboarding}");
+      if (!userProvider.user!.onboarding) {
         if (context.mounted) {
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => EditPerfilPage()),
@@ -241,7 +241,7 @@ class AuthMethods {
     Uint8List? file,
     List<String>? foodNiches,
     List<String>? dietaryRestrictions,
-    Bool? onboarding,
+    bool? onboarding,
     BuildContext context,
   ) async {
     final RegExp regex = RegExp(r'^[a-zA-Z0-9\- ]*$');
