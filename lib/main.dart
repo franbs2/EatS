@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'core/routes/routes.dart';
+import 'data/datasources/ia_repository.dart';
 import 'firebase/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -53,6 +54,9 @@ class MyApp extends StatelessWidget {
           create: (_) => RecipesRepository(
             FirebaseFirestore.instance,
           ),
+        ),
+        Provider<AIRepository>(
+          create: (_) => AIRepository(apiKey: 'API_KEY'),
         ),
         ChangeNotifierProxyProvider<RecipesRepository, RecipesProvider>(
           create: (context) =>
