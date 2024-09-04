@@ -27,21 +27,21 @@ class CardRecipeWidget extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: FutureBuilder<String>(
-                future: storageMethods
-                    .loadImageInURL(recipe.image, true), // Use a função loadImage
+                future: storageMethods.loadImageInURL(
+                    recipe.image, true), // Use a função loadImage
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Container(
                       height: MediaQuery.of(context).size.height * 0.18,
                       width: double.infinity,
-                      color: Colors.grey.shade200,
+                      color: Colors.white,
                       child: const Center(child: CircularProgressIndicator()),
                     );
                   } else if (snapshot.hasError) {
                     return Container(
                       height: MediaQuery.of(context).size.height * 0.18,
                       width: double.infinity,
-                      color: Colors.grey.shade200,
+                      color: Colors.white,
                       child:
                           const Center(child: Text('Erro ao carregar imagem')),
                     );
