@@ -39,7 +39,7 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
     }
   }
 
-  Future<Recipes> _generateRecipe() async {
+  Future<Recipes?> _generateRecipe() async {
     final ingredients = _controllers.map((e) => e.text).toList();
     print(ingredients);
     final recipe = await _aiRepository.generateRecipe(ingredients);
@@ -112,7 +112,7 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
                     width: 0.1 / 2,
                     height: 14,
                     onPressed: () async {
-                      Recipes recipe = await _generateRecipe();
+                      Recipes? recipe = await _generateRecipe();
                       Navigator.of(context).pushNamed(
                           RoutesApp.detailRecipePage,
                           arguments: recipe);

@@ -6,4 +6,5 @@ class ImageApp {
   static const String googleIcon = 'assets/icons/google_icon.png';
   static const String statMinusIcon = 'assets/icons/stat_minus_icon.png';
   static const String uploadIcon = 'assets/icons/upload_icon.png';
+  static const String hungryIllustration = 'assets/hungry.png';
 }
