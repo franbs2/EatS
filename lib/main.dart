@@ -4,6 +4,7 @@ import 'package:eats/data/datasources/recipes_repository.dart';
 import 'package:eats/presentation/auth_wrapper_widget.dart';
 import 'package:eats/presentation/providers/recipes_provider.dart';
 import 'package:eats/presentation/providers/user_provider.dart';
+import 'package:eats/presentation/view/generate_recipes_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +22,7 @@ import 'presentation/view/home_page.dart';
 import 'presentation/view/initial_page.dart';
 import 'presentation/view/login_page.dart';
 import 'presentation/view/perfil_page.dart';
+import 'presentation/view/recipe_page.dart';
 import 'presentation/view/register_page.dart';
 
 void main() async {

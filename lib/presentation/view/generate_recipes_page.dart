@@ -1,3 +1,5 @@
+import 'package:eats/core/routes/routes.dart';
+import 'package:eats/data/model/recipes.dart';
 import 'package:eats/presentation/widget/button_default_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +37,14 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
         _controllers.removeAt(index);
       });
     }
+  }
+
+  Future<Recipes> _generateRecipe() async {
+    final ingredients = _controllers.map((e) => e.text).toList();
+    print(ingredients);
+    final recipe = await _aiRepository.generateRecipe(ingredients);
+
+    return recipe;
   }
 
   @override
@@ -97,18 +107,16 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
             Align(
                 alignment: Alignment.bottomRight,
                 child: ButtonDefaultlWidget(
-                  text: 'Gerar receita',
-                  color: AppTheme.loginYellow,
-                  width: 0.1 / 2,
-                  height: 14,
-                  onPressed: () async {
-                    final ingredients = _controllers
-                        .map((controller) => controller.text)
-                        .toList();
-                    final response =
-                        await _aiRepository.generateRecipe(ingredients);
-                  },
-                )),
+                    text: 'Gerar receita',
+                    color: AppTheme.loginYellow,
+                    width: 0.1 / 2,
+                    height: 14,
+                    onPressed: () async {
+                      Recipes recipe = await _generateRecipe();
+                      Navigator.of(context).pushNamed(
+                          RoutesApp.detailRecipePage,
+                          arguments: recipe);
+                    })),
           ],
         ),
       ),
