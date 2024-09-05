@@ -301,32 +301,6 @@ class AuthMethods {
     return updateData;
   }
 
-  // verificar se um username já existe
-  Future<bool> _usernameExists(String username) async {
-    try {
-      final snap = await _firestore
-          .collection('users')
-          .where('username', isEqualTo: username)
-          .limit(1)
-          .get();
-      return snap.docs.isNotEmpty;
-    } catch (err) {
-      debugPrint(err.toString());
-      return false;
-    }
-  }
-
-  // Lidar com erros de cadastro do Firebase
-  void _handleFirebaseSignUpError(FirebaseAuthException err) {
-    if (err.code == 'invalid-email') {
-      throw InvalidEmailException();
-    } else if (err.code == 'weak-password') {
-      throw WeakPasswordException();
-    } else {
-      throw GenericAuthException(err.message ?? 'Erro desconhecido.');
-    }
-  }
-
   // Verificar e criar usuário no Firestore se necessário
   Future<model.User?> createUserInFirestoreIfNotExists() async {
     final currentUser = _auth.currentUser;
@@ -354,6 +328,32 @@ class AuthMethods {
     }
 
     return model.User.fromSnap(snap);
+  }
+
+  // verificar se um username já existe
+  Future<bool> _usernameExists(String username) async {
+    try {
+      final snap = await _firestore
+          .collection('users')
+          .where('username', isEqualTo: username)
+          .limit(1)
+          .get();
+      return snap.docs.isNotEmpty;
+    } catch (err) {
+      debugPrint(err.toString());
+      return false;
+    }
+  }
+
+  // Lidar com erros de cadastro do Firebase
+  void _handleFirebaseSignUpError(FirebaseAuthException err) {
+    if (err.code == 'invalid-email') {
+      throw InvalidEmailException();
+    } else if (err.code == 'weak-password') {
+      throw WeakPasswordException();
+    } else {
+      throw GenericAuthException(err.message ?? 'Erro desconhecido.');
+    }
   }
 
   // Fazer login com Google

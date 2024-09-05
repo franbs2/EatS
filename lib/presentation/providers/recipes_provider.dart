@@ -7,8 +7,7 @@ class RecipesProvider extends ChangeNotifier {
   List<Recipes> _recipes = [];
   bool _isLoading = false;
   String? _errorMessage;
-
-
+  
   RecipesProvider(RecipesRepository recipeRepository) {
     _recipeRepository = recipeRepository;
   }

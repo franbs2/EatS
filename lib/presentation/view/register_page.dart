@@ -1,4 +1,5 @@
 import 'package:eats/core/style/strings_app.dart';
+import 'package:eats/presentation/view/login_page.dart';
 import 'package:eats/presentation/widget/button_google_widget.dart';
 import 'package:eats/presentation/widget/continue_with_widget.dart';
 import 'package:eats/presentation/widget/page_default_auth.dart';
@@ -6,7 +7,6 @@ import 'package:eats/presentation/widget/text_widget.dart';
 import 'package:flutter/material.dart';
 import '../../core/style/color.dart';
 
-import '../../core/routes/routes.dart';
 import '../widget/button_default_widget.dart';
 import '../widget/text_button_have_account_widget.dart';
 import '../widget/text_password_input_widget.dart';
@@ -108,8 +108,10 @@ class RegisterPage extends StatelessWidget {
                 ])),
             const SizedBox(height: 20),
             TextButtonHaveAccountWidget(
-              onPressed: () =>
-                  Navigator.of(context).pushNamed(RoutesApp.loginPage),
+              onPressed: () => Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => LoginPage()),
+                (Route<dynamic> route) => false,
+              ),
               title: StringsApp.haveAccount,
             ),
             const SizedBox(height: 20),

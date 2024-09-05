@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eats/data/datasources/auth_methods.dart';
+import 'package:eats/data/datasources/banners_repository.dart';
 import 'package:eats/data/datasources/recipes_repository.dart';
 import 'package:eats/presentation/auth_wrapper_widget.dart';
+import 'package:eats/presentation/providers/banners_provider.dart';
 import 'package:eats/presentation/providers/recipes_provider.dart';
 import 'package:eats/presentation/providers/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,24 +41,35 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        StreamProvider<User?>(
+          create: (context) => context.read<AuthMethods>().authState,
+          initialData: null,
+        ),
         ChangeNotifierProvider(
           create: (_) => UserProvider(),
         ),
         Provider<AuthMethods>(
           create: (_) => AuthMethods(),
         ),
-        StreamProvider<User?>(
-          create: (context) => context.read<AuthMethods>().authState,
-          initialData: null,
-        ),
         Provider<RecipesRepository>(
           create: (_) => RecipesRepository(
+            FirebaseFirestore.instance,
+          ),
+        ),
+        Provider<BannersRepository>(
+          create: (_) => BannersRepository(
             FirebaseFirestore.instance,
           ),
         ),
         ChangeNotifierProxyProvider<RecipesRepository, RecipesProvider>(
           create: (context) =>
               RecipesProvider(context.read<RecipesRepository>()),
+          update: (context, repository, previous) =>
+              previous!..updateRepository(repository),
+        ),
+        ChangeNotifierProxyProvider<BannersRepository, BannersProvider>(
+          create: (context) =>
+              BannersProvider(context.read<BannersRepository>()),
           update: (context, repository, previous) =>
               previous!..updateRepository(repository),
         ),

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:eats/core/style/color.dart';
 import 'package:eats/data/model/recipes.dart';
 import 'package:eats/presentation/widget/rating_bar_widget.dart';

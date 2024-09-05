@@ -1,3 +1,4 @@
+import 'package:eats/presentation/providers/banners_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,12 +25,15 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<RecipesProvider>(context, listen: false).fetchRecipes();
+      Provider.of<BannersProvider>(context, listen: false).fetchBanners();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final recipesProvider = Provider.of<RecipesProvider>(context);
+    final bannersProvider = Provider.of<BannersProvider>(context);
+    
 
     const categories = StringsApp.listFilterCategories;
     double height = MediaQuery.of(context).size.height;
@@ -112,7 +116,9 @@ class _HomePageState extends State<HomePage> {
                     child: SearchBarWidget(),
                   ),
                   const SizedBox(height: 24),
-                  const CarouselWidget(),
+                  CarouselWidget(
+                    banners: bannersProvider.banners,
+                  ),
                   const SizedBox(height: 24),
                   const FilterCategoriesRecipesWidget(categories: categories),
                   if (recipesProvider.recipes.isEmpty)
