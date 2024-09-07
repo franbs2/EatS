@@ -24,7 +24,6 @@ import 'presentation/view/home_page.dart';
 import 'presentation/view/initial_page.dart';
 import 'presentation/view/login_page.dart';
 import 'presentation/view/perfil_page.dart';
-import 'presentation/view/recipe_page.dart';
 import 'presentation/view/register_page.dart';
 
 void main() async {
