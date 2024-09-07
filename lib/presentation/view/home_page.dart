@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../core/routes/routes.dart';
 import '../../core/style/color.dart';
+import '../../core/style/images_app.dart';
 import '../../core/style/strings_app.dart';
 import '../providers/recipes_provider.dart';
 import '../widget/carousel_widget.dart';

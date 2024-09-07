@@ -4,10 +4,15 @@
     // Para obter mais informações, acesse: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
         {
             "name": "EatS",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "toolArgs": [
+                "--dart-define-from-file",
+                ".env"
+            ]
         },
         {
             "name": "EatS (profile mode)",

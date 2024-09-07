@@ -26,6 +26,7 @@ dependencies:
   geocoding: ^3.0.0
   flutter_rating_bar: ^4.0.1
   http: ^1.2.2
+  google_generative_ai: ^0.4.5
   flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
@@ -53,3 +54,4 @@ flutter:
     - assets/icons/google_icon.png
     - assets/food_img.jpg
     - assets/star.png
+    - assets/hungry.png

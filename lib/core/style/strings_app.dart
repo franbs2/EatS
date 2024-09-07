@@ -24,7 +24,7 @@ class StringsApp {
 
   static const List<String> listFilterCategories = [
     'Todos',
-    'Lanches',
+    'Lanche',
     'Jantar',
     'Almoço',
     'Café da Manhã',

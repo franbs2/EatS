@@ -6,12 +6,14 @@ import 'package:eats/presentation/auth_wrapper_widget.dart';
 import 'package:eats/presentation/providers/banners_provider.dart';
 import 'package:eats/presentation/providers/recipes_provider.dart';
 import 'package:eats/presentation/providers/user_provider.dart';
+import 'package:eats/presentation/view/generate_recipes_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'core/routes/routes.dart';
+import 'data/datasources/ia_repository.dart';
 import 'firebase/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -22,6 +24,7 @@ import 'presentation/view/home_page.dart';
 import 'presentation/view/initial_page.dart';
 import 'presentation/view/login_page.dart';
 import 'presentation/view/perfil_page.dart';
+import 'presentation/view/recipe_page.dart';
 import 'presentation/view/register_page.dart';
 
 void main() async {
@@ -55,6 +58,9 @@ class MyApp extends StatelessWidget {
           create: (_) => RecipesRepository(
             FirebaseFirestore.instance,
           ),
+        ),
+        Provider<AIRepository>(
+          create: (_) => AIRepository(apiKey: 'API_KEY'),
         ),
         Provider<BannersRepository>(
           create: (_) => BannersRepository(

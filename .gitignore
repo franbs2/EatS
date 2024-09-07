@@ -5,6 +5,7 @@
 /ios
 /macos
 /lib/firebase
+.env
 
 # Miscellaneous
 *.class
