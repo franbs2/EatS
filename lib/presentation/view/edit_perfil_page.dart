@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:eats/core/utils/utils.dart';
@@ -23,7 +24,7 @@ class EditPerfilPage extends StatefulWidget {
   final TextEditingController username = TextEditingController();
 
   @override
-  _EditPerfilPageState createState() => _EditPerfilPageState();
+  State<EditPerfilPage> createState() => _EditPerfilPageState();
 }
 
 class _EditPerfilPageState extends State<EditPerfilPage> {
@@ -45,11 +46,13 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
     imageBytes = null;
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final profileImage = userProvider.profileImage;
+    bool arrowBack =
+        ModalRoute.of(context)?.settings.arguments as bool? ?? false;
 
     return Scaffold(
       backgroundColor: AppTheme.secondaryColor,
@@ -61,10 +64,31 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
               children: [
                 UploadWidget(
                   backgroundImage: imageBytes ?? profileImage,
-                  ontap: () async {
-                    _uploadImage();
-                  },
+                  ontap: _uploadImage,
                 ),
+                if (arrowBack)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 36),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            size: 28,
+                            shadows: [
+                              Shadow(
+                                color: Colors.black,
+                                blurRadius: 10,
+                              ),
+                            ],
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ),
                 Positioned(
                   top: MediaQuery.of(context).size.height * 0.47,
                   left: 0,
@@ -93,23 +117,43 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
                         ),
                         const SizedBox(height: 18),
                         PreferenceOptionsWidget(
-                            title: 'Preferências', onTap: () => ()),
+                          title: 'Preferências',
+                          onTap: () {},
+                        ),
                         const SizedBox(height: 20),
                         Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              ButtonDefaultlWidget(
-                                text: 'Salvar',
-                                width: 0.1,
-                                height: 16,
-                                color: AppTheme.perfilYellow,
-                                onPressed: () async {
-                                  if (userProvider.user!.onboarding) {
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ButtonDefaultlWidget(
+                              text: 'Salvar',
+                              width: 0.1,
+                              height: 16,
+                              color: AppTheme.perfilYellow,
+                              onPressed: () async {
+                                if (userProvider.user!.onboarding) {
+                                  try {
+                                    await AuthMethods().updateUserProfile(
+                                      username: widget.username.text,
+                                      file: imageBytes,
+                                      context: context,
+                                    );
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const HomePage()),
+                                      (Route<dynamic> route) => false,
+                                    );
+                                  } catch (e) {
+                                    showSnackBar(e.toString(), context);
+                                  }
+                                } else {
+                                  if (widget.username.text.isNotEmpty) {
                                     try {
                                       await AuthMethods().updateUserProfile(
                                         username: widget.username.text,
                                         file: imageBytes,
                                         context: context,
+                                        onboarding: true,
                                       );
                                       Navigator.of(context).pushAndRemoveUntil(
                                         MaterialPageRoute(
@@ -121,32 +165,14 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
                                       showSnackBar(e.toString(), context);
                                     }
                                   } else {
-                                    if (widget.username.text.isNotEmpty) {
-                                      try {
-                                        await AuthMethods().updateUserProfile(
-                                          username: widget.username.text,
-                                          file: imageBytes,
-                                          context: context,
-                                          onboarding: true,
-                                        );
-                                        Navigator.of(context)
-                                            .pushAndRemoveUntil(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const HomePage()),
-                                          (Route<dynamic> route) => false,
-                                        );
-                                      } catch (e) {
-                                        showSnackBar(e.toString(), context);
-                                      }
-                                    } else {
-                                      showSnackBar("Preencha o nome de usuário",
-                                          context);
-                                    }
+                                    showSnackBar(
+                                        "Preencha o nome de usuário", context);
                                   }
-                                },
-                              ),
-                            ])
+                                }
+                              },
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -177,7 +203,6 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
     );
   }
 
-  //  Fun o para exibir o modal de dietas
   void _showDietsModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -195,18 +220,4 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
       },
     );
   }
-
-  // // Fun o para exibir o modal de prefer ncias
-  // void _showPreferencesModal(BuildContext context) {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     backgroundColor: Colors.white,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
-  //     ),
-  //     builder: (context) {
-  //       return const PreferencesListWidget();
-  //     },
-  //   );
-  // }
 }

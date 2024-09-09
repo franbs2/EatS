@@ -17,7 +17,6 @@ class PerfilPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Não precisa mais criar um novo PreferencesProvider aqui.
     final userProvider = Provider.of<UserProvider>(context);
     final authmethods = Provider.of<AuthMethods>(context);
 
@@ -46,6 +45,12 @@ class PerfilPage extends StatelessWidget {
                         icon: const Icon(
                           Icons.arrow_back,
                           size: 28,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black,
+                              blurRadius: 10,
+                            ),
+                          ],
                         ),
                         onPressed: () => Navigator.pop(context),
                         color: Colors.white,
@@ -65,7 +70,8 @@ class PerfilPage extends StatelessWidget {
                             return [
                               PopupMenuItem(
                                 onTap: () => Navigator.pushNamed(
-                                    context, RoutesApp.editPefilPage),
+                                    context, RoutesApp.editPefilPage,
+                                    arguments: true),
                                 child: const SizedBox(
                                   child: Text(
                                     'Editar Perfil',
