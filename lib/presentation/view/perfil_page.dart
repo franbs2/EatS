@@ -39,22 +39,8 @@ class PerfilPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 36),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      IconButton(
-                        icon: const Icon(
-                          Icons.arrow_back,
-                          size: 28,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black,
-                              blurRadius: 10,
-                            ),
-                          ],
-                        ),
-                        onPressed: () => Navigator.pop(context),
-                        color: Colors.white,
-                      ),
                       PopupMenuButton(
                           shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(

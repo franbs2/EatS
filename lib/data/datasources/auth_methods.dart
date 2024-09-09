@@ -1,12 +1,11 @@
-import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eats/data/model/user.dart' as model;
 import 'package:eats/data/datasources/storage_methods.dart';
 import 'package:eats/core/utils/utils.dart';
+import 'package:eats/presentation/main_screen.dart';
 import 'package:eats/presentation/providers/user_provider.dart';
 import 'package:eats/presentation/view/edit_perfil_page.dart';
-import 'package:eats/presentation/view/home_page.dart';
 import 'package:eats/presentation/view/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -134,7 +133,7 @@ class AuthMethods {
       // Redirecione para a tela adequada
       if (context.mounted) {
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(builder: (context) => const MainScreen()),
           (Route<dynamic> route) => false,
         );
       }
@@ -179,7 +178,7 @@ class AuthMethods {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       await userProvider.refreshUser();
-      debugPrint("{userProvider.user!.onboarding}");
+      debugPrint("${userProvider.user!.onboarding}");
       if (!userProvider.user!.onboarding) {
         if (context.mounted) {
           Navigator.of(context).pushAndRemoveUntil(
@@ -190,7 +189,7 @@ class AuthMethods {
       } else {
         if (context.mounted) {
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(builder: (context) => const MainScreen()),
             (Route<dynamic> route) => false,
           );
         }

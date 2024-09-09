@@ -50,7 +50,9 @@ flutter:
     - assets/icons/google_icon.png
     - assets/icons/upload_icon.png
     - assets/icons/stat_minus_icon.png
-    - assets/icons/google_icon.png
+    - assets/icons/icon.png
+    - assets/icons/mini_icon.png
     - assets/food_img.jpg
     - assets/star.png
     - assets/hungry.png
+    - assets/icons/brilha.png

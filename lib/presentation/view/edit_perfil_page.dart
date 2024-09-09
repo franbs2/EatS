@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:eats/core/utils/utils.dart';
 import 'package:eats/data/datasources/auth_methods.dart';
+import 'package:eats/presentation/main_screen.dart';
 import 'package:eats/presentation/providers/user_provider.dart';
 import 'package:eats/presentation/view/home_page.dart';
 import 'package:flutter/material.dart';
@@ -140,7 +141,7 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
                                     Navigator.of(context).pushAndRemoveUntil(
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const HomePage()),
+                                              const MainScreen()),
                                       (Route<dynamic> route) => false,
                                     );
                                   } catch (e) {
@@ -158,7 +159,7 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
                                       Navigator.of(context).pushAndRemoveUntil(
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const HomePage()),
+                                                const MainScreen()),
                                         (Route<dynamic> route) => false,
                                       );
                                     } catch (e) {

@@ -1,10 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:eats/presentation/providers/user_provider.dart';
 import 'package:eats/presentation/view/edit_perfil_page.dart';
 import 'package:eats/presentation/view/home_page.dart';
 import 'package:eats/presentation/view/login_page.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
+import 'main_screen.dart';
 
 class AuthWrapperWidget extends StatefulWidget {
   const AuthWrapperWidget({super.key});
@@ -54,7 +57,8 @@ class _AuthWrapperWidgetState extends State<AuthWrapperWidget> {
   Future<void> _loadUserData(UserProvider userProvider) async {
     try {
       await userProvider.refreshUser();
-      debugPrint('AuthWrapperWidget: Dados do usuário carregados: ${userProvider.user}');
+      debugPrint(
+          'AuthWrapperWidget: Dados do usuário carregados: ${userProvider.user}');
       _navigateToNextScreen(userProvider);
     } catch (e) {
       debugPrint('AuthWrapperWidget: Erro ao carregar dados do usuário: $e');
@@ -66,13 +70,16 @@ class _AuthWrapperWidgetState extends State<AuthWrapperWidget> {
 
     hasNavigated = true; // Marcar que a navegação ocorreu
     if (userProvider.user == null) {
-      debugPrint('AuthWrapperWidget: Nenhum usuário encontrado. Navegando para a página de login...');
+      debugPrint(
+          'AuthWrapperWidget: Nenhum usuário encontrado. Navegando para a página de login...');
       _navigateToLogin();
     } else if (userProvider.user!.onboarding) {
-      debugPrint('AuthWrapperWidget: Usuário concluiu o onboarding. Navegando para a página inicial...');
+      debugPrint(
+          'AuthWrapperWidget: Usuário concluiu o onboarding. Navegando para a página inicial...');
       _navigateToHome();
     } else {
-      debugPrint('AuthWrapperWidget: Usuário não concluiu o onboarding. Navegando para a página de edição de perfil...');
+      debugPrint(
+          'AuthWrapperWidget: Usuário não concluiu o onboarding. Navegando para a página de edição de perfil...');
       _navigateToEditPerfil();
     }
   }
@@ -86,7 +93,8 @@ class _AuthWrapperWidgetState extends State<AuthWrapperWidget> {
 
   void _navigateToHome() {
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const HomePage()),
+      MaterialPageRoute(
+          builder: (context) => const MainScreen()), // Navegue para MainScreen
     );
   }
 

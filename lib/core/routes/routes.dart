@@ -8,4 +8,5 @@ class RoutesApp {
   static String initialPage = '/initialPage';
   static String searchPage = '/searchPage';
   static String editPefilPage = '/editPerfilPage';
+  static String generateRecipePage = '/generateRecipePage';
 }

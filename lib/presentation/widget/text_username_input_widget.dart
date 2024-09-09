@@ -51,13 +51,12 @@ class _TextUsernameInputWidgetState extends State<TextUsernameInputWidget> {
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             floatingLabelBehavior: FloatingLabelBehavior.never,
-            //tamanho da fonte
-            hintStyle: TextStyle(
-              color: Colors.black,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+            //mudar a cor do texto adicionado pelo usuario
           ),
+          style: const TextStyle(
+              color: Color(0xff624242),
+              fontSize: 20,
+              fontWeight: FontWeight.w600),
         ),
       ],
     );
