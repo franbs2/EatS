@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import '../../data/datasources/storage_methods.dart';
 
 /// [DetailRecipesPage] é uma página que exibe os detalhes de uma receita específica.
-/// 
+///
 /// Esta página inclui a imagem da receita, o nome, a categoria, os ingredientes, o modo de preparo e a avaliação da receita.
-/// 
+///
 /// A classe utiliza o [StorageMethods] para carregar a imagem da receita e o [Recipes] para representar as informações da receita.
 class DetailRecipesPage extends StatelessWidget {
   const DetailRecipesPage({super.key});
@@ -45,9 +45,9 @@ class DetailRecipesPage extends StatelessWidget {
   }
 
   /// Renderiza o conteúdo de erro quando não há receita.
-  /// 
+  ///
   /// Exibe uma mensagem de erro, uma ilustração e um botão para tentar novamente.
-  /// 
+  ///
   /// [context] - O contexto BuildContext utilizado para exibir a UI.
   Widget _buildErrorContent(BuildContext context) {
     return Center(
@@ -91,7 +91,7 @@ class DetailRecipesPage extends StatelessWidget {
 
   /// Renderiza os detalhes da receita, incluindo a imagem, nome, categoria,
   /// ingredientes, modo de preparo e avaliação.
-  /// 
+  ///
   /// [context] - O contexto BuildContext utilizado para exibir a UI.
   /// [recipe] - O objeto Recipes que contém as informações da receita.
   /// [storageMethods] - O objeto StorageMethods utilizado para carregar a imagem.
@@ -141,7 +141,7 @@ class DetailRecipesPage extends StatelessWidget {
   }
 
   /// Renderiza a imagem da receita com um efeito de sombra e carregamento dinâmico.
-  /// 
+  ///
   /// [context] - O contexto BuildContext utilizado para exibir a UI.
   /// [recipe] - O objeto Recipes que contém a URL da imagem.
   /// [storageMethods] - O objeto StorageMethods utilizado para carregar a imagem.
@@ -184,7 +184,7 @@ class DetailRecipesPage extends StatelessWidget {
   }
 
   /// Renderiza um indicador de carregamento para a imagem da receita.
-  /// 
+  ///
   /// [context] - O contexto BuildContext utilizado para exibir a UI.
   Widget _buildLoadingImage(BuildContext context) {
     return Container(
@@ -196,7 +196,7 @@ class DetailRecipesPage extends StatelessWidget {
   }
 
   /// Renderiza uma mensagem de erro caso ocorra falha ao carregar a imagem.
-  /// 
+  ///
   /// [context] - O contexto BuildContext utilizado para exibir a UI.
   Widget _buildErrorImage(BuildContext context) {
     return Container(
@@ -208,12 +208,14 @@ class DetailRecipesPage extends StatelessWidget {
   }
 
   /// Renderiza a avaliação da receita com estrelas.
-  /// 
+  ///
   /// [recipe] - O objeto Recipes que contém a avaliação da receita.
   Widget _buildRating(Recipes recipe) {
     return Row(
       children: [
-        StarRating(rating: recipe.rating), // Widget para exibir a avaliação em estrelas
+        StarRating(
+            rating:
+                recipe.rating), // Widget para exibir a avaliação em estrelas
         Text(
           ' ${recipe.rating}',
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -223,7 +225,7 @@ class DetailRecipesPage extends StatelessWidget {
   }
 
   /// Renderiza a lista de ingredientes da receita.
-  /// 
+  ///
   /// [recipe] - O objeto Recipes que contém a lista de ingredientes.
   Widget _buildIngredients(Recipes recipe) {
     return Column(
@@ -244,7 +246,7 @@ class DetailRecipesPage extends StatelessWidget {
   }
 
   /// Renderiza as etapas do modo de preparo da receita.
-  /// 
+  ///
   /// [recipe] - O objeto Recipes que contém as etapas do preparo.
   Widget _buildPreparationSteps(Recipes recipe) {
     return Column(

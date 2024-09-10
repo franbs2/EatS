@@ -2,12 +2,23 @@ import 'package:flutter/material.dart';
 
 import '../../core/style/strings_app.dart';
 
+/// [ContinueWithWidget] é um widget que exibe um texto centralizado com linhas de separação estilizadas em ambos os lados.
+///
+/// - Objetivo:
+///   - Este widget é usado para separar seções de uma tela, como uma seção de login ou um formulário, com uma mensagem centralizada que indica uma ação alternativa (por exemplo, "Ou continue com").
+///
+/// - Estrutura:
+///   - O widget usa um [Row] para posicionar os elementos horizontalmente.
+///   - Inclui duas linhas estilizadas usando [Container] com gradientes lineares, e um texto centralizado.
+///
 class ContinueWithWidget extends StatelessWidget {
+  /// Construtor do widget, com a chave opcional para identificar o widget na árvore.
   const ContinueWithWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      // Utiliza o widget Row para posicionar seus filhos horizontalmente.
       children: <Widget>[
         Expanded(
           child: Container(

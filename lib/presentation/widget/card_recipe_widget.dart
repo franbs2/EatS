@@ -3,18 +3,41 @@ import 'package:eats/data/model/recipes.dart';
 import 'package:eats/data/datasources/storage_methods.dart';
 import 'package:flutter/material.dart';
 
+/// [CardRecipeWidget] é um widget que exibe uma receita em um cartão.
+/// Este widget mostra a imagem da receita, o nome, a descrição e o valor.
+///
+/// - Parâmetros:
+///   - [recipe] ([Recipes]): A receita que será exibida pelo widget. Deve ser um objeto da classe [Recipes].
+///
+/// - Funcionamento:
+///   - Quando o cartão é clicado, o widget navega para a página de detalhes da receita, passando a receita como argumento.
+///   - A imagem da receita é carregada a partir de uma URL, e o estado de carregamento é gerenciado com [FutureBuilder].
+///   - O widget exibe o nome, a descrição e o valor da receita com estilos específicos.
+///
+/// Referências:
+/// - [Recipes]: Modelo de dados que define a estrutura de uma receita.
+/// - [StorageMethods]: Classe que contém métodos para manipulação de armazenamento e carregamento de imagens.
+/// - [RoutesApp]: Classe que define as rotas usadas no aplicativo.
+
 class CardRecipeWidget extends StatelessWidget {
+  /// A receita que será exibida no cartão.
   final Recipes recipe;
 
+  /// Construtor do widget que exige uma receita.
   const CardRecipeWidget({super.key, required this.recipe});
 
   @override
   Widget build(BuildContext context) {
+    // Instancia o método de armazenamento para carregar a imagem da receita.
     final StorageMethods storageMethods = StorageMethods();
+
     return InkWell(
+      // Define o comportamento ao clicar no cartão.
       onTap: () {
-        Navigator.of(context)
-            .pushNamed(RoutesApp.detailRecipePage, arguments: recipe);
+        Navigator.of(context).pushNamed(
+          RoutesApp.detailRecipePage,
+          arguments: recipe,
+        );
       },
       borderRadius: BorderRadius.circular(12),
       child: Card(
@@ -25,12 +48,17 @@ class CardRecipeWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
+              // Recorta a imagem com bordas arredondadas.
               borderRadius: BorderRadius.circular(12),
               child: FutureBuilder<String>(
+                // Constrói o widget com base no estado do futuro.
                 future: storageMethods.loadImageInURL(
-                    recipe.image, true), // Use a função loadImage
+                  recipe.image, // URL da imagem da receita.
+                  true, // Indica que a imagem deve ser carregada.
+                ),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Exibe um indicador de carregamento enquanto a imagem está sendo carregada.
                     return Container(
                       height: MediaQuery.of(context).size.height * 0.18,
                       width: double.infinity,
@@ -38,6 +66,7 @@ class CardRecipeWidget extends StatelessWidget {
                       child: const Center(child: CircularProgressIndicator()),
                     );
                   } else if (snapshot.hasError) {
+                    // Exibe uma mensagem de erro se ocorrer um problema ao carregar a imagem.
                     return Container(
                       height: MediaQuery.of(context).size.height * 0.18,
                       width: double.infinity,
@@ -46,9 +75,11 @@ class CardRecipeWidget extends StatelessWidget {
                           const Center(child: Text('Erro ao carregar imagem')),
                     );
                   } else {
+                    // Exibe a imagem da receita quando estiver carregada.
                     return Image.network(
-                      snapshot.data ?? '',
-                      fit: BoxFit.fill,
+                      snapshot.data ?? '', // URL da imagem.
+                      fit: BoxFit
+                          .fill, // Ajusta a imagem para preencher o espaço disponível.
                       height: MediaQuery.of(context).size.height * 0.18,
                       width: double.infinity,
                     );
@@ -57,6 +88,7 @@ class CardRecipeWidget extends StatelessWidget {
               ),
             ),
             Padding(
+              // Adiciona espaçamento ao redor do conteúdo do cartão.
               padding: const EdgeInsets.all(12.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +115,7 @@ class CardRecipeWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'R\$ ${recipe.value.toStringAsFixed(2)}',
+                    'R\$ ${recipe.value.toStringAsFixed(2)}', // Exibe o valor da receita formatado em reais.
                     style: const TextStyle(
                       fontSize: 18,
                       color: Color(0xff2F2D2C),
