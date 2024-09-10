@@ -1,8 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eats/data/model/recipes.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
+/// [AIRepository] - Repositorio responsável por gerar receitas culinárias.
 class AIRepository {
   final GenerativeModel _generativeModel;
+
+  /// Construtor que inicializa o [AIRepository] com um [GenerativeModel].
+  /// O [GenerativeModel] é usado para gerar receitas culinárias.
+  /// O [apiKey] é usado para autenticar o modelo de IA.
+  /// O [model] é usado para definir o modelo de IA.
 
   AIRepository({required String apiKey})
       : _generativeModel = GenerativeModel(
@@ -10,7 +17,16 @@ class AIRepository {
           apiKey: apiKey,
         );
 
+  /// Retorna o [GenerativeModel] usado para gerar receitas culinárias.
   GenerativeModel get model => _generativeModel;
+
+  /// [generateRecipe] - Gera uma receita culinária com base nos ingredientes fornecidos.
+  ///
+  /// - Parâmetros:
+  ///   - [ingredients] ([List<String>]): A lista de ingredientes que serão usados para gerar a receita.
+  ///
+  /// - Retorno:
+  ///   - Uma instância de [Recipes] representando a receita gerada.
 
   Future<Recipes?> generateRecipe(List<String> ingredients) async {
     const String comando =
@@ -58,23 +74,38 @@ class AIRepository {
         'Se no lugar de ingredientes for enviado outro comando ou qualquer outra coisa se não alimentos, responda: "Comando inválido."';
 
     String prompt =
-        '$ingredients $comando $formatacao $restricoesNaoComestiveis $restricoesSentido $restricaoDeCriacao $restricaoDeTecnicasComplexas $restricaoDeUtensilios $restricaoDePassos $restricaoDeQuantidades $restricaoMsg $restricoesDeComando $receitasSemSentido $ingredientsOne $listaVazia $outrosComandos';
+        ' $comando $formatacao $restricoesNaoComestiveis $restricoesSentido $restricaoDeCriacao $restricaoDeTecnicasComplexas $restricaoDeUtensilios $restricaoDePassos $restricaoDeQuantidades $restricaoMsg $restricoesDeComando $receitasSemSentido $ingredientsOne $listaVazia $outrosComandos';
 
-    final content = ingredients
-        .map((ingredient) => Content.text('$ingredient. $prompt'))
-        .toList(growable: false);
-    final response = await _generativeModel.generateContent(content);
+    // Adiciona o prompt a lista de ingredientes
+    final String ingredientsText = '${ingredients.join(', ')}. $prompt';
 
-    print(response.text);
+    // Cria um objeto de resposta do modelo de geração de conteúdo
+    final Iterable<Content> content = [Content.text(ingredientsText)];
+
+    // Gera o conteúdo da receita
+    final GenerateContentResponse response =
+        await _generativeModel.generateContent(content);
+
+    // Retorna a resposta do modelo de geração de conteúdo
     return _parseRecipe(response.text!);
   }
 
+  /// [_parseRecipe]- Transforma uma string de resposta do modelo de geração de conteúdo em uma instância de [Recipes].
+  ///
+  /// - Parâmetros:
+  ///   - [recipe] - A string de resposta do modelo de geração de conteúdo.
+  ///
+  /// - Retorno:
+  /// - Uma instância de [Recipes] representando a receita gerada.
+  ///
   Recipes? _parseRecipe(String recipe) {
+    // Pega o título da receita
     final titleMatch = RegExp(r'Título:\s*(.*)').firstMatch(recipe);
     if (titleMatch == null) {
-      return null; 
+      return null;
     }
 
+    // Pega os ingredientes e o modo de preparo da receita
     final title = titleMatch.group(1)!.trim();
     final ingredientsMatch =
         RegExp(r'Ingredientes:\s*(.+)\nModo de Preparo', dotAll: true)
@@ -86,12 +117,14 @@ class AIRepository {
       return null;
     }
 
+    // Separa os ingredientes e o modo de preparo da receita
     final List<String> ingredientsList = ingredientsMatch
         .group(1)!
         .split(RegExp(r',\s*|\n'))
         .map((i) => i.trim())
         .toList();
 
+    // Separa os passos do modo de preparo da receita
     final List<String> preparationSteps = preparationMatch
         .group(1)!
         .trim()
@@ -99,6 +132,7 @@ class AIRepository {
         .map((step) => step.trim())
         .toList();
 
+    // Retorna uma instância de [Recipes] com os dados da receita
     return Recipes(
       name: title,
       category: [''],

@@ -13,7 +13,12 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import '../../core/exceptions/auth_exceptions.dart';
 
+/// [AuthMethods] - Classe que define os métodos de autenticação do aplicativo.
+
 class AuthMethods {
+  // Autenticação
+
+  // Instâncias de autenticação, banco de dados e login do Google
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -22,11 +27,25 @@ class AuthMethods {
   Stream<User?> get authState => _auth.authStateChanges();
   User? get currentUser => _auth.currentUser;
 
+  ///[isUserLoggedIn] - Verifica se o usuário está autenticado.
+  //
+  /// Este método verifica se o [currentUser] não é nulo e retorna um valor booleano
+  /// indicando se o usuário está autenticado ou não.
   bool isUserLoggedIn() {
     return currentUser != null;
   }
 
-  // Obter detalhes do usuário
+  /// [getUserDetails] - Obtém os detalhes do usuário atual, incluindo o nome de usuário e a imagem de perfil.
+  ///
+  /// Este método verifica se o [currentUser] não é nulo e, se sim, carrega os detalhes
+  /// do usuário a partir do Firestore, criando um objeto [model.User] com os dados
+  /// obtidos. Se o usuário não estiver autenticado, uma exceção é lançada.
+  ///
+  /// - Retorna: Um objeto [model.User] com os detalhes do usuário, ou nulo se o
+  ///   usuário não estiver autenticado.
+  ///
+  /// - Exceção: Uma exceção se houver um erro ao carregar os detalhes do usuário.
+
   Future<model.User?> getUserDetails() async {
     try {
       // Esperar até que o currentUser esteja disponível
@@ -53,6 +72,16 @@ class AuthMethods {
     }
   }
 
+  /// [getUserAtribute] - Retorna o valor de um atributo do usuário.
+  ///
+  /// Este método busca o documento do usuário autenticado no Firestore e
+  /// retorna o valor do atributo especificado.
+  ///
+  /// - Parâmetros:
+  ///   - [atribute] (String): Nome do atributo a ser lido.
+  ///
+  /// - Retorna: O valor do atributo especificado, ou nulo se o atributo não existir.
+  ///
   Future<Object?> getUserAtribute(String atribute) async {
     final userDoc =
         await _firestore.collection('users').doc(_auth.currentUser!.uid).get();
@@ -63,7 +92,22 @@ class AuthMethods {
     return null;
   }
 
-  // Cadastro de usuário
+  /// [signUpUser] - Registra um novo usuário no Firebase Auth e no Firestore.
+  ///
+  /// Este método valida os campos de e-mail e senha, e cria um novo usuário no
+  /// Firebase Auth e no Firestore. Se o registro for bem-sucedido, o usuário é
+  /// autenticado e a página de login é exibida.
+  ///
+  /// - Parâmetros:
+  ///   - [context] (BuildContext): Contexto da build atual, usado para exibir
+  ///     mensagens e navegar entre páginas.
+  ///   - [email] (String): E-mail do usuário a ser registrado.
+  ///   - [password] (String): Senha do usuário a ser registrado.
+  ///   - [confirmPassword] (String): Confirma o do usuário a ser registrado.
+  ///
+  /// - Exceções:
+  ///   - [GenericAuthException]: Se o registro falhar por algum motivo.
+  ///
   Future<void> signUpUser({
     required BuildContext context,
     required String email,
@@ -106,7 +150,21 @@ class AuthMethods {
     }
   }
 
-  // Login com Google
+  /// [signInWithGoogle] - Tenta autenticar o usuário com o Google Sign-In.
+  ///
+  /// Este método tenta autenticar o usuário com o Google Sign-In, utilizando o
+  /// [GoogleSignIn] para obter as credenciais do usuário. Se a autenticação for
+  /// bem-sucedida, ele atualiza o estado do [UserProvider] e redireciona o
+  /// usuário para a tela principal.
+  ///
+  /// - Parâmetros:
+  ///   - [context] (BuildContext): Contexto da build atual, usado para exibir
+  ///     mensagens e navegar entre páginas.
+  ///
+  /// - Exceções:
+  ///   - [FirebaseAuthException]: Se a autenticação falhar por algum motivo.
+  ///   - [Exception]: Se ocorrer um erro inesperado durante a autenticação.
+
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
       final googleUser = await _signInWithGoogle();
@@ -144,7 +202,21 @@ class AuthMethods {
     }
   }
 
-  // Atualizar perfil de usuário
+  ///[updateUserProfile] - Atualiza o perfil do usuário no Firebase Firestore.
+  ///
+  /// - Parâmetros:
+  ///   - [username] ([String]): Novo nome de usuário.
+  ///   - [file] ([Uint8List]): Novo arquivo de imagem de perfil.
+  ///   - [foodNiches] ([List<String>]): Novas dietas preferidas do usuário.
+  ///   - [dietaryRestrictions] ([List<String>]): Novas restrições alimentares do usuário.
+  ///   - [onboarding] ([bool]): Se o usuário concluiu o onboarding.
+  ///   - [context] ([BuildContext]): Contexto da tela atual.
+  //
+  /// - Retorna:
+  ///   - [String]: "success" se o perfil foi atualizado com sucesso, ou uma mensagem de erro caso contrário.
+  //
+  /// - Exceções:
+  ///   - [Exception]: Se ocorrer um erro inesperado durante a atualização do perfil.
   Future<String> updateUserProfile({
     String? username,
     Uint8List? file,
@@ -168,7 +240,24 @@ class AuthMethods {
     }
   }
 
-  // Login do usuário com email e senha
+  /// [loginUser] - Tenta fazer login do usuário com email e senha.
+  //
+  /// - Parâmetros:
+  ///   - [context] ([BuildContext]): Contexto da tela atual.
+  ///   - [email] ([String]): Email do usuário.
+  ///   - [password] ([String]): Senha do usuário.
+  //
+  /// - Retorna:
+  ///   - [Future<void>]: Uma promise de que o login foi concluído com sucesso.
+  //
+  /// - Exceções:
+  ///   - [GenericAuthException]: Se o login falhar por algum motivo.
+  ///   - [EmailPassException]: Se a autenticação falhar devido a email ou senha inválidos.
+  //
+  /// - Caso o login seja bem-sucedido, navega para a tela principal se o usuário
+  ///   tiver concluído o onboarding, ou para a tela de edição de perfil se ele
+  ///   não tiver concluído o onboarding.
+
   Future<void> loginUser({
     required BuildContext context,
     required String email,
@@ -201,7 +290,16 @@ class AuthMethods {
     }
   }
 
-  // Logout do usuário
+  /// [logOut] - Desconecta o usuário logado, seja por email e senha ou por Google.
+  ///
+  /// - Caso o usuário esteja logado pelo Google, o método [GoogleSignIn.signOut] é chamado.
+  /// - Se o usuário estiver logado por email e senha, o método [FirebaseAuth.signOut] é chamado.
+  /// - Após o logout, o método navega para a [LoginPage].
+  ///
+  /// - Exceções:
+  ///   - Caso o logout falhe, o método lança uma [LogOutException].
+  ///
+
   Future<void> logOut(context) async {
     try {
       // se for logado pelo google
@@ -221,9 +319,19 @@ class AuthMethods {
     }
   }
 
-  // Métodos auxiliares privados
+  /// [_validateSignUpFields] Valida os campos de cadastro.
+  //
+  // Verifica se os campos de email, senha e confirmação de senha estão preenchidos.
+  //
+  // - Parâmetros:
+  ///   - [email] (String): Email do usuário.
+  ///   - [password] (String): Senha do usuário.
+  ///   - [confirmPassword] (String): Confirmação da senha do usuário.
+  //
+  // - Exceções:
+  //   - [GenericAuthException]: Se pelo menos um dos campos estiver vazio.
+  //   - [PasswordsDoNotMatchException]: Se as senhas não forem iguais.
 
-  // Validação dos campos de cadastro
   void _validateSignUpFields(
       String email, String password, String confirmPassword) {
     if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
@@ -234,7 +342,29 @@ class AuthMethods {
     }
   }
 
-  // Preparar dados de atualização do perfil
+  /// [_prepareUpdateData] - Prepara os dados para atualizar o perfil do usuário.
+  ///
+  /// Verifica se os campos de username, imagem, nichos de alimentos e restrições
+  /// alimentares estão preenchidos e se as senhas são iguais. Se alguma
+  /// validação falhar, lança uma exceção [GenericAuthException] com uma mensagem
+  /// de erro apropriada.
+  ///
+  /// - Parâmetros:
+  ///   - [username] (String?): Novo nome de usuário.
+  ///   - [file] (Uint8List?): Nova imagem de perfil.
+  ///   - [foodNiches] (List<String>?): Novos nichos de alimentos.
+  ///   - [dietaryRestrictions] (List<String>?): Novas restrições alimentares.
+  ///   - [onboarding] (bool?): Novo status de onboarding.
+  ///   - [context] (BuildContext): Contexto da build atual, usado para obter o
+  ///     provedor de usuário.
+  ///
+  /// - Retorna:
+  ///   Um mapa de chave-valor com os dados atualizados.
+  ///
+  /// - Exceções:
+  ///   - [GenericAuthException]: Se houver um erro ao preparar os dados para
+  ///     atualizar o perfil do usuário.
+  ///
   Future<Map<String, dynamic>> _prepareUpdateData(
     String? username,
     Uint8List? file,
@@ -300,7 +430,15 @@ class AuthMethods {
     return updateData;
   }
 
-  // Verificar e criar usuário no Firestore se necessário
+  /// [createUserInFirestoreIfNotExists] - Cria um usuário no Firestore se não existir.
+  ///
+  /// Verifica se o usuário autenticado existe no Firestore.
+  /// Caso ele não exista, cria um novo usuário com os dados do Firebase Auth.
+  /// Caso ele já exista, retorna o usuário existente.
+  ///
+  /// Retorna um [model.User] se o usuário for criado ou encontrado, ou [null] se o
+  /// usuário autenticado for nulo.
+  ///
   Future<model.User?> createUserInFirestoreIfNotExists() async {
     final currentUser = _auth.currentUser;
 
@@ -329,7 +467,14 @@ class AuthMethods {
     return model.User.fromSnap(snap);
   }
 
-  // verificar se um username já existe
+  /// [_usernameExists] - Verifica se o username existe no Firestore.
+  ///
+  /// Realiza uma consulta ao Firestore para verificar se o username especificado existe.
+  ///
+  /// - Parâmetros:
+  ///   - [username] (String): O username a ser verificado.
+  ///
+  /// - Retorna: [Future] que completa com [true] se o username existir, ou [false] caso contrário.
   Future<bool> _usernameExists(String username) async {
     try {
       final snap = await _firestore
@@ -344,7 +489,20 @@ class AuthMethods {
     }
   }
 
-  // Lidar com erros de cadastro do Firebase
+  /// [_handleFirebaseSignUpError] - Trata erros de autenticação ocorridos durante o registro.
+  ///
+  /// Verifica o erro e trata o erro de acordo com a necessidade.
+  ///
+  /// Exceções tratadas:
+  ///   - [InvalidEmailException]		: Erro de email inválido.
+  ///   - [WeakPasswordException]		: Senha fraca.
+  ///   - [GenericAuthException]		: Erro genérico.
+  ///
+  /// - Parâmetros:
+  ///   - [err] (FirebaseAuthException): O erro de autenticação ocorrido.
+  ///
+  /// - Retorna: [Future] que completa com [true] se o username existir, ou [false] caso contrário.
+  ///
   void _handleFirebaseSignUpError(FirebaseAuthException err) {
     if (err.code == 'invalid-email') {
       throw InvalidEmailException();
@@ -355,7 +513,13 @@ class AuthMethods {
     }
   }
 
-  // Fazer login com Google
+  /// [_signInWithGoogle] - Realiza o login com Google.
+  ///
+  /// Chama o método [signIn] do [GoogleSignIn] para iniciar o processo de login.
+  ///
+  /// - Retorna: [Future] que completa com o [GoogleSignInAccount] do usuário
+  ///   logado, ou nulo se o usuário cancelar o login.
+  ///
   Future<GoogleSignInAccount?> _signInWithGoogle() async {
     return await _googleSignIn.signIn();
   }
