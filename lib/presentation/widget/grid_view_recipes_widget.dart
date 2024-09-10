@@ -29,6 +29,7 @@ class GridViewRecipesWidget extends StatelessWidget {
     return GridView.builder(
       // Define que o grid deve se ajustar ao conteúdo, permitindo ser incorporado em outros widgets.
       shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       // Define o número de itens no grid com base no tamanho da lista de receitas.
       itemCount: listRecipes.length,
       // Configura o scroll do grid para ser vertical.
