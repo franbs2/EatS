@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// [AppTheme] - Classe que define as cores da aplicação.
 class AppTheme {
   static const Color backgroundColor = Color(0xffDDDDDD);
   static const Color primaryColor = Color(0xff539F33);

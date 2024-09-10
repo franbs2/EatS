@@ -1,3 +1,4 @@
+/// [ImageApp] - Classe que define as imagens da aplicação.
 class ImageApp {
   static const String logoWhite = 'assets/logo_white.png';
   static const String logo = 'assets/eats_logo.png';

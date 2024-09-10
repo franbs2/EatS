@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+/// [pickImage] - Função para escolher imagem de acordo do usuário.
 pickImage(ImageSource source) async {
   final ImagePicker imagePicker = ImagePicker();
 
@@ -11,7 +12,7 @@ pickImage(ImageSource source) async {
   }
 }
 
-
+/// [showSnackBar] - Função para mostrar uma snackbar.
 showSnackBar(String content, BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
