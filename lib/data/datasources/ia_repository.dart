@@ -1,5 +1,4 @@
 import 'package:eats/data/model/recipes.dart';
-import 'package:flutter_launcher_icons/custom_exceptions.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 class AIRepository {
@@ -99,10 +98,6 @@ class AIRepository {
         .split('\n')
         .map((step) => step.trim())
         .toList();
-
-    print(title);
-    print(ingredientsList);
-    print(preparationSteps);
 
     return Recipes(
       name: title,

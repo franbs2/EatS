@@ -21,7 +21,36 @@ class StringsApp {
   static const String haveAccount = 'Já possuo uma conta';
   static const String dontHaveAccount = 'Não possuo uma conta';
   static const String username = 'Nome de usuário';
+  static const String cancel = 'Cancelar';
+  static const String save = 'Salvar';
+  static const String ingredientTitle = 'Ingredientes';
+  static const String addIngredient = 'Adicionar ingrediente';
+  static const String dietTitle = 'Dietas';
+  static const String selectDiet = 'Selecione sua dieta';
+  static const String selectAllergies = 'Selecione suas alergias';
+  static const String selectDiets = 'Selecione suas dietas';
+  static const String add = 'Adicionar';
+  static const String remove = 'Remover';
+  static const String search = 'Procurar';
+  static const String errorLoadImage = 'Erro ao carregar imagem';
 
+  static const List<String> listDiets = [
+    'Vegetariana',
+    'Vegana',
+    'Low Carb',
+    'Cetogênica',
+    'Sem Glúten',
+    'Sem Lactose'
+  ];
+
+  static const List<String> listAllergies = [
+    'Amendoim',
+    'Leite',
+    'Ovos',
+    'Peixes',
+    'Nozes',
+    'Soja'
+  ];
   static const List<String> listFilterCategories = [
     'Todos',
     'Lanche',

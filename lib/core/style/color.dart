@@ -12,4 +12,5 @@ class AppTheme {
   static const Color homeColorText = Color(0xffB7B7B7);
   static const Color loginYellow = Color(0xffE1AA1E);
   static const Color perfilYellow = Color(0xffFBBE21);
+  static const Color atencionRed = Color(0xffE74C3C);
 }

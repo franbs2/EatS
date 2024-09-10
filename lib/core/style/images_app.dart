@@ -10,4 +10,5 @@ class ImageApp {
   static const String uploadIcon = 'assets/icons/upload_icon.png';
   static const String hungryIllustration = 'assets/hungry.png';
   static const String brilhaIcon = 'assets/icons/brilha.png';
+  static const String starIcon = 'assets/star.png';
 }
