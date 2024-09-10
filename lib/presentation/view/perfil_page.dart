@@ -12,22 +12,29 @@ import '../widget/location_widget.dart';
 import '../widget/preference_options_widget.dart';
 import '../widget/text_username_widget.dart';
 
+/// Página de perfil do usuário.
+///
+/// A [PerfilPage] exibe informações e opções relacionadas ao perfil do usuário, incluindo
+/// imagem de perfil, nome de usuário, localização, e preferências alimentares como alergias e dietas.
 class PerfilPage extends StatelessWidget {
   const PerfilPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Obtém o provedor de dados do usuário para acessar as informações do perfil.
     final userProvider = Provider.of<UserProvider>(context);
+    // Obtém o provedor de métodos de autenticação para permitir logout.
     final authmethods = Provider.of<AuthMethods>(context);
 
     return Scaffold(
-      backgroundColor: AppTheme.secondaryColor,
+      backgroundColor: AppTheme.secondaryColor, // Define a cor de fundo do Scaffold.
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Stack(
               children: [
+                // Exibe a imagem de perfil do usuário como um fundo de tela.
                 SizedBox(
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height * 0.55,
@@ -41,6 +48,7 @@ class PerfilPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      // Menu de opções no canto superior direito.
                       PopupMenuButton(
                           shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
@@ -54,6 +62,7 @@ class PerfilPage extends StatelessWidget {
                           ),
                           itemBuilder: (context) {
                             return [
+                              // Opção para editar o perfil.
                               PopupMenuItem(
                                 onTap: () => Navigator.pushNamed(
                                     context, RoutesApp.editPefilPage,
@@ -67,6 +76,7 @@ class PerfilPage extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                              // Opção para visualizar dados pessoais (não implementada).
                               PopupMenuItem(
                                 onTap: () => {},
                                 child: const Text('Meus dados',
@@ -74,6 +84,7 @@ class PerfilPage extends StatelessWidget {
                                         color: AppTheme.primaryColor,
                                         fontWeight: FontWeight.normal)),
                               ),
+                              // Opção para sair da conta.
                               PopupMenuItem(
                                 onTap: () => authmethods.logOut(context),
                                 child: const Text('Sair',
@@ -86,6 +97,7 @@ class PerfilPage extends StatelessWidget {
                     ],
                   ),
                 ),
+                // Exibe o conteúdo do perfil abaixo da imagem de perfil.
                 Positioned(
                   top: MediaQuery.of(context).size.height * 0.52,
                   left: 0,
@@ -95,22 +107,27 @@ class PerfilPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Widget para exibir a localização do usuário.
                         const LocationWidget(),
                         const SizedBox(height: 12),
+                        // Widget para exibir o nome de usuário.
                         TextUsernameWidget(
                           username: userProvider.user!.username,
                         ),
                         const SizedBox(height: 20),
+                        // Widget para exibir opções de alergias.
                         PreferenceOptionsWidget(
                           title: 'Alergias',
                           onTap: () => _showAllergiesModal(context),
                         ),
                         const SizedBox(height: 18),
+                        // Widget para exibir opções de dietas.
                         PreferenceOptionsWidget(
                           title: 'Dietas',
                           onTap: () => _showDietsModal(context),
                         ),
                         const SizedBox(height: 18),
+                        // Widget para exibir preferências (não implementado).
                         PreferenceOptionsWidget(
                             title: 'Preferências', onTap: () => ()),
                         const SizedBox(height: 18),
@@ -126,6 +143,9 @@ class PerfilPage extends StatelessWidget {
     );
   }
 
+  /// Exibe um modal com a lista de alergias do usuário.
+  ///
+  /// Utiliza o [PreferencesProvider] para gerenciar e atualizar as alergias selecionadas.
   void _showAllergiesModal(BuildContext context) {
     final preferencesProvider =
         Provider.of<PreferencesProvider>(context, listen: false);
@@ -146,6 +166,9 @@ class PerfilPage extends StatelessWidget {
     ).then((_) => preferencesProvider.resetSelectedAllergies());
   }
 
+  /// Exibe um modal com a lista de dietas do usuário.
+  ///
+  /// Utiliza o [PreferencesProvider] para gerenciar e atualizar as dietas selecionadas.
   void _showDietsModal(BuildContext context) {
     final preferencesProvider =
         Provider.of<PreferencesProvider>(context, listen: false);

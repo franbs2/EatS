@@ -4,7 +4,7 @@ import 'package:eats/data/datasources/recipes_repository.dart';
 import 'package:eats/data/model/recipes.dart';
 import 'package:flutter/material.dart';
 
-/// `RecipesProvider` é um `ChangeNotifier` que gerencia o estado das receitas,
+/// [RecipesProvider] é um [ChangeNotifier] que gerencia o estado das receitas,
 /// incluindo a obtenção das receitas do repositório, filtragem por categoria,
 /// e a exibição de mensagens de erro. Ele notifica os ouvintes sobre mudanças
 /// de estado, permitindo uma UI reativa.
@@ -19,7 +19,7 @@ class RecipesProvider extends ChangeNotifier {
 
   String? _selectedCategory; // Categoria selecionada para filtragem.
 
-  /// Construtor que inicializa o `RecipesProvider` com um `RecipesRepository`.
+  /// Construtor que inicializa o [RecipesProvider] com um [RecipesRepository].
   RecipesProvider(RecipesRepository recipeRepository) {
     _recipeRepository = recipeRepository;
   }
@@ -67,7 +67,7 @@ class RecipesProvider extends ChangeNotifier {
     }
   }
 
-  /// `filterRecipesByCategory` filtra as receitas com base na categoria selecionada.
+  /// [filterRecipesByCategory] filtra as receitas com base na categoria selecionada.
   /// Atualiza a lista filtrada e define uma mensagem de erro se não houver receitas correspondentes.
   void filterRecipesByCategory(String? category) {
     _selectedCategory = category; // Define a categoria selecionada.

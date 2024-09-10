@@ -4,7 +4,7 @@ import 'package:eats/data/datasources/banners_repository.dart';
 import 'package:eats/data/model/banners.dart';
 import 'package:flutter/material.dart';
 
-/// `BannersProvider` gerencia o estado dos banners no aplicativo,
+/// [BannersProvider] gerencia o estado dos banners no aplicativo,
 /// incluindo a busca, atualização e exibição dos banners.
 class BannersProvider extends ChangeNotifier {
   late BannersRepository
@@ -15,7 +15,7 @@ class BannersProvider extends ChangeNotifier {
   String?
       _errorMessage; // Mensagem de erro, caso ocorra algum problema ao carregar os banners.
 
-  /// Construtor que inicializa o `BannersProvider` com um `BannersRepository`.
+  /// Construtor que inicializa o [BannersProvider] com um [BannersRepository].
   BannersProvider(BannersRepository bannerRepository) {
     _bannerRepository = bannerRepository;
   }

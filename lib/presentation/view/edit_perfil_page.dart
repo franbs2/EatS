@@ -1,14 +1,11 @@
-import 'dart:ffi';
 import 'dart:typed_data';
 
-import 'package:eats/core/utils/utils.dart';
-import 'package:eats/data/datasources/auth_methods.dart';
-import 'package:eats/presentation/main_screen.dart';
-import 'package:eats/presentation/providers/user_provider.dart';
-import 'package:eats/presentation/view/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+
+import '../../core/style/color.dart';
+import '../../core/utils/utils.dart';
 import '../widget/alergies_list_widget.dart';
 import '../widget/button_default_widget.dart';
 import '../widget/diets_list_widget.dart';
@@ -16,12 +13,19 @@ import '../widget/location_widget.dart';
 import '../widget/preference_options_widget.dart';
 import '../widget/text_username_input_widget.dart';
 import '../widget/upload_widget.dart';
-import '../../core/style/color.dart';
+import '../../data/datasources/auth_methods.dart';
+import '../main_screen.dart';
+import '../providers/user_provider.dart';
 
+/// A [EditPerfilPage] é uma página para editar o perfil do usuário.
+/// Permite ao usuário atualizar sua imagem de perfil, nome de usuário, e preferências.
 class EditPerfilPage extends StatefulWidget {
   EditPerfilPage({super.key});
 
+  // Chave global para o formulário, usada para validação.
   final _formKey = GlobalKey<FormState>();
+
+  // Controlador para o campo de nome de usuário.
   final TextEditingController username = TextEditingController();
 
   @override
@@ -29,44 +33,55 @@ class EditPerfilPage extends StatefulWidget {
 }
 
 class _EditPerfilPageState extends State<EditPerfilPage> {
+  // Armazena os bytes da imagem selecionada pelo usuário.
   Uint8List? imageBytes;
 
+  /// Carrega uma imagem da galeria do dispositivo e a converte em bytes.
   void _uploadImage() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     final bytes = await image!.readAsBytes();
     setState(() {
-      imageBytes = bytes;
+      imageBytes = bytes; // Atualiza o estado com os bytes da imagem.
     });
-    debugPrint("bytes: $bytes");
-    debugPrint("imageBytes: $imageBytes");
+    debugPrint("bytes: $bytes"); // Imprime os bytes da imagem no console.
+    debugPrint(
+        "imageBytes: $imageBytes"); // Imprime os bytes da imagem armazenados no estado.
   }
 
+  /// Método chamado quando o widget é removido da árvore de widgets.
   @override
   void dispose() {
-    debugPrint("EditPerfilPage: Disposing...");
-    imageBytes = null;
+    debugPrint(
+        "EditPerfilPage: Disposing..."); // Mensagem de depuração ao descartar o widget.
+    imageBytes = null; // Limpa a imagem carregada ao sair da tela.
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // Acesso ao provedor de dados do usuário.
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final profileImage = userProvider.profileImage;
+
+    // Verifica se a seta de voltar deve ser exibida.
     bool arrowBack =
         ModalRoute.of(context)?.settings.arguments as bool? ?? false;
 
     return Scaffold(
-      backgroundColor: AppTheme.secondaryColor,
+      backgroundColor: AppTheme.secondaryColor, // Cor de fundo da página.
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Stack(
               children: [
+                // Widget para fazer o upload da imagem de perfil.
                 UploadWidget(
                   backgroundImage: imageBytes ?? profileImage,
-                  ontap: _uploadImage,
+                  ontap:
+                      _uploadImage, // Função chamada ao tocar na área de upload.
                 ),
+                // Exibe o botão de voltar se necessário.
                 if (arrowBack)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 36),
@@ -84,12 +99,14 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
                               ),
                             ],
                           ),
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () => Navigator.pop(
+                              context), // Volta para a página anterior.
                           color: Colors.white,
                         ),
                       ],
                     ),
                   ),
+                // Conteúdo da página principal de edição do perfil.
                 Positioned(
                   top: MediaQuery.of(context).size.height * 0.47,
                   left: 0,
@@ -99,29 +116,35 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const LocationWidget(),
+                        const LocationWidget(), // Widget de localização.
                         Form(
-                          key: widget._formKey,
+                          key: widget
+                              ._formKey, // Chave do formulário para validação.
                           child: TextUsernameInputWidget(
-                            controller: widget.username,
+                            controller: widget
+                                .username, // Controlador para o campo de nome de usuário.
                           ),
                         ),
                         const SizedBox(height: 18),
+                        // Botão para selecionar alergias.
                         PreferenceOptionsWidget(
                           title: 'Alergias',
                           onTap: () => _showAllergiesModal(context),
                         ),
                         const SizedBox(height: 18),
+                        // Botão para selecionar dietas.
                         PreferenceOptionsWidget(
                           title: 'Dietas',
                           onTap: () => _showDietsModal(context),
                         ),
                         const SizedBox(height: 18),
+                        // Botão para selecionar preferências.
                         PreferenceOptionsWidget(
                           title: 'Preferências',
                           onTap: () {},
                         ),
                         const SizedBox(height: 20),
+                        // Botão para salvar as alterações do perfil.
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -132,12 +155,14 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
                               color: AppTheme.perfilYellow,
                               onPressed: () async {
                                 if (userProvider.user!.onboarding) {
+                                  // Atualiza o perfil do usuário se estiver na fase de onboarding.
                                   try {
                                     await AuthMethods().updateUserProfile(
                                       username: widget.username.text,
                                       file: imageBytes,
                                       context: context,
                                     );
+                                    // Navega para a tela principal após salvar.
                                     Navigator.of(context).pushAndRemoveUntil(
                                       MaterialPageRoute(
                                           builder: (context) =>
@@ -145,7 +170,8 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
                                       (Route<dynamic> route) => false,
                                     );
                                   } catch (e) {
-                                    showSnackBar(e.toString(), context);
+                                    showSnackBar(e.toString(),
+                                        context); // Exibe uma mensagem de erro.
                                   }
                                 } else {
                                   if (widget.username.text.isNotEmpty) {
@@ -163,11 +189,12 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
                                         (Route<dynamic> route) => false,
                                       );
                                     } catch (e) {
-                                      showSnackBar(e.toString(), context);
+                                      showSnackBar(e.toString(),
+                                          context); // Exibe uma mensagem de erro.
                                     }
                                   } else {
-                                    showSnackBar(
-                                        "Preencha o nome de usuário", context);
+                                    showSnackBar("Preencha o nome de usuário",
+                                        context); // Solicita que o nome de usuário seja preenchido.
                                   }
                                 }
                               },
@@ -186,6 +213,7 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
     );
   }
 
+  /// Exibe o modal de seleção de alergias.
   void _showAllergiesModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -204,6 +232,7 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
     );
   }
 
+  /// Exibe o modal de seleção de dietas.
   void _showDietsModal(BuildContext context) {
     showModalBottomSheet(
       context: context,

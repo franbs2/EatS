@@ -4,14 +4,14 @@ import 'package:eats/data/datasources/auth_methods.dart';
 import 'package:eats/presentation/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 
-/// `PreferencesProvider` gerencia as preferências alimentares,
+/// [PreferencesProvider] gerencia as preferências alimentares,
 /// incluindo alergias, dietas e outras preferências do usuário.
-/// Ele interage com o `UserProvider` para carregar e atualizar as preferências do usuário.
+/// Ele interage com o [UserProvider] para carregar e atualizar as preferências do usuário.
 class PreferencesProvider with ChangeNotifier {
   UserProvider
       _userProvider; // Provedor de usuário para carregar e atualizar preferências.
 
-  /// Construtor que inicializa o `PreferencesProvider` com um `UserProvider` e
+  /// Construtor que inicializa o [PreferencesProvider] com um [UserProvider] e
   /// carrega as preferências do usuário.
   PreferencesProvider(this._userProvider) {
     loadPreferences();
@@ -29,7 +29,7 @@ class PreferencesProvider with ChangeNotifier {
   final List<String> _preferences =
       []; // Lista completa de outras preferências.
 
-  /// Atualiza o `UserProvider` e recarrega as preferências do usuário.
+  /// Atualiza o [UserProvider] e recarrega as preferências do usuário.
   void updateUserProvider(UserProvider userProvider) {
     _userProvider = userProvider;
     loadPreferences();
@@ -40,7 +40,7 @@ class PreferencesProvider with ChangeNotifier {
   List<String> get selectedDiets => _selectedDiets;
   List<String> get selectedPreferences => _selectedPreferences;
 
-  /// Carrega as preferências do usuário a partir do `UserProvider`.
+  /// Carrega as preferências do usuário a partir do [UserProvider].
   /// Chama métodos para resetar as listas de alergias, dietas e preferências selecionadas.
   Future<void> loadPreferences() async {
     _allergies = _userProvider.user?.dietaryRestrictions ?? [];

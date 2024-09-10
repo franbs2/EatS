@@ -5,15 +5,15 @@ import 'package:eats/data/model/user.dart' as model;
 import 'package:eats/data/datasources/auth_methods.dart';
 import 'package:flutter/foundation.dart';
 
-/// `UserProvider` é uma classe que gerencia o estado do usuário autenticado no aplicativo.
-/// Ele utiliza o `ChangeNotifier` para permitir a atualização reativa do estado do usuário
+/// [UserProvider] é uma classe que gerencia o estado do usuário autenticado no aplicativo.
+/// Ele utiliza o [ChangeNotifier] para permitir a atualização reativa do estado do usuário
 /// e notificar os ouvintes quando há mudanças.
 class UserProvider with ChangeNotifier {
   model.User? _user; // Armazena o usuário autenticado.
   Uint8List?
       _profileImage; // Armazena a imagem de perfil do usuário em memória.
   Uint8List?
-      _image; // Reservado para armazenamento de outras imagens relacionadas ao usuário.
+      image; // Reservado para armazenamento de outras imagens relacionadas ao usuário.
 
   final AuthMethods _authMethods =
       AuthMethods(); // Instância de métodos de autenticação.
@@ -27,7 +27,7 @@ class UserProvider with ChangeNotifier {
   // Verifica se o usuário está carregado.
   bool get isUserLoaded => _user != null;
 
-  /// `refreshUser` tenta carregar ou atualizar os detalhes do usuário a partir da autenticação.
+  /// [refreshUser] tenta carregar ou atualizar os detalhes do usuário a partir da autenticação.
   /// Faz múltiplas tentativas para verificar se o usuário está autenticado, carrega ou cria o
   /// usuário no Firestore se necessário, e atualiza os dados de perfil.
   Future<void> refreshUser() async {
@@ -83,7 +83,7 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  /// Atualiza a imagem de perfil do usuário carregando-a a partir do `StorageMethods`.
+  /// Atualiza a imagem de perfil do usuário carregando-a a partir do [StorageMethods].
   /// Verifica se há mudanças na imagem e notifica ouvintes caso ocorra uma atualização.
   Future<void> _updateUserProfileImage(model.User newUser) async {
     debugPrint('UserProvider: Atualizando imagem de perfil...');

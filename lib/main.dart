@@ -24,24 +24,27 @@ import 'presentation/providers/preferences_provider.dart';
 import 'presentation/view/detail_recipes_page.dart';
 import 'presentation/view/edit_perfil_page.dart';
 import 'presentation/view/home_page.dart';
-import 'presentation/view/initial_page.dart';
 import 'presentation/view/login_page.dart';
 import 'presentation/view/perfil_page.dart';
 import 'presentation/view/register_page.dart';
 
-/// Função principal do aplicativo. Inicializa o Firebase, define a orientação da tela
+/// Função principal do aplicativo. Inicializa o [Firebase], define a orientação da tela
 /// para retrato e executa o aplicativo.
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Garante que a árvore de widgets foi inicializada.
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Garante que a árvore de widgets foi inicializada.
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform, // Inicializa o Firebase com as opções específicas da plataforma.
+    options: DefaultFirebaseOptions
+        .currentPlatform, // Inicializa o Firebase com as opções específicas da plataforma.
   );
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // Define a orientação da tela para retrato.
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp
+  ]); // Define a orientação da tela para retrato.
 
   runApp(const MyApp()); // Executa o aplicativo.
 }
 
-/// Classe principal do aplicativo que configura o MaterialApp e os provedores.
+/// Classe principal do aplicativo que configura o [MaterialApp] e os provedores.
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -81,13 +84,15 @@ class MyApp extends StatelessWidget {
         ),
         // Provedor que atualiza o RecipesProvider com base no RecipesRepository.
         ChangeNotifierProxyProvider<RecipesRepository, RecipesProvider>(
-          create: (context) => RecipesProvider(context.read<RecipesRepository>()),
+          create: (context) =>
+              RecipesProvider(context.read<RecipesRepository>()),
           update: (context, repository, previous) =>
               previous!..updateRepository(repository),
         ),
         // Provedor que atualiza o BannersProvider com base no BannersRepository.
         ChangeNotifierProxyProvider<BannersRepository, BannersProvider>(
-          create: (context) => BannersProvider(context.read<BannersRepository>()),
+          create: (context) =>
+              BannersProvider(context.read<BannersRepository>()),
           update: (context, repository, previous) =>
               previous!..updateRepository(repository),
         ),
@@ -106,16 +111,17 @@ class MyApp extends StatelessWidget {
             Theme.of(context).textTheme,
           ), // Define a fonte padrão do aplicativo usando Google Fonts.
         ),
-        home: const AuthWrapperWidget(), // Tela inicial que decide se o usuário está autenticado.
+        home:
+            const AuthWrapperWidget(), // Tela inicial que decide se o usuário está autenticado.
         routes: {
-          RoutesApp.initialPage: (context) => const InitialPage(),
           RoutesApp.registerPage: (context) => RegisterPage(),
           RoutesApp.loginPage: (context) => LoginPage(),
           RoutesApp.homePage: (context) => const HomePage(),
           RoutesApp.detailRecipePage: (context) => const DetailRecipesPage(),
           RoutesApp.perfilPage: (context) => const PerfilPage(),
           RoutesApp.editPefilPage: (context) => EditPerfilPage(),
-          RoutesApp.generateRecipePage: (context) => const GenerateRecipesPage(),
+          RoutesApp.generateRecipePage: (context) =>
+              const GenerateRecipesPage(),
         },
       ),
     );
