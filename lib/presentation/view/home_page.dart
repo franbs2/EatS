@@ -50,6 +50,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
+        // Define um scroll infinito para o conteúdo.
         child: CustomScrollView(
           slivers: [
             const SliverToBoxAdapter(
@@ -95,6 +96,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+            // Renderiza os banners.
             SliverToBoxAdapter(
               child: Container(
                 decoration: const BoxDecoration(
@@ -118,60 +120,66 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
+            // Renderiza as categorias de filtro.
             SliverToBoxAdapter(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Color(0xffF9F9F9),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height * 0.5,
                 ),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 16),
-                    const FilterCategoriesRecipesWidget(categories: categories),
-                    Consumer<RecipesProvider>(
-                      builder: (context, recipesProvider, child) {
-                        if (recipesProvider.recipes.isEmpty &&
-                            recipesProvider.errorMessage == null) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              color: AppTheme.primaryColor,
-                            ),
-                          );
-                        }
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Color(0xffF9F9F9),
+                  ),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      const FilterCategoriesRecipesWidget(
+                          categories: categories),
+                      Consumer<RecipesProvider>(
+                        builder: (context, recipesProvider, child) {
+                          if (recipesProvider.recipes.isEmpty &&
+                              recipesProvider.errorMessage == null) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                color: AppTheme.primaryColor,
+                              ),
+                            );
+                          }
 
-                        if (recipesProvider.errorMessage != null) {
-                          return Center(
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 24),
-                                Text(
-                                  recipesProvider.errorMessage!.toLowerCase(),
-                                  style: const TextStyle(
-                                    color: AppTheme.primaryColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
+                          if (recipesProvider.errorMessage != null) {
+                            return Center(
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 24),
+                                  Text(
+                                    recipesProvider.errorMessage!.toLowerCase(),
+                                    style: const TextStyle(
+                                      color: AppTheme.primaryColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 24),
-                                Image.asset(
-                                  ImageApp.hungryIllustration,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.2,
-                                ),
-                              ],
+                                  const SizedBox(height: 24),
+                                  Image.asset(
+                                    ImageApp.hungryIllustration,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.2,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 10),
+                            child: GridViewRecipesWidget(
+                              listRecipes: recipesProvider.recipes,
                             ),
                           );
-                        }
-
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 10),
-                          child: GridViewRecipesWidget(
-                            listRecipes: recipesProvider.recipes,
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
