@@ -21,15 +21,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late final ScrollController scrollController;
-  bool isVisible = false;
-
   @override
   void initState() {
     super.initState();
-    scrollController = ScrollController();
-    scrollController.addListener(_scrollListener);
-
     // Busca receitas e banners após o layout ser construído.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<RecipesProvider>(context, listen: false).fetchRecipes();
@@ -37,36 +31,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _scrollListener() {
-    if (scrollController.hasClients) {
-      final offset = scrollController.offset;
-      final maxExtent = scrollController.position.maxScrollExtent;
-
-      // Verifica se o scroll ultrapassou 20% da altura total.
-      final shouldBeVisible = offset >= maxExtent * 0.2;
-
-      if (shouldBeVisible != isVisible) {
-        setState(() {
-          isVisible = shouldBeVisible;
-        });
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    scrollController.removeListener(_scrollListener);
-    scrollController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     // Obtém a lista de categorias de filtro a partir de strings constantes.
-
     const categories = StringsApp.listFilterCategories;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       body: SafeArea(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -84,97 +55,76 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           child: CustomScrollView(
-            controller: scrollController,
             slivers: [
-              if (isVisible)
-                SliverAppBar(
-                  backgroundColor: Colors.transparent,
-                  pinned: true,
-                  floating: true,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                          colors: [
-                            Color(0xff539F33),
-                            Color(0xffEFC136),
-                          ],
-                        ),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 30.0, vertical: 2.0),
-                        child: SearchBarWidget(),
-                      ),
-                    ),
-                  ),
-                ),
               const SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    SizedBox(height: 30),
-                    Padding(
-                      padding: EdgeInsets.all(30.0),
-                      child: Row(
+                child: Padding(
+                  padding:
+                      EdgeInsets.only(top: 30, left: 30, right: 30, bottom: 20),
+                  child: Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                StringsApp.local,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color(0xffB7B7B7),
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                'Santarém, Pará',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: AppTheme.secondaryColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
+                          Text(
+                            StringsApp.local,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xffB7B7B7),
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
-                          Spacer(),
-                          ImgPerfilWidget(),
+                          SizedBox(height: 4),
+                          Text(
+                            'Santarém, Pará',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: AppTheme.secondaryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 30.0),
-                      child: SearchBarWidget(),
-                    ),
-                    SizedBox(height: 24),
-                  ],
+                      Spacer(),
+                      ImgPerfilWidget(),
+                    ],
+                  ),
                 ),
               ),
+              SliverAppBar(
+                backgroundColor: Colors.transparent,
+                collapsedHeight: MediaQuery.of(context).size.height * 0.1,
+                pinned: true,
+                flexibleSpace: const Center(
+                    child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 26.0),
+                  child: SearchBarWidget(),
+                )),
+              ),
+
               // Renderiza o banner e o slider de banners.
               SliverToBoxAdapter(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.transparent, Color(0xffF9F9F9)],
-                      stops: [0.5, 0.5],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Color(0xffF9F9F9),
-                        width: 2.0,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.transparent, Color(0xffF9F9F9)],
+                        stops: [0.5, 0.5],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xffF9F9F9),
+                          width: 2.0,
+                        ),
                       ),
                     ),
-                  ),
-                  child: Consumer<BannersProvider>(
-                    builder: (context, bannersProvider, child) {
-                      return CarouselWidget(banners: bannersProvider.banners);
-                    },
+                    child: Consumer<BannersProvider>(
+                      builder: (context, bannersProvider, child) {
+                        return CarouselWidget(banners: bannersProvider.banners);
+                      },
+                    ),
                   ),
                 ),
               ),
