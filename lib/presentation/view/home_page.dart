@@ -67,114 +67,6 @@ class _HomePageState extends State<HomePage> {
     const categories = StringsApp.listFilterCategories;
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.centerLeft,
-            colors: [
-              Color(0xff539F33),
-              Color(0xff82A030),
-              Color(0xffEFC136),
-              Color(0xffEFC136),
-            ],
-          ),
-        ),
-        // Define um scroll infinito para o conteúdo.
-        child: CustomScrollView(
-          slivers: [
-            const SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  SizedBox(height: 30), // Espaçamento superior.
-                  Padding(
-                    padding: EdgeInsets.all(30.0),
-                    child: Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              StringsApp.local,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Color(0xffB7B7B7),
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              'Santarém, Pará',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: AppTheme.secondaryColor,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Spacer(),
-                        ImgPerfilWidget(),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30.0),
-                    child: SearchBarWidget(),
-                  ),
-                  SizedBox(height: 24),
-                ],
-              ),
-            ),
-            // Renderiza os banners.
-            SliverToBoxAdapter(
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.transparent, AppTheme.backgroundColor],
-                    stops: [0.5, 0.5],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                  border: Border(
-                    bottom: BorderSide(
-                      color: AppTheme.backgroundColor,
-                      width: 2.0,
-                    ),
-                  ),
-                ),
-                child: Consumer<BannersProvider>(
-                  builder: (context, bannersProvider, child) {
-                    return CarouselWidget(banners: bannersProvider.banners);
-                  },
-                ),
-              ),
-            ),
-            // Renderiza as categorias de filtro.
-            SliverToBoxAdapter(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height * 0.5,
-                ),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: AppTheme.backgroundColor,
-                  ),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 16),
-                      const FilterCategoriesRecipesWidget(
-                          categories: categories),
-                      Consumer<RecipesProvider>(
-                        builder: (context, recipesProvider, child) {
-                          if (recipesProvider.recipes.isEmpty &&
-                              recipesProvider.errorMessage == null) {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                color: AppTheme.primaryColor,
-                              ),
-                            );
-                          }
       body: SafeArea(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -286,11 +178,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              // Renderiza as categorias de filtro. 
+              // Renderiza as categorias de filtro.
               SliverToBoxAdapter(
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height * 0.5,
+                    minHeight: MediaQuery.of(context).size.height * 0.6,
                   ),
                   child: Container(
                     decoration: const BoxDecoration(
