@@ -377,13 +377,14 @@ class AuthMethods {
     final updateData = <String, dynamic>{};
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
+    if (username == userProvider.user?.username) username = null;
     if (username != null && username.isNotEmpty) {
       debugPrint("AuthMethods: Validando username");
       debugPrint("username: $username");
       if (!regex.hasMatch(username)) {
         debugPrint("AuthMethods: username inválido");
         throw InvalidUsernameException();
-      } else if (username.length <= 5) {
+      } else if (username.length < 5) {
         debugPrint("AuthMethods: username muito curto");
         throw InvalidTooShortException();
       } else if (username.length > 20) {

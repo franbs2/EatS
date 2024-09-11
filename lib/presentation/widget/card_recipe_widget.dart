@@ -1,4 +1,5 @@
 import 'package:eats/core/routes/routes.dart';
+import 'package:eats/core/style/color.dart';
 import 'package:eats/data/model/recipes.dart';
 import 'package:eats/data/datasources/storage_methods.dart';
 import 'package:flutter/material.dart';
@@ -41,50 +42,55 @@ class CardRecipeWidget extends StatelessWidget {
       },
       borderRadius: BorderRadius.circular(12),
       child: Card(
+        elevation: 0, // Define a elevação do cartão.
+        color: AppTheme.secondaryColor, // Define a cor do cartão.
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12), // Define o formato do cartão.
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              // Recorta a imagem com bordas arredondadas.
-              borderRadius: BorderRadius.circular(12),
-              child: FutureBuilder<String>(
-                // Constrói o widget com base no estado do futuro.
-                future: storageMethods.loadImageInURL(
-                  recipe.image, // URL da imagem da receita.
-                  true, // Indica que a imagem deve ser carregada.
+            Container(
+              padding: const EdgeInsets.fromLTRB(3, 3, 3, 0),
+              child: ClipRRect(
+                // Recorta a imagem com bordas arredondadas.
+                borderRadius: BorderRadius.circular(12),
+                child: FutureBuilder<String>(
+                  // Constrói o widget com base no estado do futuro.
+                  future: storageMethods.loadImageInURL(
+                    recipe.image, // URL da imagem da receita.
+                    true, // Indica que a imagem deve ser carregada.
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      // Exibe um indicador de carregamento enquanto a imagem está sendo carregada.
+                      return Container(
+                        height: MediaQuery.of(context).size.height * 0.18,
+                        width: double.infinity,
+                        color: AppTheme.secondaryColor,
+                        child: const Center(child: CircularProgressIndicator()),
+                      );
+                    } else if (snapshot.hasError) {
+                      // Exibe uma mensagem de erro se ocorrer um problema ao carregar a imagem.
+                      return Container(
+                        height: MediaQuery.of(context).size.height * 0.18,
+                        width: double.infinity,
+                        color: AppTheme.secondaryColor,
+                        child: const Center(
+                            child: Text('Erro ao carregar imagem')),
+                      );
+                    } else {
+                      // Exibe a imagem da receita quando estiver carregada.
+                      return Image.network(
+                        snapshot.data ?? '', // URL da imagem.
+                        fit: BoxFit
+                            .fill, // Ajusta a imagem para preencher o espaço disponível.
+                        height: MediaQuery.of(context).size.height * 0.18,
+                        width: double.infinity,
+                      );
+                    }
+                  },
                 ),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    // Exibe um indicador de carregamento enquanto a imagem está sendo carregada.
-                    return Container(
-                      height: MediaQuery.of(context).size.height * 0.18,
-                      width: double.infinity,
-                      color: Colors.white,
-                      child: const Center(child: CircularProgressIndicator()),
-                    );
-                  } else if (snapshot.hasError) {
-                    // Exibe uma mensagem de erro se ocorrer um problema ao carregar a imagem.
-                    return Container(
-                      height: MediaQuery.of(context).size.height * 0.18,
-                      width: double.infinity,
-                      color: Colors.white,
-                      child:
-                          const Center(child: Text('Erro ao carregar imagem')),
-                    );
-                  } else {
-                    // Exibe a imagem da receita quando estiver carregada.
-                    return Image.network(
-                      snapshot.data ?? '', // URL da imagem.
-                      fit: BoxFit
-                          .fill, // Ajusta a imagem para preencher o espaço disponível.
-                      height: MediaQuery.of(context).size.height * 0.18,
-                      width: double.infinity,
-                    );
-                  }
-                },
               ),
             ),
             Padding(

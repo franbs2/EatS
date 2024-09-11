@@ -22,7 +22,10 @@ class DetailRecipesPage extends StatelessWidget {
         ModalRoute.of(context)?.settings.arguments as Recipes?;
 
     return Scaffold(
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
+        backgroundColor: AppTheme.secondaryColor,
+        surfaceTintColor: AppTheme.secondaryColor,
         title: Title(
           color: Colors.black,
           child: const Text(
@@ -57,7 +60,7 @@ class DetailRecipesPage extends StatelessWidget {
         children: [
           const Text(
             'Não foi possível criar sua receita! Desculpe.',
-            style: TextStyle(fontSize: 18, color: Colors.red),
+            style: TextStyle(fontSize: 18, color: AppTheme.atencionRed),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),

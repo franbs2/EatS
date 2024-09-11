@@ -69,7 +69,7 @@ class UsernameAlreadyInUseException implements Exception {
 class InvalidTooShortException implements Exception {
   final String message;
   InvalidTooShortException(
-      [this.message = 'O nome de usuário deve ter mais de 2 caracteres.']);
+      [this.message = 'O nome de usuário deve ter pelo menos 5 caracteres.']);
   @override
   String toString() => message;
 }

@@ -62,7 +62,6 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
     final ingredients = _controllers
         .map((e) => e.text)
         .toList(); // Obtém a lista de ingredientes dos controladores de texto.
-    print(ingredients); // Imprime a lista de ingredientes para depuração.
     final recipe = await _aiRepository.generateRecipe(
         ingredients); // Solicita ao repositório de IA a geração de uma receita com os ingredientes fornecidos.
 
@@ -149,11 +148,13 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
                     onPressed: () async {
                       Recipes? recipe =
                           await _generateRecipe(); // Gera a receita e aguarda o resultado.
-                      Navigator.of(context).pushNamed(
-                          RoutesApp
-                              .detailRecipePage, // Navega para a página de detalhes da receita.
-                          arguments:
-                              recipe); // Passa a receita gerada como argumento para a próxima página.
+                      if (context.mounted) {
+                        Navigator.of(context).pushNamed(
+                            RoutesApp
+                                .detailRecipePage, // Navega para a página de detalhes da receita.
+                            arguments:
+                                recipe); // Passa a receita gerada como argumento para a próxima página.
+                      }
                     })),
           ],
         ),

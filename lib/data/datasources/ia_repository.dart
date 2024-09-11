@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eats/data/model/recipes.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 

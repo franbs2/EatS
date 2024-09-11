@@ -89,7 +89,7 @@ class PerfilPage extends StatelessWidget {
                                 onTap: () => authmethods.logOut(context),
                                 child: const Text('Sair',
                                     style: TextStyle(
-                                        color: Color.fromARGB(255, 229, 85, 74),
+                                        color: AppTheme.atencionRed,
                                         fontWeight: FontWeight.normal)),
                               ),
                             ];
@@ -128,9 +128,6 @@ class PerfilPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 18),
                         // Widget para exibir preferências (não implementado).
-                        PreferenceOptionsWidget(
-                            title: 'Preferências', onTap: () => ()),
-                        const SizedBox(height: 18),
                       ],
                     ),
                   ),
