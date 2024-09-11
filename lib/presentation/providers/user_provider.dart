@@ -104,6 +104,7 @@ class UserProvider with ChangeNotifier {
 
     // Verifica se há mudanças na imagem de perfil e atualiza o estado.
     if (_profileImage == null ||
+        // ignore: unnecessary_null_comparison
         _profileImage != null && newProfileImage == null ||
         _profileImage != null && !listEquals(_profileImage, newProfileImage)) {
       debugPrint('UserProvider: Imagem de perfil atualizada.');

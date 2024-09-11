@@ -49,6 +49,7 @@ class StarRating extends StatelessWidget {
       // Constrói cada item da barra de avaliação com um ícone de estrela.
       itemBuilder: (context, _) => Image.asset(
         ImageApp.starIcon, // Caminho do ícone da estrela.
+        // ignore: no_wildcard_variable_uses
         color: _ < rating ? null : Colors.grey, // Define a cor da estrela com base na avaliação.
       ),
       // Função chamada ao atualizar a classificação, sem ação neste caso.

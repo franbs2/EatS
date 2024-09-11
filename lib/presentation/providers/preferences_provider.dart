@@ -22,12 +22,9 @@ class PreferencesProvider with ChangeNotifier {
       []; // Lista de alergias selecionadas pelo usuário.
   List<String> _selectedDiets =
       []; // Lista de dietas selecionadas pelo usuário.
-  List<String> _selectedPreferences =
-      []; // Lista de preferências alimentares selecionadas.
-  List<String> _allergies = []; // Lista completa de alergias do usuário.
+  List<String> _allergies = 
+      []; // Lista completa de alergias do usuário.
   List<String> _diets = []; // Lista completa de dietas do usuário.
-  final List<String> _preferences =
-      []; // Lista completa de outras preferências.
 
   /// Atualiza o [UserProvider] e recarrega as preferências do usuário.
   void updateUserProvider(UserProvider userProvider) {
@@ -38,7 +35,6 @@ class PreferencesProvider with ChangeNotifier {
   // Getters para expor as listas selecionadas à interface de usuário.
   List<String> get selectedAllergies => _selectedAllergies;
   List<String> get selectedDiets => _selectedDiets;
-  List<String> get selectedPreferences => _selectedPreferences;
 
   /// Carrega as preferências do usuário a partir do [UserProvider].
   /// Chama métodos para resetar as listas de alergias, dietas e preferências selecionadas.
@@ -48,7 +44,6 @@ class PreferencesProvider with ChangeNotifier {
     notifyListeners();
     resetSelectedAllergies();
     resetSelectedDiets();
-    revokePreferences();
   }
 
   /// Reseta as alergias selecionadas para refletir as alergias atuais do usuário.
@@ -60,12 +55,6 @@ class PreferencesProvider with ChangeNotifier {
   /// Reseta as dietas selecionadas para refletir as dietas atuais do usuário.
   Future<void> resetSelectedDiets() async {
     _selectedDiets = [..._diets];
-    notifyListeners();
-  }
-
-  /// Reseta as preferências selecionadas para refletir as preferências padrão.
-  Future<void> revokePreferences() async {
-    _selectedPreferences = _preferences;
     notifyListeners();
   }
 
@@ -89,16 +78,6 @@ class PreferencesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  /// Adiciona ou remove uma preferência da lista de preferências selecionadas.
-  void togglePreference(String preference) {
-    if (_selectedPreferences.contains(preference)) {
-      _selectedPreferences.remove(preference);
-    } else {
-      _selectedPreferences.add(preference);
-    }
-    notifyListeners();
-  }
-
   /// Limpa todas as alergias selecionadas.
   void clearAllergies() {
     _selectedAllergies.clear();
@@ -108,12 +87,6 @@ class PreferencesProvider with ChangeNotifier {
   /// Limpa todas as dietas selecionadas.
   void clearDiets() {
     _selectedDiets.clear();
-    notifyListeners();
-  }
-
-  /// Limpa todas as preferências selecionadas.
-  void clearPreferences() {
-    _selectedPreferences.clear();
     notifyListeners();
   }
 

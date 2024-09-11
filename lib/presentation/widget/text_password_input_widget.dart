@@ -56,7 +56,7 @@ class _TextPasswordInputWidgetState extends State<TextPasswordInputWidget> {
         ),
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
-            color: Color.fromARGB(255, 73, 139, 45),
+            color: AppTheme.primaryColor,
             width: 1.0,
           ),
         ),

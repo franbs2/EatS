@@ -43,9 +43,6 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
     setState(() {
       imageBytes = bytes; // Atualiza o estado com os bytes da imagem.
     });
-    debugPrint("bytes: $bytes"); // Imprime os bytes da imagem no console.
-    debugPrint(
-        "imageBytes: $imageBytes"); // Imprime os bytes da imagem armazenados no estado.
   }
 
   /// Método chamado quando o widget é removido da árvore de widgets.
@@ -55,6 +52,16 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
         "EditPerfilPage: Disposing..."); // Mensagem de depuração ao descartar o widget.
     imageBytes = null; // Limpa a imagem carregada ao sair da tela.
     super.dispose();
+  }
+
+  /// Inicia o nome de usuário com o valor do provedor.
+  @override
+  void initState() {
+    super.initState();
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    if (userProvider.user?.username != null) {
+      widget.username.text = userProvider.user!.username;
+    }
   }
 
   @override
@@ -137,12 +144,6 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
                           title: 'Dietas',
                           onTap: () => _showDietsModal(context),
                         ),
-                        const SizedBox(height: 18),
-                        // Botão para selecionar preferências.
-                        PreferenceOptionsWidget(
-                          title: 'Preferências',
-                          onTap: () {},
-                        ),
                         const SizedBox(height: 20),
                         // Botão para salvar as alterações do perfil.
                         Row(
@@ -163,15 +164,19 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
                                       context: context,
                                     );
                                     // Navega para a tela principal após salvar.
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const MainScreen()),
-                                      (Route<dynamic> route) => false,
-                                    );
+                                    if (context.mounted) {
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const MainScreen()),
+                                        (Route<dynamic> route) => false,
+                                      );
+                                    }
                                   } catch (e) {
-                                    showSnackBar(e.toString(),
-                                        context); // Exibe uma mensagem de erro.
+                                    if (context.mounted) {
+                                      showSnackBar(e.toString(),
+                                          context); // Exibe uma mensagem de erro.
+                                    }
                                   }
                                 } else {
                                   if (widget.username.text.isNotEmpty) {
@@ -182,15 +187,20 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
                                         context: context,
                                         onboarding: true,
                                       );
-                                      Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const MainScreen()),
-                                        (Route<dynamic> route) => false,
-                                      );
+                                      if (context.mounted) {
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const MainScreen()),
+                                          (Route<dynamic> route) => false,
+                                        );
+                                      }
                                     } catch (e) {
-                                      showSnackBar(e.toString(),
-                                          context); // Exibe uma mensagem de erro.
+                                      if (context.mounted) {
+                                        showSnackBar(e.toString(),
+                                            context); // Exibe uma mensagem de erro.
+                                      }
                                     }
                                   } else {
                                     showSnackBar("Preencha o nome de usuário",

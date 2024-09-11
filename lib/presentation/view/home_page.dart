@@ -99,14 +99,14 @@ class _HomePageState extends State<HomePage> {
               child: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Colors.transparent, Color(0xffF9F9F9)],
+                    colors: [Colors.transparent, AppTheme.backgroundColor],
                     stops: [0.5, 0.5],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                   ),
                   border: Border(
                     bottom: BorderSide(
-                      color: Color(0xffF9F9F9),
+                      color: AppTheme.backgroundColor,
                       width: 2.0,
                     ),
                   ),
@@ -121,7 +121,7 @@ class _HomePageState extends State<HomePage> {
             SliverToBoxAdapter(
               child: Container(
                 decoration: const BoxDecoration(
-                  color: Color(0xffF9F9F9),
+                  color: AppTheme.backgroundColor,
                 ),
                 child: Column(
                   children: [

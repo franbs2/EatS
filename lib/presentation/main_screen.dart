@@ -52,7 +52,7 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex, // Define o item atualmente selecionado.
         onTap: _onItemTapped, // Função chamada quando um item é tocado.
-        backgroundColor: Colors.white, // Cor de fundo do BottomNavigationBar.
+        backgroundColor: AppTheme.secondaryColor, // Cor de fundo do BottomNavigationBar.
         selectedItemColor: AppTheme.primaryColor, // Cor do item selecionado.
         unselectedItemColor: Colors.grey, // Cor dos itens não selecionados.
         items: const [
@@ -84,7 +84,7 @@ class _MainScreenState extends State<MainScreen> {
           borderRadius: BorderRadius.all(
               Radius.circular(50)), // Forma arredondada do botão.
         ),
-        backgroundColor: Colors.white, // Cor de fundo do botão flutuante.
+        backgroundColor: AppTheme.secondaryColor, // Cor de fundo do botão flutuante.
         child: Image.asset(
           ImageApp.appMiniIcon, // Imagem exibida no botão flutuante.
           height: 35, // Altura da imagem do botão.

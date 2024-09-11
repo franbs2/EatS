@@ -39,10 +39,8 @@ class UploadWidget extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           color: backgroundImage == null
-              ? Colors.grey[
-                  300] // Cor de fundo padrão se nenhuma imagem for fornecida.
-              : const Color(
-                  0xfff1f1f1), // Cor de fundo alternativa para quando a imagem é fornecida.
+              ? AppTheme.backgroundColor // Cor de fundo padrão se nenhuma imagem for fornecida.
+              : AppTheme.backgroundColor, // Cor de fundo alternativa para quando a imagem é fornecida.
           image: backgroundImage != null
               ? DecorationImage(
                   image: MemoryImage(
