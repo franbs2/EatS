@@ -37,6 +37,18 @@ void main() async {
     options: DefaultFirebaseOptions
         .currentPlatform, // Inicializa o Firebase com as opções específicas da plataforma.
   );
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent, // Barra de status transparente
+      systemNavigationBarColor:
+          Colors.transparent, // Barra de navegação transparente
+      statusBarIconBrightness:
+          Brightness.light, // Ícones da barra de status claros
+      systemNavigationBarIconBrightness:
+          Brightness.light, // Ícones da barra de navegação claros
+    ),
+  );
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp
   ]); // Define a orientação da tela para retrato.
@@ -74,7 +86,8 @@ class MyApp extends StatelessWidget {
         ),
         // Provedor para gerenciar a integração com a IA.
         Provider<AIRepository>(
-          create: (_) => AIRepository(apiKey: 'API_KEY'),
+          create: (_) =>
+              AIRepository(apiKey: 'AIzaSyD5Sd9GNhXfGf-fq4setyqWFcUdFxB-YCs'),
         ),
         // Provedor para gerenciar os banners, conectando ao Firestore.
         Provider<BannersRepository>(
