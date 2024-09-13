@@ -47,16 +47,17 @@ class RecipesProvider extends ChangeNotifier {
 
   /// `fetchRecipes` busca as receitas do repositório e atualiza o estado do provedor.
   /// Em caso de erro, define uma mensagem de erro apropriada.
-  Future<void> fetchRecipes() async {
+  Future<void> fetchRecipes(String? query) async {
     _isLoading = true; // Indica que o carregamento está em andamento.
     notifyListeners(); // Notifica ouvintes para atualizações de UI.
 
     try {
       _recipes = await _recipeRepository
-          .getRecipes(); // Obtém receitas do repositório.
+          .getRecipes(query); // Obtém receitas do repositório.
       _filteredRecipes = [
         ..._recipes
       ]; // Inicializa as receitas filtradas com todas as receitas.
+      debugPrint('RecipesProvider: $_filteredRecipes');
       _errorMessage = null; // Reseta qualquer mensagem de erro.
     } catch (error) {
       _errorMessage =

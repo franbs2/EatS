@@ -9,14 +9,40 @@ class RecipesRepository {
 
   /// [getRecipes] - Retorna uma lista de receitas obtidas do Firestore.
   ///
+  /// O parâmetro [searchValue] é opcional e serve para filtrar as receitas
+  /// com base no nome. Se [searchValue] for nulo, todas as receitas do
+  /// Firestore são retornadas. Caso contrário, apenas as receitas cujo nome
+  /// contenha as palavras chave especificadas em [searchValue] são retornadas.
+  ///
   /// A lista de receitas [recipesCollection] é retornada como um futuro,
   /// pois a leitura do Firestore é um processo assincrono.
   ///
   /// - Retorna: Uma lista de receitas.
+  Future<List<Recipes>> getRecipes(String? query) async {
+    // Recupera todas as receitas
+    Query<Map<String, dynamic>> recipesCollection =
+        _firestore.collection('recipes');
 
-  Future<List<Recipes>> getRecipes() async {
-    var recipesCollection = _firestore.collection('recipes');
+    // Obtém todos os documentos da coleção
     var querySnapshot = await recipesCollection.get();
-    return querySnapshot.docs.map((doc) => Recipes.fromFirestore(doc)).toList();
+
+    // Mapeia os documentos para uma lista de objetos Recipes
+    var allRecipes =
+        querySnapshot.docs.map((doc) => Recipes.fromFirestore(doc)).toList();
+
+    if (query == null || query.isEmpty) {
+      // Se searchValue for nulo ou vazio, retorna todas as receitas
+      return allRecipes;
+    } else {
+      // Caso contrário, filtra os resultados localmente no lado do cliente
+      var searchValues =
+          query.toLowerCase().split(" ").map((e) => e.trim()).toList();
+
+      // Retorna apenas as receitas que contêm todas as palavras de searchValue no nome
+      return allRecipes.where((recipe) {
+        return searchValues
+            .every((value) => recipe.name.toLowerCase().contains(value));
+      }).toList();
+    }
   }
 }
