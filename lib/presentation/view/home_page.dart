@@ -22,7 +22,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController _searchController = TextEditingController();
-  final ValueNotifier<bool> _isEmptyNotifier = ValueNotifier(true);
 
   @override
   void initState() {
