@@ -21,14 +21,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final TextEditingController _searchController = TextEditingController();
+  final ValueNotifier<bool> _isEmptyNotifier = ValueNotifier(true);
+
   @override
   void initState() {
     super.initState();
     // Busca receitas e banners após o layout ser construído.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<RecipesProvider>(context, listen: false).fetchRecipes();
+      Provider.of<RecipesProvider>(context, listen: false).fetchRecipes(null);
       Provider.of<BannersProvider>(context, listen: false).fetchBanners();
     });
+  }
+
+  void _searchRecipes(String query) {
+    Provider.of<RecipesProvider>(context, listen: false).fetchRecipes(query);
   }
 
   @override
@@ -94,11 +101,22 @@ class _HomePageState extends State<HomePage> {
                 backgroundColor: Colors.transparent,
                 collapsedHeight: MediaQuery.of(context).size.height * 0.1,
                 pinned: true,
-                flexibleSpace: const Center(
-                    child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 26.0),
-                  child: SearchBarWidget(),
-                )),
+                flexibleSpace: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 26.0),
+                    child: SearchBarWidget(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        // Implementando debounce para a busca
+                          Future.delayed(
+                            const Duration(milliseconds: 800),
+                            () => _searchRecipes(value),
+                          );
+                       
+                      },
+                    ),
+                  ),
+                ),
               ),
 
               // Renderiza o banner e o slider de banners.
@@ -145,15 +163,13 @@ class _HomePageState extends State<HomePage> {
                             categories: categories),
                         Consumer<RecipesProvider>(
                           builder: (context, recipesProvider, child) {
-                            if (recipesProvider.recipes.isEmpty &&
-                                recipesProvider.errorMessage == null) {
+                            if (recipesProvider.isLoading) {
                               return const Center(
                                 child: CircularProgressIndicator(
                                   color: AppTheme.primaryColor,
                                 ),
                               );
                             }
-
                             if (recipesProvider.errorMessage != null) {
                               return Center(
                                 child: Column(
