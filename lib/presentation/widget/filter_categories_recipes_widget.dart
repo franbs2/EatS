@@ -36,7 +36,7 @@ class FilterCategoriesRecipesWidget extends StatefulWidget {
 class _FilterCategoriesRecipesWidgetState
     extends State<FilterCategoriesRecipesWidget> {
   /// Armazena a categoria atualmente selecionada.
-  String? _selectedCategory;
+  String? _selectedCategory = 'Todos';
 
   @override
   Widget build(BuildContext context) {
