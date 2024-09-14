@@ -1,7 +1,7 @@
 // Importações necessárias para o provedor de preferências,
 // incluindo métodos de autenticação e o provedor de usuário.
-import 'package:eats/data/datasources/auth_methods.dart';
 import 'package:eats/presentation/providers/user_provider.dart';
+import 'package:eats/services/user_service.dart';
 import 'package:flutter/material.dart';
 
 /// [PreferencesProvider] gerencia as preferências alimentares,
@@ -92,9 +92,8 @@ class PreferencesProvider with ChangeNotifier {
 
   /// Salva as dietas selecionadas no perfil do usuário e recarrega o estado do usuário.
   Future<void> saveDiets(BuildContext context) async {
-    await AuthMethods().updateUserProfile(
+    await UserService().updateUserProfile(
       foodNiches: [..._selectedDiets],
-      context: context,
     );
     _diets = [..._selectedDiets];
     await _userProvider.refreshUser();
@@ -103,9 +102,8 @@ class PreferencesProvider with ChangeNotifier {
 
   /// Salva as alergias selecionadas no perfil do usuário e recarrega o estado do usuário.
   Future<void> saveAllergies(BuildContext context) async {
-    await AuthMethods().updateUserProfile(
+    await UserService().updateUserProfile(
       dietaryRestrictions: [..._selectedAllergies],
-      context: context,
     );
     _allergies = [..._selectedAllergies];
     await _userProvider.refreshUser();

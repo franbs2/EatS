@@ -1,7 +1,7 @@
 import 'package:eats/core/routes/routes.dart';
-import 'package:eats/data/datasources/auth_methods.dart';
 import 'package:eats/presentation/providers/preferences_provider.dart';
 import 'package:eats/presentation/providers/user_provider.dart';
+import 'package:eats/services/google_sign_in_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,10 +24,11 @@ class PerfilPage extends StatelessWidget {
     // Obtém o provedor de dados do usuário para acessar as informações do perfil.
     final userProvider = Provider.of<UserProvider>(context);
     // Obtém o provedor de métodos de autenticação para permitir logout.
-    final authmethods = Provider.of<AuthMethods>(context);
+    final googleSignIn = Provider.of<GoogleSignInService>(context);
 
     return Scaffold(
-      backgroundColor: AppTheme.secondaryColor, // Define a cor de fundo do Scaffold.
+      backgroundColor:
+          AppTheme.secondaryColor, // Define a cor de fundo do Scaffold.
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -86,7 +87,10 @@ class PerfilPage extends StatelessWidget {
                               ),
                               // Opção para sair da conta.
                               PopupMenuItem(
-                                onTap: () => authmethods.logOut(context),
+                                onTap: () {
+                                  googleSignIn.signOutFromGoogle();
+                                  userProvider.clearUser();
+                                },
                                 child: const Text('Sair',
                                     style: TextStyle(
                                         color: AppTheme.atencionRed,

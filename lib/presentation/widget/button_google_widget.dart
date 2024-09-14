@@ -1,10 +1,10 @@
+import 'package:eats/services/google_sign_in_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:eats/core/style/color.dart';
 import 'package:eats/core/style/images_app.dart';
 import 'package:eats/core/style/strings_app.dart';
-import 'package:eats/data/datasources/auth_methods.dart';
 
 /// Widget personalizado para um botão de login com Google.
 ///
@@ -27,7 +27,7 @@ class ButtonGoogleWidget extends StatelessWidget {
     return ElevatedButton(
       onPressed: () {
         // Chama o método de login com Google ao clicar no botão.
-        context.read<AuthMethods>().signInWithGoogle(context);
+        context.read<GoogleSignInService>().signInWithGoogle();
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.transparent,

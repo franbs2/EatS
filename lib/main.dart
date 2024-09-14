@@ -1,14 +1,14 @@
 // Importações necessárias para o funcionamento do app, incluindo bibliotecas do Flutter,
 // Firebase, provedores de estado (Provider) e outras dependências utilizadas no projeto.
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eats/services/auth_service.dart';
+import 'package:eats/services/google_sign_in_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
-import 'package:eats/data/datasources/auth_methods.dart';
 import 'package:eats/data/datasources/banners_repository.dart';
 import 'package:eats/data/datasources/recipes_repository.dart';
 import 'package:eats/presentation/auth_wrapper_widget.dart';
@@ -65,9 +65,12 @@ class MyApp extends StatelessWidget {
     // Configura os provedores para gerenciar o estado do aplicativo.
     return MultiProvider(
       providers: [
+        Provider<GoogleSignInService>(
+          create: (_) => GoogleSignInService(),
+        ),
         // Provedor de autenticação que gerencia o estado do usuário autenticado.
         StreamProvider<User?>(
-          create: (context) => context.read<AuthMethods>().authState,
+          create: (context) => context.read<AuthService>().authState,
           initialData: null,
         ),
         // Provedor que gerencia o estado do usuário.
@@ -75,8 +78,8 @@ class MyApp extends StatelessWidget {
           create: (_) => UserProvider(),
         ),
         // Provedor para autenticação, utilizando métodos personalizados.
-        Provider<AuthMethods>(
-          create: (_) => AuthMethods(),
+        Provider<AuthService>(
+          create: (_) => AuthService(),
         ),
         // Provedor para gerenciar as receitas, conectando ao Firestore.
         Provider<RecipesRepository>(

@@ -1,17 +1,19 @@
 import 'package:eats/core/style/strings_app.dart';
+import 'package:eats/presentation/providers/user_provider.dart';
 import 'package:eats/presentation/view/login_page.dart';
 import 'package:eats/presentation/widget/button_google_widget.dart';
 import 'package:eats/presentation/widget/continue_with_widget.dart';
 import 'package:eats/presentation/widget/page_default_auth.dart';
 import 'package:eats/presentation/widget/text_widget.dart';
+import 'package:eats/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../core/style/color.dart';
 
 import '../widget/button_default_widget.dart';
 import '../widget/text_button_have_account_widget.dart';
 import '../widget/text_password_input_widget.dart';
 import '../widget/title_initial_widget.dart';
-import 'package:eats/data/datasources/auth_methods.dart';
 
 /// Página de registro do usuário. Permite que o usuário se registre fornecendo email e senha.
 ///
@@ -30,7 +32,7 @@ class RegisterPage extends StatelessWidget {
       TextEditingController();
 
   // Instância do provedor de métodos de autenticação.
-  final AuthMethods _authMethods = AuthMethods();
+  final AuthService _authService = AuthService();
 
   /// Função responsável por registrar o usuário.
   ///
@@ -39,14 +41,13 @@ class RegisterPage extends StatelessWidget {
   ///
   /// @param [context] O contexto da build atual.
   void _registerUser(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
       try {
         // Tenta registrar o usuário.
-        await _authMethods.signUpUser(
-          context: context,
+        await _authService.signUpUser(
           email: _emailController.text,
           password: _senhaController.text,
-          confirmPassword: _confirmarSenhaController.text,
         );
         if (context.mounted) {
           // Exibe uma mensagem de sucesso após o registro bem-sucedido.
@@ -54,6 +55,11 @@ class RegisterPage extends StatelessWidget {
             const SnackBar(content: Text('Usuário registrado com sucesso!')),
           );
         }
+        _authService.loginUser(
+          email: _emailController.text,
+          password: _senhaController.text,
+        );
+        userProvider.refreshUser();
       } catch (e) {
         if (context.mounted) {
           // Exibe uma mensagem de erro caso algo dê errado durante o registro.

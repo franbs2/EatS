@@ -3,8 +3,8 @@ import "package:firebase_storage/firebase_storage.dart";
 import "package:flutter/foundation.dart";
 import 'package:http/http.dart' as http;
 
-/// [StorageMethods] - Repositorio responsável por salvar imagem no Firebase.
-class StorageMethods {
+/// [StorageService] - Repositorio responsável por salvar imagem no Firebase.
+class StorageService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -24,18 +24,18 @@ class StorageMethods {
     Uint8List file,
   ) async {
     // checar se já existe esse nome no firebase
-    debugPrint("StorageMethods: iniciando uploadImageToStorage...");
+    debugPrint("StorageService: iniciando uploadImageToStorage...");
     try {
       var ref =
           await _storage.ref().child(childName).child(name).getDownloadURL();
-      debugPrint("StorageMethods: Imagem existe: $ref");
+      debugPrint("StorageService: Imagem existe: $ref");
 
       return "";
     } catch (e) {
       // se não existir, faz upload
-      debugPrint("StorageMethods: Imagem não existe");
+      debugPrint("StorageService: Imagem não existe");
       Reference ref = _storage.ref().child(childName).child(name);
-      debugPrint("StorageMethods: ref: $ref");
+      debugPrint("StorageService: ref: $ref");
       UploadTask uploadTask = ref.putData(file);
       await uploadTask.whenComplete(() => null);
 

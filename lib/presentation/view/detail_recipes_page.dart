@@ -2,21 +2,21 @@ import 'package:eats/core/style/color.dart';
 import 'package:eats/core/style/images_app.dart';
 import 'package:eats/data/model/recipes.dart';
 import 'package:eats/presentation/widget/rating_bar_widget.dart';
+import 'package:eats/services/storage_service.dart';
 import 'package:flutter/material.dart';
-import '../../data/datasources/storage_methods.dart';
 
 /// [DetailRecipesPage] é uma página que exibe os detalhes de uma receita específica.
 ///
 /// Esta página inclui a imagem da receita, o nome, a categoria, os ingredientes, o modo de preparo e a avaliação da receita.
 ///
-/// A classe utiliza o [StorageMethods] para carregar a imagem da receita e o [Recipes] para representar as informações da receita.
+/// A classe utiliza o [StorageService] para carregar a imagem da receita e o [Recipes] para representar as informações da receita.
 class DetailRecipesPage extends StatelessWidget {
   const DetailRecipesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     // Instancia o objeto StorageMethods para carregar imagens.
-    final StorageMethods storageMethods = StorageMethods();
+    final StorageService storageService = StorageService();
     // Obtém a receita passada como argumento na navegação.
     final Recipes? recipe =
         ModalRoute.of(context)?.settings.arguments as Recipes?;
@@ -42,7 +42,7 @@ class DetailRecipesPage extends StatelessWidget {
             ? _buildErrorContent(
                 context) // Renderiza uma mensagem de erro se a receita não for encontrada
             : _buildRecipeDetails(context, recipe,
-                storageMethods), // Renderiza os detalhes da receita
+                storageService), // Renderiza os detalhes da receita
       ),
     );
   }
@@ -97,13 +97,13 @@ class DetailRecipesPage extends StatelessWidget {
   ///
   /// [context] - O contexto BuildContext utilizado para exibir a UI.
   /// [recipe] - O objeto Recipes que contém as informações da receita.
-  /// [storageMethods] - O objeto StorageMethods utilizado para carregar a imagem.
+  /// [StorageService] - O objeto StorageMethods utilizado para carregar a imagem.
   Widget _buildRecipeDetails(
-      BuildContext context, Recipes recipe, StorageMethods storageMethods) {
+      BuildContext context, Recipes recipe, StorageService storageService) {
     return Column(
       children: [
         if (recipe.image != '')
-          _buildRecipeImage(context, recipe, storageMethods),
+          _buildRecipeImage(context, recipe, storageService),
         Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -147,9 +147,9 @@ class DetailRecipesPage extends StatelessWidget {
   ///
   /// [context] - O contexto BuildContext utilizado para exibir a UI.
   /// [recipe] - O objeto Recipes que contém a URL da imagem.
-  /// [storageMethods] - O objeto StorageMethods utilizado para carregar a imagem.
+  /// [StorageService] - O objeto StorageService utilizado para carregar a imagem.
   Widget _buildRecipeImage(
-      BuildContext context, Recipes recipe, StorageMethods storageMethods) {
+      BuildContext context, Recipes recipe, StorageService storageService) {
     return Padding(
       padding: const EdgeInsets.all(28.0),
       child: Container(
@@ -166,7 +166,7 @@ class DetailRecipesPage extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: FutureBuilder<String>(
-            future: storageMethods.loadImageInURL(recipe.image, true),
+            future: storageService.loadImageInURL(recipe.image, true),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return _buildLoadingImage(context);

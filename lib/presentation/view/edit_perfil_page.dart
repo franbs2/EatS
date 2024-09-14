@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:eats/presentation/widget/load_screen_widget.dart';
+import 'package:eats/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -13,8 +15,6 @@ import '../widget/location_widget.dart';
 import '../widget/preference_options_widget.dart';
 import '../widget/text_username_input_widget.dart';
 import '../widget/upload_widget.dart';
-import '../../data/datasources/auth_methods.dart';
-import '../main_screen.dart';
 import '../providers/user_provider.dart';
 
 /// A [EditPerfilPage] é uma página para editar o perfil do usuário.
@@ -35,6 +35,7 @@ class EditPerfilPage extends StatefulWidget {
 class _EditPerfilPageState extends State<EditPerfilPage> {
   // Armazena os bytes da imagem selecionada pelo usuário.
   Uint8List? imageBytes;
+  bool _isLoading = false;
 
   /// Carrega uma imagem da galeria do dispositivo e a converte em bytes.
   void _uploadImage() async {
@@ -66,6 +67,10 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const LoadScreenWidget();
+    }
+
     // Acesso ao provedor de dados do usuário.
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final profileImage = userProvider.profileImage;
@@ -154,60 +159,7 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
                               width: 0.1,
                               height: 16,
                               color: AppTheme.perfilYellow,
-                              onPressed: () async {
-                                if (userProvider.user!.onboarding) {
-                                  // Atualiza o perfil do usuário se estiver na fase de onboarding.
-                                  try {
-                                    await AuthMethods().updateUserProfile(
-                                      username: widget.username.text,
-                                      file: imageBytes,
-                                      context: context,
-                                    );
-                                    // Navega para a tela principal após salvar.
-                                    if (context.mounted) {
-                                      Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const MainScreen()),
-                                        (Route<dynamic> route) => false,
-                                      );
-                                    }
-                                  } catch (e) {
-                                    if (context.mounted) {
-                                      showSnackBar(e.toString(),
-                                          context); // Exibe uma mensagem de erro.
-                                    }
-                                  }
-                                } else {
-                                  if (widget.username.text.isNotEmpty) {
-                                    try {
-                                      await AuthMethods().updateUserProfile(
-                                        username: widget.username.text,
-                                        file: imageBytes,
-                                        context: context,
-                                        onboarding: true,
-                                      );
-                                      if (context.mounted) {
-                                        Navigator.of(context)
-                                            .pushAndRemoveUntil(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const MainScreen()),
-                                          (Route<dynamic> route) => false,
-                                        );
-                                      }
-                                    } catch (e) {
-                                      if (context.mounted) {
-                                        showSnackBar(e.toString(),
-                                            context); // Exibe uma mensagem de erro.
-                                      }
-                                    }
-                                  } else {
-                                    showSnackBar("Preencha o nome de usuário",
-                                        context); // Solicita que o nome de usuário seja preenchido.
-                                  }
-                                }
-                              },
+                              onPressed: () => _updateProfile(context, userProvider),
                             ),
                           ],
                         ),
@@ -259,5 +211,61 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
         );
       },
     );
+  }
+
+  void _updateProfile(BuildContext context, UserProvider userProvider) async {
+    if (userProvider.user!.onboarding) {
+      // Atualiza o perfil do usuário se estiver na fase de onboarding.
+      try {
+        setState(() {
+          _isLoading = true;
+        });
+
+        await UserService().updateUserProfile(
+          username: widget.username.text,
+          file: imageBytes,
+        );
+        // Chama refreshUser para atualizar o estado do UserProvider
+        await userProvider.refreshUser();
+        if (context.mounted) {
+          Navigator.of(context).pop();
+        }
+      } catch (e) {
+        if (context.mounted) {
+          showSnackBar(e.toString(), context); // Exibe uma mensagem de erro.
+        }
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } else {
+      if (widget.username.text.isNotEmpty) {
+        try {
+          setState(() {
+            _isLoading = true;
+          });
+
+          await UserService().updateUserProfile(
+            username: widget.username.text,
+            file: imageBytes,
+            onboarding: true,
+          );
+
+          await userProvider.refreshUser();
+        } catch (e) {
+          if (context.mounted) {
+            showSnackBar(e.toString(), context); // Exibe uma mensagem de erro.
+          }
+        } finally {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      } else {
+        showSnackBar("Preencha o nome de usuário",
+            context); // Solicita que o nome de usuário seja preenchido.
+      }
+    }
   }
 }

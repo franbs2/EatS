@@ -1,8 +1,9 @@
 // Importações das dependências necessárias, incluindo métodos de armazenamento,
 // autenticação e o modelo de usuário.
-import 'package:eats/data/datasources/storage_methods.dart';
 import 'package:eats/data/model/user.dart' as model;
-import 'package:eats/data/datasources/auth_methods.dart';
+import 'package:eats/services/auth_service.dart';
+import 'package:eats/services/storage_service.dart';
+import 'package:eats/services/user_service.dart';
 import 'package:flutter/foundation.dart';
 
 /// [UserProvider] é uma classe que gerencia o estado do usuário autenticado no aplicativo.
@@ -15,22 +16,26 @@ class UserProvider with ChangeNotifier {
   Uint8List?
       image; // Reservado para armazenamento de outras imagens relacionadas ao usuário.
 
-  final AuthMethods _authMethods =
-      AuthMethods(); // Instância de métodos de autenticação.
+  bool _isLoading = false;
+
+  final AuthService _authService = AuthService();
+  final UserService _userService = UserService();
 
   // Getter para obter o usuário autenticado.
   model.User? get user => _user;
 
   // Getter para obter a imagem de perfil do usuário.
   Uint8List? get profileImage => _profileImage;
-
+  bool get isLoading => _isLoading;
   // Verifica se o usuário está carregado.
   bool get isUserLoaded => _user != null;
 
   /// [refreshUser] tenta carregar ou atualizar os detalhes do usuário a partir da autenticação.
-  /// Faz múltiplas tentativas para verificar se o usuário está autenticado, carrega ou cria o
+  /// Faz múltiplas tentativas para verificar se o usuário está autenticado, carrega ou cria oZ
   /// usuário no Firestore se necessário, e atualiza os dados de perfil.
   Future<void> refreshUser() async {
+    _isLoading = true;
+    notifyListeners();
     try {
       debugPrint('UserProvider: Iniciando refreshUser...');
 
@@ -38,27 +43,27 @@ class UserProvider with ChangeNotifier {
       int attempts = 0;
 
       // Loop para aguardar até que o usuário esteja autenticado, com um limite de tentativas.
-      while (_authMethods.currentUser == null && attempts < maxAttempts) {
+      while (_authService.currentUser == null && attempts < maxAttempts) {
         debugPrint('UserProvider: Aguardando autenticação do usuário...');
         await Future.delayed(const Duration(milliseconds: 500));
         attempts++;
       }
 
       // Verifica se o usuário não foi autenticado após as tentativas.
-      if (_authMethods.currentUser == null) {
+      if (_authService.currentUser == null) {
         debugPrint('UserProvider: Autenticação falhou após várias tentativas.');
         throw Exception("Autenticação do usuário falhou");
       }
 
       debugPrint(
-          'UserProvider: Usuário autenticado: ${_authMethods.currentUser!.uid}');
+          'UserProvider: Usuário autenticado: ${_authService.currentUser!.uid}');
 
       // Carrega os detalhes do usuário a partir do Firestore.
-      var newUser = await _authMethods.getUserDetails();
+      var newUser = await _userService.getUserDetails();
       if (newUser == null) {
         debugPrint(
             'UserProvider: Usuário não encontrado, criando no Firestore...');
-        newUser = await _authMethods.createUserInFirestoreIfNotExists();
+        newUser = await _userService.createUserInFirestoreIfNotExists();
 
         // Se a criação do usuário falhar, lança uma exceção.
         if (newUser == null) {
@@ -75,6 +80,7 @@ class UserProvider with ChangeNotifier {
 
       debugPrint(
           'UserProvider: Refresh do usuário completo. Usuário: ${_user?.uid}');
+      _isLoading = false;
       notifyListeners(); // Notifica os ouvintes sobre a mudança no estado.
     } catch (e) {
       debugPrint('UserProvider: Erro em refreshUser: $e');
@@ -83,7 +89,7 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  /// Atualiza a imagem de perfil do usuário carregando-a a partir do [StorageMethods].
+  /// Atualiza a imagem de perfil do usuário carregando-a a partir do [StorageService].
   /// Verifica se há mudanças na imagem e notifica ouvintes caso ocorra uma atualização.
   Future<void> _updateUserProfileImage(model.User newUser) async {
     debugPrint('UserProvider: Atualizando imagem de perfil...');
@@ -91,12 +97,12 @@ class UserProvider with ChangeNotifier {
 
     // Carrega a imagem com base no caminho especificado.
     if (newUser.photoURL.startsWith('profilePics')) {
-      newProfileImage = await StorageMethods().loadImageInMemory(
+      newProfileImage = await StorageService().loadImageInMemory(
         newUser.photoURL,
         true,
       );
     } else {
-      newProfileImage = await StorageMethods().loadImageInMemory(
+      newProfileImage = await StorageService().loadImageInMemory(
         newUser.photoURL,
         false,
       );

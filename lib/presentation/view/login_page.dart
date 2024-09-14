@@ -1,7 +1,7 @@
 import 'package:eats/core/routes/routes.dart';
-import 'package:eats/data/datasources/auth_methods.dart';
 import 'package:eats/presentation/widget/text_password_input_widget.dart';
 import 'package:eats/presentation/widget/text_widget.dart';
+import 'package:eats/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import '../../core/style/strings_app.dart';
 import '../widget/button_default_widget.dart';
@@ -28,7 +28,7 @@ class LoginPage extends StatelessWidget {
   final TextEditingController _senhaController = TextEditingController();
 
   // Instância do AuthMethods para realizar operações de autenticação.
-  final AuthMethods _authMethods = AuthMethods();
+  final AuthService _authService = AuthService();
 
   /// Método para fazer login do usuário.
   ///
@@ -40,8 +40,7 @@ class LoginPage extends StatelessWidget {
     if (_formKey.currentState!.validate()) {
       try {
         // Tenta fazer login do usuário usando o e-mail e senha fornecidos.
-        await _authMethods.loginUser(
-          context: context,
+        await _authService.loginUser(
           email: _emailController.text,
           password: _senhaController.text,
         );

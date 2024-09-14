@@ -1,7 +1,7 @@
 import 'package:eats/core/routes/routes.dart';
 import 'package:eats/core/style/color.dart';
 import 'package:eats/data/model/recipes.dart';
-import 'package:eats/data/datasources/storage_methods.dart';
+import 'package:eats/services/storage_service.dart';
 import 'package:flutter/material.dart';
 
 /// [CardRecipeWidget] é um widget que exibe uma receita em um cartão.
@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 ///
 /// Referências:
 /// - [Recipes]: Modelo de dados que define a estrutura de uma receita.
-/// - [StorageMethods]: Classe que contém métodos para manipulação de armazenamento e carregamento de imagens.
+/// - [StorageService]: Classe que contém métodos para manipulação de armazenamento e carregamento de imagens.
 /// - [RoutesApp]: Classe que define as rotas usadas no aplicativo.
 
 class CardRecipeWidget extends StatelessWidget {
@@ -30,7 +30,7 @@ class CardRecipeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Instancia o método de armazenamento para carregar a imagem da receita.
-    final StorageMethods storageMethods = StorageMethods();
+    final StorageService storageService = StorageService();
 
     return InkWell(
       // Define o comportamento ao clicar no cartão.
@@ -57,7 +57,7 @@ class CardRecipeWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 child: FutureBuilder<String>(
                   // Constrói o widget com base no estado do futuro.
-                  future: storageMethods.loadImageInURL(
+                  future: storageService.loadImageInURL(
                     recipe.image, // URL da imagem da receita.
                     true, // Indica que a imagem deve ser carregada.
                   ),

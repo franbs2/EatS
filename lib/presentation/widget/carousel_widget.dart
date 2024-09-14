@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:eats/core/style/strings_app.dart';
-import 'package:eats/data/datasources/storage_methods.dart';
 import 'package:eats/data/model/banners.dart';
+import 'package:eats/services/storage_service.dart';
 import 'package:flutter/material.dart';
 
 /// [CarouselWidget] é um widget que exibe um carrossel de banners em um slider.
@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 ///
 /// Referências:
 /// - [CarouselSlider](https://pub.dev/packages/carousel_slider): Pacote para criar carrosséis de imagens no Flutter.
-/// - [StorageMethods]: Classe que contém métodos para manipulação de armazenamento e carregamento de imagens.
+/// - [StorageService]: Classe que contém métodos para manipulação de armazenamento e carregamento de imagens.
 /// - [Banners]: Modelo de dados que define a estrutura de um banner.
 class CarouselWidget extends StatelessWidget {
   /// Lista de banners a serem exibidos no carrossel.
@@ -29,7 +29,7 @@ class CarouselWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Instancia o método de armazenamento para carregar a imagem do banner.
-    final StorageMethods storageMethods = StorageMethods();
+    final StorageService storageService = StorageService();
 
     return CarouselSlider(
       items: banners
@@ -38,7 +38,7 @@ class CarouselWidget extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: FutureBuilder<String>(
                   // Constrói o widget com base no estado do futuro.
-                  future: storageMethods.loadImageInURL(
+                  future: storageService.loadImageInURL(
                     banner.image, // URL da imagem do banner.
                     true, // Indica que a imagem deve ser carregada.
                   ),
