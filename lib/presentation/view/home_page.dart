@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               SliverAppBar(
-                backgroundColor: Colors.transparent,
+                backgroundColor: const Color.fromARGB(0, 255, 255, 255),
                 collapsedHeight: MediaQuery.of(context).size.height * 0.1,
                 pinned: true,
                 flexibleSpace: Center(

@@ -4,11 +4,13 @@ import '../../core/style/color.dart';
 class FilterGenerateWidget extends StatefulWidget {
   final String title;
   final List<String> listFilter;
+  final Function(String) onSelected;
 
   const FilterGenerateWidget({
     super.key,
     required this.listFilter,
     required this.title,
+    required this.onSelected,
   });
 
   @override
@@ -60,10 +62,11 @@ class _FilterGenerateWidgetState extends State<FilterGenerateWidget> {
                     ),
                   ),
                   selected: _selected == filter,
-                  onSelected: (bool selected) {
+                  onSelected: (selected) {
                     setState(() {
                       _selected = selected ? filter : null;
                     });
+                    widget.onSelected(_selected ?? '');
                   },
                 ),
               );

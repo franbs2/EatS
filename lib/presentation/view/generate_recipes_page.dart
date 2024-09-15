@@ -1,3 +1,5 @@
+import 'package:eats/presentation/providers/user_provider.dart';
+import 'package:eats/presentation/widget/custom_allergies_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,9 +26,15 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
   final List<TextEditingController> _controllersIngredients = [];
   final List<TextEditingController> _controllersInstruments = [];
 
+  List<String> _selectedRestrictions = [];
+  String _selectedMealType = '';
+  String _selectedPreparationTime = '';
+
   @override
   void initState() {
     super.initState();
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    _selectedRestrictions = userProvider.user!.dietaryRestrictions;
     _addField(_controllersInstruments);
     _addField(
         _controllersIngredients); // Adiciona um campo de ingrediente ao inicializar o widget.
@@ -55,19 +63,27 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
 
   /// Gera uma receita com base nos ingredientes fornecidos.
   Future<Recipes?> _generateRecipe() async {
-    final ingredients = _controllersIngredients
-        .map((e) => e.text)
-        .toList(); // Obtém a lista de ingredientes dos controladores de texto.
-    final recipe = await _aiRepository.generateRecipe(
-        ingredients); // Solicita ao repositório de IA a geração de uma receita com os ingredientes fornecidos.
+    final ingredients = _controllersIngredients.map((e) => e.text).toList();
+    final instruments = _controllersInstruments.map((e) => e.text).toList();
 
-    return recipe; // Retorna a receita gerada.
+    final recipe = await _aiRepository.generateRecipe(
+      ingredients,
+      instruments,
+      _selectedMealType,
+      _selectedRestrictions,
+      _selectedPreparationTime,
+    );
+    return recipe;
   }
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
+        backgroundColor: AppTheme.secondaryColor,
+        surfaceTintColor: AppTheme.secondaryColor,
         title: const Text('Crie sua receita'), // Título da barra de aplicativo.
         centerTitle: true, // Centraliza o título da barra de aplicativo.
       ),
@@ -80,25 +96,62 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const FilterGenerateWidget(listFilter: [
-                      'Lanche',
-                      'Jantar',
-                      'Almoço',
-                      'Sobremesa',
-                      'Café da manhã'
-                    ], title: 'Tipo de Refeição'),
+                    FilterGenerateWidget(
+                      listFilter: const [
+                        'indefinido',
+                        'Lanche',
+                        'Jantar',
+                        'Almoço',
+                        'Sobremesa',
+                        'Café da manhã',
+                      ],
+                      title: 'Tipo de Refeição',
+                      onSelected: (value) {
+                        setState(() {
+                          _selectedMealType = value;
+                        });
+                      },
+                    ),
                     const SizedBox(height: 24),
-                    const FilterGenerateWidget(
-                        listFilter: ['Minhas', 'Customizadas', 'Nenhuma'],
-                        title: 'Restrições'),
+                    FilterGenerateWidget(
+                      listFilter: const [
+                        'Minhas',
+                        'Customizadas',
+                        'Nenhuma',
+                      ],
+                      title: 'Restrições',
+                      onSelected: (value) {
+                        if (value == 'Customizadas') {
+                          _showRestrictionsModal(context);
+                        } else {
+                          setState(() {
+                            if (value == 'Minhas') {
+                              _selectedRestrictions =
+                                  userProvider.user!.dietaryRestrictions;
+                            } else {
+                              _selectedRestrictions = [];
+                            }
+                          });
+                        }
+                      },
+                    ),
                     const SizedBox(height: 24),
-                    const FilterGenerateWidget(listFilter: [
-                      '10 min',
-                      '15 min',
-                      '30 min',
-                      '45 min',
-                      '+ 1 hora'
-                    ], title: 'Tempo de Preparo'),
+                    FilterGenerateWidget(
+                      listFilter: const [
+                        'indefinido',
+                        '10 min',
+                        '15 min',
+                        '30 min',
+                        '45 min',
+                        '+ 1 hora',
+                      ],
+                      title: 'Tempo de Preparo',
+                      onSelected: (value) {
+                        setState(() {
+                          _selectedPreparationTime = value;
+                        });
+                      },
+                    ),
                     const SizedBox(height: 24),
                     const Divider(),
                     const SizedBox(height: 24),
@@ -202,5 +255,29 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
         ),
       ),
     );
+  }
+
+  void _showRestrictionsModal(BuildContext context) async {
+    final selectedRestrictions = await showModalBottomSheet<List<String>>(
+      context: context,
+      elevation: 50,
+      backgroundColor: AppTheme.secondaryColor,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(42.0)),
+      ),
+      builder: (context) {
+        return const Padding(
+          padding: EdgeInsets.only(top: 24),
+          child: SingleChildScrollView(child: CustomAllergiesListWidget()),
+        );
+      },
+    );
+
+    if (selectedRestrictions != null) {
+      setState(() {
+        _selectedRestrictions = selectedRestrictions;
+      });
+    }
   }
 }
