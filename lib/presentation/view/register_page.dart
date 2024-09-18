@@ -1,6 +1,5 @@
 import 'package:eats/core/style/strings_app.dart';
 import 'package:eats/presentation/providers/user_provider.dart';
-import 'package:eats/presentation/view/login_page.dart';
 import 'package:eats/presentation/widget/button_google_widget.dart';
 import 'package:eats/presentation/widget/continue_with_widget.dart';
 import 'package:eats/presentation/widget/page_default_auth.dart';
@@ -60,6 +59,9 @@ class RegisterPage extends StatelessWidget {
           password: _senhaController.text,
         );
         userProvider.refreshUser();
+        if (context.mounted) {
+          Navigator.of(context).pop();
+        }
       } catch (e) {
         if (context.mounted) {
           // Exibe uma mensagem de erro caso algo dê errado durante o registro.
@@ -140,13 +142,7 @@ class RegisterPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               TextButtonHaveAccountWidget(
-                onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          LoginPage()), // Navega para a página de login.
-                  (Route<dynamic> route) =>
-                      false, // Remove todas as rotas anteriores da pilha.
-                ),
+                onPressed: () => Navigator.of(context).pop(),
                 title: StringsApp
                     .haveAccount, // Texto do botão para usuários que já possuem uma conta.
               ),

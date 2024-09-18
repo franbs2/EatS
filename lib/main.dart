@@ -130,8 +130,9 @@ class MyApp extends StatelessWidget {
         home:
             const AuthWrapperWidget(), // Tela inicial que decide se o usuário está autenticado.
         routes: {
+          RoutesApp.authWrapper: (context) => const AuthWrapperWidget(),
           RoutesApp.registerPage: (context) => RegisterPage(),
-          RoutesApp.loginPage: (context) => LoginPage(),
+          RoutesApp.loginPage: (context) => const LoginPage(),
           RoutesApp.homePage: (context) => const HomePage(),
           RoutesApp.detailRecipePage: (context) => const DetailRecipesPage(),
           RoutesApp.perfilPage: (context) => const PerfilPage(),

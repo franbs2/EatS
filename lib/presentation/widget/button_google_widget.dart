@@ -1,3 +1,4 @@
+import 'package:eats/core/routes/routes.dart';
 import 'package:eats/services/google_sign_in_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,9 +26,14 @@ class ButtonGoogleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // Cria um botão estilizado com um ícone e um texto descritivo.
     return ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
         // Chama o método de login com Google ao clicar no botão.
-        context.read<GoogleSignInService>().signInWithGoogle();
+        var auth = await context.read<GoogleSignInService>().signInWithGoogle();
+
+        if (context.mounted && auth != null) {
+          Navigator.of(context).pushNamedAndRemoveUntil(RoutesApp.authWrapper, (route) => false);
+        }
+
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.transparent,

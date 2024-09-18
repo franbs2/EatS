@@ -5,16 +5,18 @@ class GoogleSignInService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
+  
+
   /// Realiza o login com o Google
   ///
   /// Este método faz o login com o Google e
   /// retorna a credencial do usuário.
   ///
   /// Se o login falhar, uma exceção é lançada.
-  Future<void> signInWithGoogle() async {
+  Future<User?> signInWithGoogle() async {
     try {
       final googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) return;
+      if (googleUser == null) return null;
 
       final googleAuth = await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
@@ -23,6 +25,8 @@ class GoogleSignInService {
       );
 
       await _auth.signInWithCredential(credential);
+
+      return _auth.currentUser;
     } on FirebaseAuthException catch (e) {
       throw Exception(e.message);
     }

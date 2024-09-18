@@ -1,5 +1,6 @@
 /// [RoutesApp] - Classe que define as rotas da aplicação.
 class RoutesApp {
+  static String authWrapper = '/authWrapper';
   static String homePage = '/homePage';
   static String detailRecipePage = '/detailRecipePage';
   static String perfilPage = '/perfilPage';

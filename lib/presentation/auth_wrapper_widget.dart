@@ -60,7 +60,7 @@ class _AuthWrapperWidgetState extends State<AuthWrapperWidget> {
 
     if (firebaseUser == null) {
       // Usuário não está logado
-      return LoginPage();
+      return const LoginPage();
     } else {
       if (!_isUserDataLoaded || userProvider.user == null) {
         // Dados do usuário ainda não carregados
