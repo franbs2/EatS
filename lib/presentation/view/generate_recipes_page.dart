@@ -1,3 +1,4 @@
+import 'package:eats/core/utils/utils.dart';
 import 'package:eats/presentation/providers/user_provider.dart';
 import 'package:eats/presentation/widget/custom_allergies_list_widget.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,7 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
     _addField(_controllersInstruments);
     _addField(
         _controllersIngredients); // Adiciona um campo de ingrediente ao inicializar o widget.
+    _addField(_controllersIngredients);
     _aiRepository = context.read<
         AIRepository>(); // Obtém a instância do repositório de IA usando o Provider.
   }
@@ -66,6 +68,16 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
     final ingredients = _controllersIngredients.map((e) => e.text).toList();
     final instruments = _controllersInstruments.map((e) => e.text).toList();
 
+    if (ingredients.length < 2) {
+      showSnackBar('Insira pelo menos 2 ingredientes', context);
+      return null;
+    }
+    final hasEmptyIngredient = ingredients.any((element) => element.isEmpty);
+    if (hasEmptyIngredient) {
+      showSnackBar('Insira todos os ingredientes', context);
+      return null;
+    }
+    
     final recipe = await _aiRepository.generateRecipe(
       ingredients,
       instruments,
@@ -183,7 +195,8 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
                           onPressed: () async {
                             Recipes? recipe =
                                 await _generateRecipe(); // Gera a receita e aguarda o resultado.
-                            if (context.mounted) {
+
+                            if (context.mounted && recipe != null) {
                               Navigator.of(context).pushNamed(
                                   RoutesApp
                                       .detailRecipePage, // Navega para a página de detalhes da receita.
