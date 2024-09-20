@@ -92,21 +92,8 @@ class _AddRecipePageState extends State<AddRecipePage> {
                           ),
                         ),
                       ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.favorite_border,
-                          size: 28,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black,
-                              blurRadius: 10,
-                            ),
-                          ],
-                        ),
-                        onPressed: () {
-                          // Função do botão de salvar
-                        },
-                        color: Colors.white,
+                      const SizedBox(
+                        width: 48,
                       ),
                     ],
                   ),
