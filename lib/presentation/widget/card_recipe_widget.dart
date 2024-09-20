@@ -1,6 +1,7 @@
 import 'package:eats/core/routes/routes.dart';
 import 'package:eats/core/style/color.dart';
 import 'package:eats/data/model/recipes.dart';
+import 'package:eats/presentation/args/recipe_arguments.dart';
 import 'package:eats/services/storage_service.dart';
 import 'package:flutter/material.dart';
 
@@ -37,7 +38,7 @@ class CardRecipeWidget extends StatelessWidget {
       onTap: () {
         Navigator.of(context).pushNamed(
           RoutesApp.detailRecipePage,
-          arguments: recipe,
+          arguments: RecipeArguments(recipe: recipe, isRecipeGenerated: true),
         );
       },
       borderRadius: BorderRadius.circular(12),
@@ -45,7 +46,8 @@ class CardRecipeWidget extends StatelessWidget {
         elevation: 0, // Define a elevação do cartão.
         color: AppTheme.secondaryColor, // Define a cor do cartão.
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12), // Define o formato do cartão.
+          borderRadius:
+              BorderRadius.circular(12), // Define o formato do cartão.
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
