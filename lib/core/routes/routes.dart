@@ -10,4 +10,5 @@ class RoutesApp {
   static String searchPage = '/searchPage';
   static String editPefilPage = '/editPerfilPage';
   static String generateRecipePage = '/generateRecipePage';
+  static String myRecipesPage = '/myRecipesPage';
 }

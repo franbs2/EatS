@@ -1,6 +1,7 @@
 // Importações necessárias para o funcionamento do app, incluindo bibliotecas do Flutter,
 // Firebase, provedores de estado (Provider) e outras dependências utilizadas no projeto.
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eats/presentation/view/my_recipes_page.dart';
 import 'package:eats/services/auth_service.dart';
 import 'package:eats/services/google_sign_in_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -139,6 +140,7 @@ class MyApp extends StatelessWidget {
           RoutesApp.editPefilPage: (context) => EditPerfilPage(),
           RoutesApp.generateRecipePage: (context) =>
               const GenerateRecipesPage(),
+          RoutesApp.myRecipesPage: (context) => const MyRecipesPage(),
         },
       ),
     );
