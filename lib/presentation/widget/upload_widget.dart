@@ -1,8 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
 
 import 'package:eats/core/style/color.dart';
 import 'package:eats/core/style/images_app.dart';
-import 'package:flutter/material.dart';
 
 /// [UploadWidget] é um widget que exibe uma área para upload de imagem.
 ///
@@ -21,13 +23,19 @@ import 'package:flutter/material.dart';
 
 class UploadWidget extends StatelessWidget {
   /// Função de callback que é chamada quando o widget é clicado.
+  final double height;
   final VoidCallback ontap;
 
   /// Lista de bytes que representa a imagem de fundo. Pode ser nula.
   final Uint8List? backgroundImage;
 
   /// Construtor do widget que exige a função [ontap] e opcionalmente a [backgroundImage].
-  const UploadWidget({super.key, required this.ontap, this.backgroundImage});
+  const UploadWidget({
+    super.key,
+    this.height = 0.5,
+    required this.ontap,
+    this.backgroundImage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +43,14 @@ class UploadWidget extends StatelessWidget {
       // Define o comportamento ao clicar no widget.
       onTap: ontap,
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.5,
+        height: MediaQuery.of(context).size.height * height,
         width: double.infinity,
         decoration: BoxDecoration(
           color: backgroundImage == null
-              ? AppTheme.backgroundColor // Cor de fundo padrão se nenhuma imagem for fornecida.
-              : AppTheme.backgroundColor, // Cor de fundo alternativa para quando a imagem é fornecida.
+              ? AppTheme
+                  .backgroundColor // Cor de fundo padrão se nenhuma imagem for fornecida.
+              : AppTheme
+                  .backgroundColor, // Cor de fundo alternativa para quando a imagem é fornecida.
           image: backgroundImage != null
               ? DecorationImage(
                   image: MemoryImage(
