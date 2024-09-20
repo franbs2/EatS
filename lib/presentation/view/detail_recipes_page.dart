@@ -5,6 +5,7 @@ import 'package:eats/presentation/widget/rating_bar_widget.dart';
 import 'package:eats/services/storage_service.dart';
 import 'package:flutter/material.dart';
 
+import '../../core/routes/routes.dart';
 import '../../core/style/strings_app.dart';
 import '../args/recipe_arguments.dart';
 import '../widget/button_default_widget.dart';
@@ -164,7 +165,9 @@ class DetailRecipesPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                         child: const Text(
                           'Deletar',
                           style: TextStyle(
@@ -187,7 +190,11 @@ class DetailRecipesPage extends StatelessWidget {
                           color: AppTheme.loginYellow,
                           width: 0.1 / 2,
                           height: 14,
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                                RoutesApp.addRecipePage,
+                                arguments: recipe);
+                          },
                         ),
                       ],
                     ),

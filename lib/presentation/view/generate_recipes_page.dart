@@ -8,6 +8,7 @@ import '../../core/routes/routes.dart';
 import '../../core/style/color.dart';
 import '../../data/datasources/ia_repository.dart';
 import '../../data/model/recipes.dart';
+import '../args/recipe_arguments.dart';
 import '../widget/button_default_widget.dart';
 import '../widget/filter_generate_widget.dart';
 
@@ -77,7 +78,7 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
       showSnackBar('Insira todos os ingredientes', context);
       return null;
     }
-    
+
     final recipe = await _aiRepository.generateRecipe(
       ingredients,
       instruments,
@@ -198,10 +199,11 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
 
                             if (context.mounted && recipe != null) {
                               Navigator.of(context).pushNamed(
-                                  RoutesApp
-                                      .detailRecipePage, // Navega para a página de detalhes da receita.
-                                  arguments:
-                                      recipe); // Passa a receita gerada como argumento para a próxima página.
+                                RoutesApp.detailRecipePage,
+                                arguments: RecipeArguments(
+                                    recipe: recipe, isRecipeGenerated: true),
+                              );
+                              // Passa a receita gerada como argumento para a próxima página.
                             }
                           }),
                     ),

@@ -1,3 +1,4 @@
+import 'package:eats/data/model/recipes.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/style/color.dart';
@@ -15,12 +16,30 @@ class AddRecipePage extends StatefulWidget {
 class _AddRecipePageState extends State<AddRecipePage> {
   final List<TextEditingController> _controllersIngredients = [];
   final List<TextEditingController> _controllersSteps = [];
+  Recipes? recipe;
 
   @override
-  void initState() {
-    super.initState();
-    _addField(_controllersSteps);
-    _addField(_controllersIngredients);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    recipe = ModalRoute.of(context)?.settings.arguments as Recipes?;
+
+    if (_controllersIngredients.isEmpty && recipe?.ingredients != null) {
+      for (var ingredient in recipe!.ingredients) {
+        _controllersIngredients.add(TextEditingController(text: ingredient));
+      }
+    } else {
+      _addField(
+          _controllersIngredients); 
+    }
+
+    if (_controllersSteps.isEmpty && recipe?.steps != null) {
+      for (var step in recipe!.steps) {
+        _controllersSteps.add(TextEditingController(text: step));
+      }
+    } else {
+      _addField(_controllersSteps); // Adiciona um campo vazio para os passos
+    }
   }
 
   void _addField(List<TextEditingController> controllers) {
@@ -81,9 +100,9 @@ class _AddRecipePageState extends State<AddRecipePage> {
                           alignment: Alignment.center,
                           child: TextFormField(
                             textAlign: TextAlign.center,
-                            decoration: const InputDecoration(
-                              hintText: 'Nome da receita',
-                              hintStyle: TextStyle(
+                            decoration: InputDecoration(
+                              hintText: recipe?.name ?? 'Nome da receita',
+                              hintStyle: const TextStyle(
                                 color: Colors.grey,
                                 fontSize: 20,
                               ),
@@ -116,9 +135,9 @@ class _AddRecipePageState extends State<AddRecipePage> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'Adicionar tag',
-                      hintStyle: TextStyle(
+                    decoration: InputDecoration(
+                      hintText: recipe?.category.join(", ") ?? 'Adicionar tag',
+                      hintStyle: const TextStyle(
                         color: Colors.grey,
                         fontSize: 12,
                       ),

@@ -22,6 +22,7 @@ import 'core/routes/routes.dart';
 import 'data/datasources/ia_repository.dart';
 import 'firebase/firebase_options.dart';
 import 'presentation/providers/preferences_provider.dart';
+import 'presentation/view/add_recipe_page.dart';
 import 'presentation/view/detail_recipes_page.dart';
 import 'presentation/view/edit_perfil_page.dart';
 import 'presentation/view/home_page.dart';
@@ -141,6 +142,7 @@ class MyApp extends StatelessWidget {
           RoutesApp.generateRecipePage: (context) =>
               const GenerateRecipesPage(),
           RoutesApp.myRecipesPage: (context) => const MyRecipesPage(),
+          RoutesApp.addRecipePage: (context) => const AddRecipePage(),
         },
       ),
     );

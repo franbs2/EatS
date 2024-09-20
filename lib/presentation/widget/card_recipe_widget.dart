@@ -38,7 +38,7 @@ class CardRecipeWidget extends StatelessWidget {
       onTap: () {
         Navigator.of(context).pushNamed(
           RoutesApp.detailRecipePage,
-          arguments: RecipeArguments(recipe: recipe, isRecipeGenerated: true),
+          arguments: RecipeArguments(recipe: recipe, isRecipeGenerated: false),
         );
       },
       borderRadius: BorderRadius.circular(12),
