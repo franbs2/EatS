@@ -29,6 +29,7 @@ import 'presentation/view/home_page.dart';
 import 'presentation/view/login_page.dart';
 import 'presentation/view/perfil_page.dart';
 import 'presentation/view/register_page.dart';
+import 'presentation/view/terms_of_use_page.dart';
 
 /// Função principal do aplicativo. Inicializa o [Firebase], define a orientação da tela
 /// para retrato e executa o aplicativo.
@@ -131,6 +132,7 @@ class MyApp extends StatelessWidget {
               const GenerateRecipesPage(),
           RoutesApp.myRecipesPage: (context) => const MyRecipesPage(),
           RoutesApp.addRecipePage: (context) => const AddRecipePage(),
+          RoutesApp.termsOfUsePage: (context) => const TermsOfUsePage(),
         },
       ),
     );

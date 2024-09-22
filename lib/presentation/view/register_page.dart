@@ -7,6 +7,7 @@ import 'package:eats/presentation/widget/text_widget.dart';
 import 'package:eats/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../core/routes/routes.dart';
 import '../../core/style/color.dart';
 
 import '../widget/button_default_widget.dart';
@@ -95,7 +96,7 @@ class RegisterPage extends StatelessWidget {
                 const ButtonGoogleWidget(), // Widget para login com Google.
                 const SizedBox(height: 24),
                 const ContinueWithWidget(), // Widget para continuar com opções adicionais.
-                const SizedBox(height: 40),
+                const SizedBox(height: 36),
                 Form(
                   key: _formKey, // Define a chave do formulário para validação.
                   child: Column(children: [
@@ -142,20 +143,35 @@ class RegisterPage extends StatelessWidget {
                     ),
                   ]),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
                 TextButtonHaveAccountWidget(
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () => Navigator.of(context).pushNamed(
+                      RoutesApp.loginPage), // Navega para a página de login.
                   title: StringsApp
                       .haveAccount, // Texto do botão para usuários que já possuem uma conta.
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 ButtonDefaultlWidget(
                   text: StringsApp.register, // Texto do botão de registro.
                   color: AppTheme.loginYellow, // Cor do botão de registro.
                   onPressed: () => _registerUser(
                       context), // Função chamada ao pressionar o botão.
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(RoutesApp.termsOfUsePage);
+                  },
+                  child: const Text(
+                    'Ao registrar-se, você concorda com nossos Termos de Uso e Política de Privacidade.',
+                    style: TextStyle(
+                      color: AppTheme.atencionRed,
+                      fontSize: 12,
+                    ),
+                    softWrap: true,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ],
             ),
           ),
