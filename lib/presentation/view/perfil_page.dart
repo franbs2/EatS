@@ -1,4 +1,5 @@
 import 'package:eats/core/routes/routes.dart';
+import 'package:eats/core/style/strings_app.dart';
 import 'package:eats/presentation/providers/preferences_provider.dart';
 import 'package:eats/presentation/providers/user_provider.dart';
 import 'package:eats/services/google_sign_in_service.dart';
@@ -60,6 +61,12 @@ class PerfilPage extends StatelessWidget {
                             Icons.menu_sharp,
                             size: 28,
                             color: Colors.white,
+                            shadows: [
+                              Shadow(
+                                color: Colors.black,
+                                blurRadius: 10,
+                              ),
+                            ],
                           ),
                           itemBuilder: (context) {
                             return [
@@ -118,17 +125,29 @@ class PerfilPage extends StatelessWidget {
                         TextUsernameWidget(
                           username: userProvider.user!.username,
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 14),
+                        PreferenceOptionsWidget(
+                            title: 'Minhas Receitas',
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, RoutesApp.myRecipesPage
+                                  //arguments: TODO: Passar as receitas do usuário para a página de receitas do usuário.
+                                  );
+                            },
+                            subtitle: 'Ver todas'),
+                        const SizedBox(height: 18),
                         // Widget para exibir opções de alergias.
                         PreferenceOptionsWidget(
                           title: 'Alergias',
                           onTap: () => _showAllergiesModal(context),
+                          subtitle: StringsApp.add,
                         ),
                         const SizedBox(height: 18),
                         // Widget para exibir opções de dietas.
                         PreferenceOptionsWidget(
                           title: 'Dietas',
                           onTap: () => _showDietsModal(context),
+                          subtitle: StringsApp.add,
                         ),
                         const SizedBox(height: 18),
                         // Widget para exibir preferências (não implementado).

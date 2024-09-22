@@ -20,10 +20,8 @@ import '../../core/style/strings_app.dart';
 /// - [ImageApp]: Classe que contém as imagens usadas na aplicação.
 
 class PreferenceOptionsWidget extends StatelessWidget {
-  /// O título que será exibido na opção de preferência.
   final String title;
-
-  /// Callback acionado quando o widget é clicado.
+  final String subtitle;
   final VoidCallback onTap;
 
   /// Construtor do widget que exige um título e uma função de callback.
@@ -31,6 +29,7 @@ class PreferenceOptionsWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.onTap,
+    required this.subtitle,
   });
 
   @override
@@ -63,18 +62,18 @@ class PreferenceOptionsWidget extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const Row(
+            Row(
               // Exibe o texto adicional e o ícone de seta.
               children: [
                 Text(
-                  StringsApp.add,
-                  style: TextStyle(
+                  subtitle,
+                  style: const TextStyle(
                     fontSize: 12,
                     color: Colors.grey,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Icon(
+                const Icon(
                   Icons.arrow_forward_ios,
                   color: Colors.grey,
                 ),

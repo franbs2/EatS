@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:eats/core/style/strings_app.dart';
 import 'package:eats/presentation/widget/load_screen_widget.dart';
 import 'package:eats/services/user_service.dart';
 import 'package:flutter/material.dart';
@@ -142,12 +143,14 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
                         PreferenceOptionsWidget(
                           title: 'Alergias',
                           onTap: () => _showAllergiesModal(context),
+                          subtitle: StringsApp.add,
                         ),
                         const SizedBox(height: 18),
                         // Botão para selecionar dietas.
                         PreferenceOptionsWidget(
                           title: 'Dietas',
                           onTap: () => _showDietsModal(context),
+                          subtitle: StringsApp.add,
                         ),
                         const SizedBox(height: 20),
                         // Botão para salvar as alterações do perfil.
@@ -159,7 +162,8 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
                               width: 0.1,
                               height: 16,
                               color: AppTheme.perfilYellow,
-                              onPressed: () => _updateProfile(context, userProvider),
+                              onPressed: () =>
+                                  _updateProfile(context, userProvider),
                             ),
                           ],
                         ),

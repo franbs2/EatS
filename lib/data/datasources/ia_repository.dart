@@ -79,6 +79,9 @@ A receita deve:
 - Descrever o modo de preparo detalhadamente de forma clara e objetiva.
 - Informar o tempo caso o tempo seja importante para o preparo da receita.
 - Recomente temperos opcionais na sessão de ingredientes se usual.
+- Se a categoria for indefinida, faça uma receita ultilizando qualquer uma das categorias como: almoço, jantar, sobremesa, lanche, café da manhã.
+- Se o tempo for indefinido, faça uma receita ultilizando qualquer tempo de preparo.
+
 
 
 ''';

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../core/routes/routes.dart';
 import '../../core/style/color.dart';
+import '../../core/style/images_app.dart';
 import '../../data/datasources/ia_repository.dart';
 import '../../data/model/recipes.dart';
 import '../args/recipe_arguments.dart';
@@ -197,13 +198,22 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
                             Recipes? recipe =
                                 await _generateRecipe(); // Gera a receita e aguarda o resultado.
 
-                            if (context.mounted && recipe != null) {
+                            if (recipe == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'Não foi possível criar sua receita! Tente novamente. Verifique se os ingredientes estão corretos.'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            }
+                            if (context.mounted) {
                               Navigator.of(context).pushNamed(
                                 RoutesApp.detailRecipePage,
                                 arguments: RecipeArguments(
                                     recipe: recipe, isRecipeGenerated: true),
                               );
-                              // Passa a receita gerada como argumento para a próxima página.
                             }
                           }),
                     ),
