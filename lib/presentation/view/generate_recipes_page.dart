@@ -1,17 +1,16 @@
-import 'package:eats/core/utils/utils.dart';
-import 'package:eats/presentation/providers/user_provider.dart';
-import 'package:eats/presentation/widget/custom_allergies_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/routes/routes.dart';
+import '../../core/utils/utils.dart';
 import '../../core/style/color.dart';
-import '../../core/style/images_app.dart';
 import '../../data/datasources/ia_repository.dart';
 import '../../data/model/recipes.dart';
 import '../args/recipe_arguments.dart';
 import '../widget/button_default_widget.dart';
 import '../widget/filter_generate_widget.dart';
+import '../widget/custom_allergies_list_widget.dart';
+import '../providers/user_provider.dart';
 
 /// Página para gerar receitas com base em ingredientes fornecidos pelo usuário.
 ///
@@ -101,128 +100,133 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
         title: const Text('Crie sua receita'), // Título da barra de aplicativo.
         centerTitle: true, // Centraliza o título da barra de aplicativo.
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverList(
-            delegate: SliverChildListDelegate([
-              Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FilterGenerateWidget(
-                      listFilter: const [
-                        'indefinido',
-                        'Lanche',
-                        'Jantar',
-                        'Almoço',
-                        'Sobremesa',
-                        'Café da manhã',
-                      ],
-                      title: 'Tipo de Refeição',
-                      onSelected: (value) {
-                        setState(() {
-                          _selectedMealType = value;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 24),
-                    FilterGenerateWidget(
-                      listFilter: const [
-                        'Minhas',
-                        'Customizadas',
-                        'Nenhuma',
-                      ],
-                      title: 'Restrições',
-                      onSelected: (value) {
-                        if (value == 'Customizadas') {
-                          _showRestrictionsModal(context);
-                        } else {
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: CustomScrollView(
+          slivers: [
+            SliverList(
+              delegate: SliverChildListDelegate([
+                Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FilterGenerateWidget(
+                        listFilter: const [
+                          'indefinido',
+                          'Lanche',
+                          'Jantar',
+                          'Almoço',
+                          'Sobremesa',
+                          'Café da manhã',
+                        ],
+                        title: 'Tipo de Refeição',
+                        onSelected: (value) {
                           setState(() {
-                            if (value == 'Minhas') {
-                              _selectedRestrictions =
-                                  userProvider.user!.dietaryRestrictions;
-                            } else {
-                              _selectedRestrictions = [];
-                            }
+                            _selectedMealType = value;
                           });
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 24),
-                    FilterGenerateWidget(
-                      listFilter: const [
-                        'indefinido',
-                        '10 min',
-                        '15 min',
-                        '30 min',
-                        '45 min',
-                        '+ 1 hora',
-                      ],
-                      title: 'Tempo de Preparo',
-                      onSelected: (value) {
-                        setState(() {
-                          _selectedPreparationTime = value;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 24),
-                    const Divider(),
-                    const SizedBox(height: 24),
-                    const Text(
-                      'Ingredientes Principais',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight:
-                              FontWeight.w600), // Estilo do título da seção.
-                    ),
-                    ..._buildFieldList(_controllersIngredients, 'Ingrediente'),
-                    const SizedBox(height: 24),
-                    const Text(
-                      'Instrumentos Principais',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight:
-                              FontWeight.w600), // Estilo do título da seção.
-                    ),
-                    ..._buildFieldList(_controllersInstruments, 'Instrumento'),
-                    const SizedBox(height: 24),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: ButtonDefaultlWidget(
-                          text: 'Gerar receita', // Texto exibido no botão.
-                          color: AppTheme.loginYellow, // Cor do botão.
-                          width: 0.1 / 2, // Largura do botão.
-                          height: 14, // Altura do botão.
-                          onPressed: () async {
-                            Recipes? recipe =
-                                await _generateRecipe(); // Gera a receita e aguarda o resultado.
-
-                            if (recipe == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                      'Não foi possível criar sua receita! Tente novamente. Verifique se os ingredientes estão corretos.'),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                              return;
-                            }
-                            if (context.mounted) {
-                              Navigator.of(context).pushNamed(
-                                RoutesApp.detailRecipePage,
-                                arguments: RecipeArguments(
-                                    recipe: recipe, isRecipeGenerated: true),
-                              );
-                            }
-                          }),
-                    ),
-                  ],
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      FilterGenerateWidget(
+                        listFilter: const [
+                          'Minhas',
+                          'Customizadas',
+                          'Nenhuma',
+                        ],
+                        title: 'Restrições',
+                        onSelected: (value) {
+                          if (value == 'Customizadas') {
+                            _showRestrictionsModal(context);
+                          } else {
+                            setState(() {
+                              if (value == 'Minhas') {
+                                _selectedRestrictions =
+                                    userProvider.user!.dietaryRestrictions;
+                              } else {
+                                _selectedRestrictions = [];
+                              }
+                            });
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      FilterGenerateWidget(
+                        listFilter: const [
+                          'indefinido',
+                          '10 min',
+                          '15 min',
+                          '30 min',
+                          '45 min',
+                          '+ 1 hora',
+                        ],
+                        title: 'Tempo de Preparo',
+                        onSelected: (value) {
+                          setState(() {
+                            _selectedPreparationTime = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      const Divider(),
+                      const SizedBox(height: 24),
+                      const Text(
+                        'Ingredientes Principais',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight:
+                                FontWeight.w600), // Estilo do título da seção.
+                      ),
+                      ..._buildFieldList(
+                          _controllersIngredients, 'Ingrediente'),
+                      const SizedBox(height: 24),
+                      const Text(
+                        'Instrumentos Principais',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight:
+                                FontWeight.w600), // Estilo do título da seção.
+                      ),
+                      ..._buildFieldList(
+                          _controllersInstruments, 'Instrumento'),
+                      const SizedBox(height: 24),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: ButtonDefaultlWidget(
+                            text: 'Gerar receita', // Texto exibido no botão.
+                            color: AppTheme.loginYellow, // Cor do botão.
+                            width: 0.1 / 2, // Largura do botão.
+                            height: 14, // Altura do botão.
+                            onPressed: () async {
+                              Recipes? recipe =
+                                  await _generateRecipe(); // Gera a receita e aguarda o resultado.
+                              print(recipe);
+                              if (recipe == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Não foi possível criar sua receita! Tente novamente. Verifique se os ingredientes estão corretos.'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                                return;
+                              }
+                              if (context.mounted) {
+                                Navigator.of(context).pushNamed(
+                                  RoutesApp.detailRecipePage,
+                                  arguments: RecipeArguments(
+                                      recipe: recipe, isRecipeGenerated: true),
+                                );
+                              }
+                            }),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ]),
-          ),
-        ],
+              ]),
+            ),
+          ],
+        ),
       ),
     );
   }

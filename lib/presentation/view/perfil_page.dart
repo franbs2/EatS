@@ -30,11 +30,12 @@ class PerfilPage extends StatelessWidget {
     return Scaffold(
       backgroundColor:
           AppTheme.secondaryColor, // Define a cor de fundo do Scaffold.
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Stack(
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
               children: [
                 // Exibe a imagem de perfil do usuário como um fundo de tela.
                 SizedBox(
@@ -46,7 +47,8 @@ class PerfilPage extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 36),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 36, horizontal: 12),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -108,57 +110,47 @@ class PerfilPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                // Exibe o conteúdo do perfil abaixo da imagem de perfil.
-                Positioned(
-                  top: MediaQuery.of(context).size.height * 0.52,
-                  left: 0,
-                  right: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Widget para exibir a localização do usuário.
-                        const LocationWidget(),
-                        const SizedBox(height: 12),
-                        // Widget para exibir o nome de usuário.
-                        TextUsernameWidget(
-                          username: userProvider.user!.username,
-                        ),
-                        const SizedBox(height: 14),
-                        PreferenceOptionsWidget(
-                            title: 'Minhas Receitas',
-                            onTap: () {
-                              Navigator.pushNamed(
-                                  context, RoutesApp.myRecipesPage
-                                  //arguments: TODO: Passar as receitas do usuário para a página de receitas do usuário.
-                                  );
-                            },
-                            subtitle: 'Ver todas'),
-                        const SizedBox(height: 18),
-                        // Widget para exibir opções de alergias.
-                        PreferenceOptionsWidget(
-                          title: 'Alergias',
-                          onTap: () => _showAllergiesModal(context),
-                          subtitle: StringsApp.add,
-                        ),
-                        const SizedBox(height: 18),
-                        // Widget para exibir opções de dietas.
-                        PreferenceOptionsWidget(
-                          title: 'Dietas',
-                          onTap: () => _showDietsModal(context),
-                          subtitle: StringsApp.add,
-                        ),
-                        const SizedBox(height: 18),
-                        // Widget para exibir preferências (não implementado).
-                      ],
-                    ),
-                  ),
-                ),
               ],
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Widget para exibir o nome de usuário.
+                  TextUsernameWidget(
+                    username: userProvider.user!.username,
+                  ),
+                  const SizedBox(height: 14),
+                  PreferenceOptionsWidget(
+                      title: 'Minhas Receitas',
+                      onTap: () {
+                        Navigator.pushNamed(context, RoutesApp.myRecipesPage
+                            //arguments: TODO: Passar as receitas do usuário para a página de receitas do usuário.
+                            );
+                      },
+                      subtitle: 'Ver todas'),
+                  const SizedBox(height: 18),
+                  // Widget para exibir opções de alergias.
+                  PreferenceOptionsWidget(
+                    title: 'Alergias',
+                    onTap: () => _showAllergiesModal(context),
+                    subtitle: StringsApp.add,
+                  ),
+                  const SizedBox(height: 18),
+                  // Widget para exibir opções de dietas.
+                  PreferenceOptionsWidget(
+                    title: 'Dietas',
+                    onTap: () => _showDietsModal(context),
+                    subtitle: StringsApp.add,
+                  ),
+                  const SizedBox(height: 18),
+                  // Widget para exibir preferências (não implementado).
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

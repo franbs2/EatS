@@ -29,8 +29,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
         _controllersIngredients.add(TextEditingController(text: ingredient));
       }
     } else {
-      _addField(
-          _controllersIngredients); 
+      _addField(_controllersIngredients);
     }
 
     if (_controllersSteps.isEmpty && recipe?.steps != null) {
@@ -70,134 +69,140 @@ class _AddRecipePageState extends State<AddRecipePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverPadding(
-            padding: const EdgeInsets.all(24.0),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(
-                          Icons.arrow_back,
-                          size: 28,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black,
-                              blurRadius: 10,
-                            ),
-                          ],
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        color: Colors.white,
-                      ),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: TextFormField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              hintText: recipe?.name ?? 'Nome da receita',
-                              hintStyle: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20,
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.all(24.0),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            size: 28,
+                            shadows: [
+                              Shadow(
+                                color: Colors.black,
+                                blurRadius: 10,
                               ),
-                              border: InputBorder.none,
+                            ],
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          color: Colors.white,
+                        ),
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: TextFormField(
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                hintText: recipe?.name ?? 'Nome da receita',
+                                hintStyle: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 20,
+                                ),
+                                border: InputBorder.none,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 48,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          offset: const Offset(0, 4),
-                          blurRadius: 16,
-                          spreadRadius: 0,
+                        const SizedBox(
+                          width: 48,
                         ),
                       ],
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(24),
-                      child: UploadWidget(height: 0.3, ontap: () {}),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      hintText: recipe?.category.join(", ") ?? 'Adicionar tag',
-                      hintStyle: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),
-                      border: InputBorder.none,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Divider(),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Ingredientes Principais',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                  ..._buildFieldList(_controllersIngredients, 'Ingrediente'),
-                  const SizedBox(height: 24),
-                  const Text(
-                    'Modo de Preparo',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                  ..._buildFieldList(_controllersSteps, 'Passo'),
-                  const SizedBox(height: 24),
-                ],
-              ),
-            ),
-          ),
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Row(
-                        children: [
-                          Icon(Icons.undo, color: Color(0xffB2B2B2)),
-                          SizedBox(width: 8),
-                          Icon(Icons.redo, color: Color(0xffB2B2B2)),
-                          SizedBox(width: 8),
+                    const SizedBox(height: 16),
+                    Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            offset: const Offset(0, 4),
+                            blurRadius: 16,
+                            spreadRadius: 0,
+                          ),
                         ],
                       ),
-                      ButtonDefaultlWidget(
-                        text: StringsApp.save,
-                        color: AppTheme.loginYellow,
-                        width: 0.1 / 2,
-                        height: 14,
-                        onPressed: () {
-                          // Ação ao salvar a receita
-                        },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(24),
+                        child: UploadWidget(height: 0.3, ontap: () {}),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                ],
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        hintText:
+                            recipe?.category.join(", ") ?? 'Adicionar tag',
+                        hintStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Divider(),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'Ingredientes Principais',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                    ..._buildFieldList(_controllersIngredients, 'Ingrediente'),
+                    const SizedBox(height: 24),
+                    const Text(
+                      'Modo de Preparo',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                    ..._buildFieldList(_controllersSteps, 'Passo'),
+                    const SizedBox(height: 24),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Row(
+                          children: [
+                            Icon(Icons.undo, color: Color(0xffB2B2B2)),
+                            SizedBox(width: 8),
+                            Icon(Icons.redo, color: Color(0xffB2B2B2)),
+                            SizedBox(width: 8),
+                          ],
+                        ),
+                        ButtonDefaultlWidget(
+                          text: StringsApp.save,
+                          color: AppTheme.loginYellow,
+                          width: 0.1 / 2,
+                          height: 14,
+                          onPressed: () {
+                            // Ação ao salvar a receita
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

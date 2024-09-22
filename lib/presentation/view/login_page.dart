@@ -90,89 +90,96 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const LoadScreenWidget();
-    } 
+    }
     return Scaffold(
-      body: Stack(
-        children: [
-          PageDefaultAuth(
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 8), // Adiciona padding horizontal ao conteúdo.
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 12), // Espaçamento superior.
-                    const TitleInitialWidget(
-                      title: StringsApp.welcomeLogin, // Título da página de login.
-                      subtitle: StringsApp.happy, // Subtítulo da página de login.
-                      space: 8.0, // Espaçamento entre o título e o subtítulo.
-                    ),
-                    const SizedBox(height: 32), // Espaçamento vertical.
-                    const ButtonGoogleWidget(), // Botão para login com Google.
-                    const SizedBox(height: 32), // Espaçamento vertical.
-                    const ContinueWithWidget(), // Widget para opções adicionais de login.
-                    const SizedBox(height: 40), // Espaçamento vertical.
-                    Form(
-                      key:
-                          _formKey, // Atribui a chave global ao formulário para validação.
-                      child: Column(
-                        children: [
-                          TextInputWidget(
-                            hint: StringsApp
-                                .email, // Texto de sugestão para o campo de e-mail.
-                            controller:
-                                _emailController, // Controlador para o campo de e-mail.
-                            validator: (value) {
-                              // Valida o campo de e-mail.
-                              if (value == null || value.isEmpty) {
-                                return 'Por favor, insira seu email'; // Mensagem de erro se o campo estiver vazio.
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 40), // Espaçamento vertical.
-                          TextPasswordInputWidget(
-                            hint: StringsApp
-                                .password, // Texto de sugestão para o campo de senha.
-                            controller:
-                                _senhaController, // Controlador para o campo de senha.
-                            validator: (value) {
-                              // Valida o campo de senha.
-                              if (value == null || value.isEmpty) {
-                                return 'Por favor, insira sua senha'; // Mensagem de erro se o campo estiver vazio.
-                              }
-                              return null;
-                            },
-                          ),
-                        ],
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Stack(
+          children: [
+            PageDefaultAuth(
+              body: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal:
+                          8), // Adiciona padding horizontal ao conteúdo.
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 12), // Espaçamento superior.
+                      const TitleInitialWidget(
+                        title: StringsApp
+                            .welcomeLogin, // Título da página de login.
+                        subtitle:
+                            StringsApp.happy, // Subtítulo da página de login.
+                        space: 8.0, // Espaçamento entre o título e o subtítulo.
                       ),
-                    ),
-                    const SizedBox(height: 48), // Espaçamento vertical.
-                    TextButtonHaveAccountWidget(
-                      onPressed: () => Navigator.of(context).pushNamed(RoutesApp
-                          .registerPage), // Navega para a página de registro.
-                      title: StringsApp.dontHaveAccount, // Texto do botão de texto.
-                    ),
-                    const SizedBox(height: 24), // Espaçamento vertical.
-                    ButtonDefaultlWidget(
-                      text: StringsApp.login, // Texto do botão de login.
-                      color: AppTheme.loginYellow, // Cor do botão de login.
-                      onPressed: () {
-                        _loginUser(
-                            context); // Chama o método de login ao pressionar o botão.
-                      },
-                    ),
-                    const SizedBox(
-                      height: 16, // Espaçamento inferior.
-                    ),
-                  ],
+                      const SizedBox(height: 32), // Espaçamento vertical.
+                      const ButtonGoogleWidget(), // Botão para login com Google.
+                      const SizedBox(height: 32), // Espaçamento vertical.
+                      const ContinueWithWidget(), // Widget para opções adicionais de login.
+                      const SizedBox(height: 40), // Espaçamento vertical.
+                      Form(
+                        key:
+                            _formKey, // Atribui a chave global ao formulário para validação.
+                        child: Column(
+                          children: [
+                            TextInputWidget(
+                              hint: StringsApp
+                                  .email, // Texto de sugestão para o campo de e-mail.
+                              controller:
+                                  _emailController, // Controlador para o campo de e-mail.
+                              validator: (value) {
+                                // Valida o campo de e-mail.
+                                if (value == null || value.isEmpty) {
+                                  return 'Por favor, insira seu email'; // Mensagem de erro se o campo estiver vazio.
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 40), // Espaçamento vertical.
+                            TextPasswordInputWidget(
+                              hint: StringsApp
+                                  .password, // Texto de sugestão para o campo de senha.
+                              controller:
+                                  _senhaController, // Controlador para o campo de senha.
+                              validator: (value) {
+                                // Valida o campo de senha.
+                                if (value == null || value.isEmpty) {
+                                  return 'Por favor, insira sua senha'; // Mensagem de erro se o campo estiver vazio.
+                                }
+                                return null;
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 48), // Espaçamento vertical.
+                      TextButtonHaveAccountWidget(
+                        onPressed: () => Navigator.of(context).pushNamed(RoutesApp
+                            .registerPage), // Navega para a página de registro.
+                        title: StringsApp
+                            .dontHaveAccount, // Texto do botão de texto.
+                      ),
+                      const SizedBox(height: 24), // Espaçamento vertical.
+                      ButtonDefaultlWidget(
+                        text: StringsApp.login, // Texto do botão de login.
+                        color: AppTheme.loginYellow, // Cor do botão de login.
+                        onPressed: () {
+                          _loginUser(
+                              context); // Chama o método de login ao pressionar o botão.
+                        },
+                      ),
+                      const SizedBox(
+                        height: 16, // Espaçamento inferior.
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

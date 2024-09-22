@@ -82,99 +82,102 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
 
     return Scaffold(
       backgroundColor: AppTheme.secondaryColor, // Cor de fundo da página.
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                // Widget para fazer o upload da imagem de perfil.
-                UploadWidget(
-                  backgroundImage: imageBytes ?? profileImage,
-                  ontap:
-                      _uploadImage, // Função chamada ao tocar na área de upload.
-                ),
-                // Exibe o botão de voltar se necessário.
-                if (arrowBack)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 36),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.arrow_back,
-                            size: 28,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black,
-                                blurRadius: 10,
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Stack(
+                children: [
+                  // Widget para fazer o upload da imagem de perfil.
+                  UploadWidget(
+                    backgroundImage: imageBytes ?? profileImage,
+                    ontap:
+                        _uploadImage, // Função chamada ao tocar na área de upload.
+                  ),
+                  // Exibe o botão de voltar se necessário.
+                  if (arrowBack)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 36),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              size: 28,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black,
+                                  blurRadius: 10,
+                                ),
+                              ],
+                            ),
+                            onPressed: () => Navigator.pop(
+                                context), // Volta para a página anterior.
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
+                  // Conteúdo da página principal de edição do perfil.
+                  Positioned(
+                    top: MediaQuery.of(context).size.height * 0.47,
+                    left: 0,
+                    right: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const LocationWidget(), // Widget de localização.
+                          Form(
+                            key: widget
+                                ._formKey, // Chave do formulário para validação.
+                            child: TextUsernameInputWidget(
+                              controller: widget
+                                  .username, // Controlador para o campo de nome de usuário.
+                            ),
+                          ),
+                          const SizedBox(height: 18),
+                          // Botão para selecionar alergias.
+                          PreferenceOptionsWidget(
+                            title: 'Alergias',
+                            onTap: () => _showAllergiesModal(context),
+                            subtitle: StringsApp.add,
+                          ),
+                          const SizedBox(height: 18),
+                          // Botão para selecionar dietas.
+                          PreferenceOptionsWidget(
+                            title: 'Dietas',
+                            onTap: () => _showDietsModal(context),
+                            subtitle: StringsApp.add,
+                          ),
+                          const SizedBox(height: 20),
+                          // Botão para salvar as alterações do perfil.
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              ButtonDefaultlWidget(
+                                text: 'Salvar',
+                                width: 0.1,
+                                height: 16,
+                                color: AppTheme.perfilYellow,
+                                onPressed: () =>
+                                    _updateProfile(context, userProvider),
                               ),
                             ],
                           ),
-                          onPressed: () => Navigator.pop(
-                              context), // Volta para a página anterior.
-                          color: Colors.white,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                // Conteúdo da página principal de edição do perfil.
-                Positioned(
-                  top: MediaQuery.of(context).size.height * 0.47,
-                  left: 0,
-                  right: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const LocationWidget(), // Widget de localização.
-                        Form(
-                          key: widget
-                              ._formKey, // Chave do formulário para validação.
-                          child: TextUsernameInputWidget(
-                            controller: widget
-                                .username, // Controlador para o campo de nome de usuário.
-                          ),
-                        ),
-                        const SizedBox(height: 18),
-                        // Botão para selecionar alergias.
-                        PreferenceOptionsWidget(
-                          title: 'Alergias',
-                          onTap: () => _showAllergiesModal(context),
-                          subtitle: StringsApp.add,
-                        ),
-                        const SizedBox(height: 18),
-                        // Botão para selecionar dietas.
-                        PreferenceOptionsWidget(
-                          title: 'Dietas',
-                          onTap: () => _showDietsModal(context),
-                          subtitle: StringsApp.add,
-                        ),
-                        const SizedBox(height: 20),
-                        // Botão para salvar as alterações do perfil.
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            ButtonDefaultlWidget(
-                              text: 'Salvar',
-                              width: 0.1,
-                              height: 16,
-                              color: AppTheme.perfilYellow,
-                              onPressed: () =>
-                                  _updateProfile(context, userProvider),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

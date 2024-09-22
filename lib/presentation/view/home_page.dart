@@ -6,6 +6,7 @@ import '../../core/style/images_app.dart';
 import '../../core/style/strings_app.dart';
 import '../providers/banners_provider.dart';
 import '../providers/recipes_provider.dart';
+import '../providers/user_provider.dart';
 import '../widget/carousel_widget.dart';
 import '../widget/filter_categories_recipes_widget.dart';
 import '../widget/grid_view_recipes_widget.dart';
@@ -41,6 +42,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     // Obtém a lista de categorias de filtro a partir de strings constantes.
     const categories = StringsApp.listFilterCategories;
+    // Obtém o provedor de dados do usuário para acessar as informações do perfil.
+    final userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -62,27 +65,27 @@ class _HomePageState extends State<HomePage> {
           ),
           child: CustomScrollView(
             slivers: [
-              const SliverToBoxAdapter(
+              SliverToBoxAdapter(
                 child: Padding(
-                  padding:
-                      EdgeInsets.only(top: 30, left: 30, right: 30, bottom: 20),
+                  padding: const EdgeInsets.only(
+                      top: 30, left: 30, right: 30, bottom: 20),
                   child: Row(
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            StringsApp.local,
+                          const Text(
+                            'Olá,',
                             style: TextStyle(
                               fontSize: 16,
-                              color: Color(0xffB7B7B7),
+                              color: AppTheme.secondaryColor,
                               fontWeight: FontWeight.normal,
                             ),
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text(
-                            'Santarém, Pará',
-                            style: TextStyle(
+                            userProvider.user!.username,
+                            style: const TextStyle(
                               fontSize: 16,
                               color: AppTheme.secondaryColor,
                               fontWeight: FontWeight.w600,
@@ -90,8 +93,8 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ],
                       ),
-                      Spacer(),
-                      ImgPerfilWidget(),
+                      const Spacer(),
+                      const ImgPerfilWidget(),
                     ],
                   ),
                 ),
@@ -107,11 +110,10 @@ class _HomePageState extends State<HomePage> {
                       controller: _searchController,
                       onChanged: (value) {
                         // Implementando debounce para a busca
-                          Future.delayed(
-                            const Duration(milliseconds: 800),
-                            () => _searchRecipes(value),
-                          );
-                       
+                        Future.delayed(
+                          const Duration(milliseconds: 800),
+                          () => _searchRecipes(value),
+                        );
                       },
                     ),
                   ),

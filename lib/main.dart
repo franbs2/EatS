@@ -39,18 +39,6 @@ void main() async {
     options: DefaultFirebaseOptions
         .currentPlatform, // Inicializa o Firebase com as opções específicas da plataforma.
   );
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent, // Barra de status transparente
-      systemNavigationBarColor:
-          Colors.transparent, // Barra de navegação transparente
-      statusBarIconBrightness:
-          Brightness.light, // Ícones da barra de status claros
-      systemNavigationBarIconBrightness:
-          Brightness.light, // Ícones da barra de navegação claros
-    ),
-  );
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp
   ]); // Define a orientação da tela para retrato.
