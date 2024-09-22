@@ -97,12 +97,15 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
       appBar: AppBar(
         backgroundColor: AppTheme.secondaryColor,
         surfaceTintColor: AppTheme.secondaryColor,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          color: Colors.black,
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        leading: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            color: Colors.black,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
         title: const Text('Crie sua receita'), // Título da barra de aplicativo.
         centerTitle: true, // Centraliza o título da barra de aplicativo.

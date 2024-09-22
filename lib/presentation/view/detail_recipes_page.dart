@@ -35,20 +35,20 @@ class DetailRecipesPage extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: AppTheme.secondaryColor,
             surfaceTintColor: AppTheme.secondaryColor,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios),
-              color: Colors.black,
-              onPressed: () {
-                Navigator.pop(context);
-              },
+            leading: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                color: Colors.black,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
             ),
             title: Title(
               color: Colors.black,
               child: const Text(
                 "Receita",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
               ),
             ),
             centerTitle: true,

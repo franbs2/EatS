@@ -98,7 +98,8 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
                 // Exibe o botão de voltar se necessário.
                 if (arrowBack)
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 36),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 36, horizontal: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
