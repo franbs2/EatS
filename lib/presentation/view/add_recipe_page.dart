@@ -82,14 +82,8 @@ class _AddRecipePageState extends State<AddRecipePage> {
                       children: [
                         IconButton(
                           icon: const Icon(
-                            Icons.arrow_back,
-                            size: 28,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black,
-                                blurRadius: 10,
-                              ),
-                            ],
+                            Icons.arrow_back_ios,
+                            color: Colors.black,
                           ),
                           onPressed: () {
                             Navigator.of(context).pop();

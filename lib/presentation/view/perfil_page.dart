@@ -32,132 +32,133 @@ class PerfilPage extends StatelessWidget {
           AppTheme.secondaryColor, // Define a cor de fundo do Scaffold.
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                // Exibe a imagem de perfil do usuário como um fundo de tela.
-                SizedBox(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.55,
-                  child: Image.memory(
-                    userProvider.profileImage!,
-                    fit: BoxFit.cover,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
+                children: [
+                  // Exibe a imagem de perfil do usuário como um fundo de tela.
+                  SizedBox(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height * 0.55,
+                    child: Image.memory(
+                      userProvider.profileImage!,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 36, horizontal: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      // Menu de opções no canto superior direito.
-                      PopupMenuButton(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(16),
-                                  bottomLeft: Radius.circular(16),
-                                  bottomRight: Radius.circular(16))),
-                          icon: const Icon(
-                            Icons.menu_sharp,
-                            size: 28,
-                            color: Colors.white,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black,
-                                blurRadius: 10,
-                              ),
-                            ],
-                          ),
-                          itemBuilder: (context) {
-                            return [
-                              // Opção para editar o perfil.
-                              PopupMenuItem(
-                                onTap: () => Navigator.pushNamed(
-                                    context, RoutesApp.editPefilPage,
-                                    arguments: true),
-                                child: const SizedBox(
-                                  child: Text(
-                                    'Editar Perfil',
-                                    style: TextStyle(
-                                        color: AppTheme.primaryColor,
-                                        fontWeight: FontWeight.normal),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 36, horizontal: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        // Menu de opções no canto superior direito.
+                        PopupMenuButton(
+                            shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(16),
+                                    bottomLeft: Radius.circular(16),
+                                    bottomRight: Radius.circular(16))),
+                            icon: const Icon(
+                              Icons.menu_sharp,
+                              size: 28,
+                              color: Colors.white,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black,
+                                  blurRadius: 10,
+                                ),
+                              ],
+                            ),
+                            itemBuilder: (context) {
+                              return [
+                                // Opção para editar o perfil.
+                                PopupMenuItem(
+                                  onTap: () => Navigator.pushNamed(
+                                      context, RoutesApp.editPefilPage,
+                                      arguments: true),
+                                  child: const SizedBox(
+                                    child: Text(
+                                      'Editar Perfil',
+                                      style: TextStyle(
+                                          color: AppTheme.primaryColor,
+                                          fontWeight: FontWeight.normal),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              // Opção para visualizar dados pessoais (não implementada).
-                              PopupMenuItem(
-                                onTap: () => {},
-                                child: const Text('Meus dados',
-                                    style: TextStyle(
-                                        color: AppTheme.primaryColor,
-                                        fontWeight: FontWeight.normal)),
-                              ),
-                              // Opção para sair da conta.
-                              PopupMenuItem(
-                                onTap: () {
-                                  googleSignIn.signOutFromGoogle();
-                                  userProvider.clearUser();
-                                },
-                                child: const Text('Sair',
-                                    style: TextStyle(
-                                        color: AppTheme.atencionRed,
-                                        fontWeight: FontWeight.normal)),
-                              ),
-                            ];
-                          }),
-                    ],
+                                // Opção para visualizar dados pessoais (não implementada).
+                                PopupMenuItem(
+                                  onTap: () => {},
+                                  child: const Text('Meus dados',
+                                      style: TextStyle(
+                                          color: AppTheme.primaryColor,
+                                          fontWeight: FontWeight.normal)),
+                                ),
+                                // Opção para sair da conta.
+                                PopupMenuItem(
+                                  onTap: () {
+                                    googleSignIn.signOutFromGoogle();
+                                    userProvider.clearUser();
+                                  },
+                                  child: const Text('Sair',
+                                      style: TextStyle(
+                                          color: AppTheme.atencionRed,
+                                          fontWeight: FontWeight.normal)),
+                                ),
+                              ];
+                            }),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Widget para exibir o nome de usuário.
-                  TextUsernameWidget(
-                    username: userProvider.user!.username,
-                  ),
-                  const SizedBox(height: 14),
-                  PreferenceOptionsWidget(
-                      title: 'Minhas Receitas',
-                      onTap: () {
-                        Navigator.pushNamed(context, RoutesApp.myRecipesPage
-                            //arguments: TODO: Passar as receitas do usuário para a página de receitas do usuário.
-                            );
-                      },
-                      subtitle: 'Ver todas'),
-                  const SizedBox(height: 18),
-                  // Widget para exibir opções de alergias.
-                  PreferenceOptionsWidget(
-                    title: 'Alergias',
-                    onTap: () => _showAllergiesModal(context),
-                    subtitle: StringsApp.add,
-                  ),
-                  const SizedBox(height: 18),
-                  // Widget para exibir opções de dietas.
-                  PreferenceOptionsWidget(
-                    title: 'Dietas',
-                    onTap: () => _showDietsModal(context),
-                    subtitle: StringsApp.add,
-                  ),
-                  const SizedBox(height: 18),
-                  // Widget para exibir preferências (não implementado).
                 ],
               ),
-            ),
-          ],
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Widget para exibir o nome de usuário.
+                    TextUsernameWidget(
+                      username: userProvider.user!.username,
+                    ),
+                    const SizedBox(height: 14),
+                    PreferenceOptionsWidget(
+                        title: 'Minhas Receitas',
+                        onTap: () {
+                          Navigator.pushNamed(context, RoutesApp.myRecipesPage
+                              //arguments: TODO: Passar as receitas do usuário para a página de receitas do usuário.
+                              );
+                        },
+                        subtitle: 'Ver todas'),
+                    const SizedBox(height: 18),
+                    // Widget para exibir opções de alergias.
+                    PreferenceOptionsWidget(
+                      title: 'Alergias',
+                      onTap: () => _showAllergiesModal(context),
+                      subtitle: StringsApp.add,
+                    ),
+                    const SizedBox(height: 18),
+                    // Widget para exibir opções de dietas.
+                    PreferenceOptionsWidget(
+                      title: 'Dietas',
+                      onTap: () => _showDietsModal(context),
+                      subtitle: StringsApp.add,
+                    ),
+                    const SizedBox(height: 18),
+                    // Widget para exibir preferências (não implementado).
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   /// Exibe um modal com a lista de alergias do usuário.
-  ///
-  /// Utiliza o [PreferencesProvider] para gerenciar e atualizar as alergias selecionadas.
   void _showAllergiesModal(BuildContext context) {
     final preferencesProvider =
         Provider.of<PreferencesProvider>(context, listen: false);
@@ -170,17 +171,22 @@ class PerfilPage extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(42.0)),
       ),
       builder: (context) {
-        return const Padding(
-          padding: EdgeInsets.only(top: 24),
-          child: SingleChildScrollView(child: AllergiesListWidget()),
+        return Padding(
+          padding: const EdgeInsets.only(top: 24),
+          child: ListView(
+            shrinkWrap: true,
+            physics:
+                const NeverScrollableScrollPhysics(), // Desativa a rolagem do ListView
+            children: const [
+              AllergiesListWidget(),
+            ],
+          ),
         );
       },
     ).then((_) => preferencesProvider.resetSelectedAllergies());
   }
 
   /// Exibe um modal com a lista de dietas do usuário.
-  ///
-  /// Utiliza o [PreferencesProvider] para gerenciar e atualizar as dietas selecionadas.
   void _showDietsModal(BuildContext context) {
     final preferencesProvider =
         Provider.of<PreferencesProvider>(context, listen: false);
@@ -193,9 +199,16 @@ class PerfilPage extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(42.0)),
       ),
       builder: (context) {
-        return const Padding(
-          padding: EdgeInsets.only(top: 24),
-          child: SingleChildScrollView(child: DietsListWidget()),
+        return Padding(
+          padding: const EdgeInsets.only(top: 24),
+          child: ListView(
+            shrinkWrap: true,
+            physics:
+                const NeverScrollableScrollPhysics(), // Desativa a rolagem do ListView
+            children: const [
+              DietsListWidget(),
+            ],
+          ),
         );
       },
     ).then((_) => preferencesProvider.resetSelectedDiets());
