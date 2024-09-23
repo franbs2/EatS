@@ -12,6 +12,7 @@ class RecipesProvider extends ChangeNotifier {
   late RecipesRepository
       _recipeRepository; // Repositório de receitas usado para obter dados.
   List<Recipes> _recipes = []; // Lista de todas as receitas obtidas.
+  
   List<Recipes> _filteredRecipes =
       []; // Lista de receitas filtradas por categoria.
   bool _isLoading = false; // Estado de carregamento para exibir na UI.
@@ -93,5 +94,11 @@ class RecipesProvider extends ChangeNotifier {
     }
 
     notifyListeners(); // Notifica ouvintes sobre mudanças na filtragem.
+  }
+
+  Future<Recipes> uploadRecipe (Recipes recipe) async {
+    notifyListeners();
+    await _recipeRepository.saveRecipe(recipe);
+    return recipe;
   }
 }

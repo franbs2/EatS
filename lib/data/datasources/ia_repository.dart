@@ -34,6 +34,7 @@ class AIRepository {
     String mealType,
     List<String> restrictions,
     String preparationTime,
+    String authorId,
   ) async {
     // Verificar se a lista de ingredientes está vazia
     if (ingredients.isEmpty) {
@@ -57,6 +58,8 @@ $preferencias
 A resposta deve seguir EXATAMENTE a formatação abaixo, sem nenhuma alteração:
 Título: [título da receita]
 Categoria: [categoria1, categoria2, ...]
+Descricão: [descricão da receita]
+Preço: [preço da receita em reais. Ex: 20.00]
 Ingredientes:
 - [quantidade] [ingrediente1]
 - [quantidade] [ingrediente2]
@@ -108,7 +111,7 @@ $prompt
     debugPrint(response.text!);
 
     // Retorna a resposta do modelo de geração de conteúdo
-    return _parseRecipe(response.text!);
+    return _parseRecipe("Id do autor: $authorId\n${response.text!}");
   }
 
   /// [_parseRecipe]- Transforma uma string de resposta do modelo de geração de conteúdo em uma instância de [Recipes].
@@ -127,6 +130,8 @@ $prompt
       return null;
     }
     final title = titleMatch.group(1)!.trim();
+    final description =
+        RegExp(r'Descricão:\s*(.*)').firstMatch(recipe)?.group(1);
 
     // Pega as categorias
     final categoryMatch = RegExp(r'Categoria:\s*(.*)').firstMatch(recipe);
@@ -137,6 +142,17 @@ $prompt
             .map((c) => c.trim())
             .toList()
         : [];
+
+    // Pega o preço
+    final priceMatch = RegExp(r'Preço:\s*(.*)').firstMatch(recipe);
+    if (priceMatch == null) {
+      debugPrint('Preço não encontrado');
+      return null;
+    }
+    final price = double.tryParse(priceMatch.group(1)!) ?? 0.0;
+
+    final authorIdMatch =
+        RegExp(r'Id do autor:\s*(.*)').firstMatch(recipe)?.group(1);
 
     // Pega os ingredientes
     final ingredientsMatch =
@@ -171,12 +187,13 @@ $prompt
     return Recipes(
       name: title,
       category: categoriesList as List<String>,
-      image: '',
-      description: '',
+      image: 'recipePics/default_recipe.jpg',
+      description: description ?? '',
       ingredients: ingredientsList,
       steps: preparationSteps,
       rating: 0.0,
-      value: 0.0,
+      value: price,
+      authorId: authorIdMatch,
     );
   }
 }

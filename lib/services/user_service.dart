@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eats/data/datasources/recipes_repository.dart';
+import 'package:eats/data/model/recipes.dart';
 import 'package:eats/data/model/user.dart' as model;
 import 'package:eats/services/storage_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -152,6 +154,11 @@ class UserService {
     }
 
     return model.User.fromSnap(snap);
+  }
+
+  Future<List<Recipes>> getMyRecipes(String id) async {
+    final recipeRepository = RecipesRepository(_firestore);
+    return await recipeRepository.getMyRecipes(id);
   }
 
 }

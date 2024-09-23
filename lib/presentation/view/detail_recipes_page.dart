@@ -189,7 +189,12 @@ class DetailRecipesPage extends StatelessWidget {
                           color: AppTheme.loginYellow,
                           width: 0.1 / 2,
                           height: 14,
-                          onPressed: () {},
+                          onPressed: () {
+                            recipe.changeVisibility(true);
+                            Navigator.of(context).pushNamed(
+                                RoutesApp.addRecipePage,
+                                arguments: recipe);
+                          },
                         ),
                         const SizedBox(width: 8),
                         ButtonDefaultlWidget(
@@ -198,6 +203,7 @@ class DetailRecipesPage extends StatelessWidget {
                           width: 0.1 / 2,
                           height: 14,
                           onPressed: () {
+                            recipe.changeVisibility(false);
                             Navigator.of(context).pushNamed(
                                 RoutesApp.addRecipePage,
                                 arguments: recipe);
@@ -223,35 +229,23 @@ class DetailRecipesPage extends StatelessWidget {
       BuildContext context, Recipes recipe, StorageService storageService) {
     return Padding(
       padding: const EdgeInsets.all(28.0),
-      child: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              offset: const Offset(0, 4),
-              blurRadius: 16,
-              spreadRadius: 0,
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: FutureBuilder<String>(
-            future: storageService.loadImageInURL(recipe.image, true),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return _buildLoadingImage(context);
-              } else if (snapshot.hasError) {
-                return _buildErrorImage(context);
-              } else {
-                return Image.network(
-                  snapshot.data ?? '',
-                  fit: BoxFit.fill,
-                  width: double.infinity,
-                );
-              }
-            },
-          ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: FutureBuilder<String>(
+          future: storageService.loadImageInURL(recipe.image, true),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return _buildLoadingImage(context);
+            } else if (snapshot.hasError) {
+              return _buildErrorImage(context);
+            } else {
+              return Image.network(
+                snapshot.data ?? '',
+                fit: BoxFit.fill,
+                width: double.infinity,
+              );
+            }
+          },
         ),
       ),
     );

@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import '../../core/style/color.dart';
 import '../widget/alergies_list_widget.dart';
 import '../widget/diets_list_widget.dart';
-import '../widget/location_widget.dart';
 import '../widget/preference_options_widget.dart';
 import '../widget/text_username_widget.dart';
 
@@ -126,10 +125,14 @@ class PerfilPage extends StatelessWidget {
                     const SizedBox(height: 14),
                     PreferenceOptionsWidget(
                         title: 'Minhas Receitas',
-                        onTap: () {
-                          Navigator.pushNamed(context, RoutesApp.myRecipesPage
-                              //arguments: TODO: Passar as receitas do usuário para a página de receitas do usuário.
-                              );
+                        onTap: () async {
+                          Navigator.pushNamed(
+                              // ignore: use_build_context_synchronously
+                              context,
+                              RoutesApp.myRecipesPage
+                              // Passa a lista de receitas como argumento.
+                              ,
+                              arguments: await userProvider.getMyRecipes());
                         },
                         subtitle: 'Ver todas'),
                     const SizedBox(height: 18),

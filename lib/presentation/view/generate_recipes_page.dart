@@ -65,7 +65,7 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
   }
 
   /// Gera uma receita com base nos ingredientes fornecidos.
-  Future<Recipes?> _generateRecipe() async {
+  Future<Recipes?> _generateRecipe(uid) async {
     final ingredients = _controllersIngredients.map((e) => e.text).toList();
     final instruments = _controllersInstruments.map((e) => e.text).toList();
 
@@ -85,6 +85,7 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
       _selectedMealType,
       _selectedRestrictions,
       _selectedPreparationTime,
+      uid,
     );
     return recipe;
   }
@@ -209,9 +210,12 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
                             height: 14, // Altura do botão.
                             onPressed: () async {
                               Recipes? recipe =
-                                  await _generateRecipe(); // Gera a receita e aguarda o resultado.
-                              print(recipe);
+                                  await _generateRecipe(
+                                    userProvider.user!.uid,
+                                  ); // Gera a receita e aguarda o resultado.
+                              debugPrint(recipe.toString());
                               if (recipe == null) {
+                                // ignore: use_build_context_synchronously
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text(

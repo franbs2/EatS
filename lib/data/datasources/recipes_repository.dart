@@ -19,9 +19,9 @@ class RecipesRepository {
   ///
   /// - Retorna: Uma lista de receitas.
   Future<List<Recipes>> getRecipes(String? query) async {
-    // Recupera todas as receitas
+    // Recupera todas as receitas com public = true
     Query<Map<String, dynamic>> recipesCollection =
-        _firestore.collection('recipes');
+        _firestore.collection('recipes').where('public', isEqualTo: true);
 
     // Obtém todos os documentos da coleção
     var querySnapshot = await recipesCollection.get();
@@ -44,5 +44,18 @@ class RecipesRepository {
             .every((value) => recipe.name.toLowerCase().contains(value));
       }).toList();
     }
+  }
+  Future<List<Recipes>> getMyRecipes(String id) async {
+    Query<Map<String, dynamic>> recipesCollection =
+        _firestore.collection('recipes').where('authorId', isEqualTo: id);
+    var querySnapshot = await recipesCollection.get();
+    var allRecipes =
+        querySnapshot.docs.map((doc) => Recipes.fromFirestore(doc)).toList();
+    return allRecipes;
+  }
+  Future<Recipes> saveRecipe(Recipes recipe) async {
+    await _firestore.collection('recipes').add(recipe.toMap());
+    return recipe;
+    
   }
 }

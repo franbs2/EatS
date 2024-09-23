@@ -4,12 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Recipes {
   final String name;
   final List<String> category;
-  final String image;
+  late final String image;
   final String description;
   final List<String> ingredients;
   final List<String> steps;
   final double rating;
   final double value;
+  final String? authorId;
+  bool? public;
 
   Recipes({
     required this.image,
@@ -20,6 +22,9 @@ class Recipes {
     required this.category,
     required this.rating,
     required this.value,
+    this.public,
+    this.authorId,
+    
   });
 
   /// [fromFirestore] - Cria uma instância de [Recipes] a partir de um documento do Firestore.
@@ -34,6 +39,36 @@ class Recipes {
       steps: List<String>.from(data['steps']),
       rating: (data['rating'] ?? 0.0).toDouble(),
       value: (data['value'] ?? 0.0).toDouble(),
+      authorId: data['authorId'] ?? '',
+      public: data['public'] ?? true,
     );
+  }
+
+  /// [toMap] - Retorna um Map com todos os campos da receita, pronto para ser salvo no Firestore.
+  ///
+  /// - Retorna um Map<String, Object> com todos os campos da receita.
+  Map<String, Object> toMap() {
+    return {
+      'name': name,
+      'category': category,
+      'image': image,
+      'description': description,
+      'ingredients': ingredients,
+      'steps': steps,
+      'rating': rating,
+      'value': value,
+      'authorId': authorId ?? '',
+      'public': public ?? true,
+    };
+  }
+
+  /// [changeVisibility] - Altera a visibilidade da receita para o valor especificado.
+  ///
+  /// - Parâmetros:
+  ///   - [willPublic] ([bool]): Se verdadeiro, a receita será tornada pública.
+  ///     Caso contrário, a receita será tornada privada.
+  ///
+  void changeVisibility(bool willPublic) {
+    public = willPublic;
   }
 }

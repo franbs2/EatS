@@ -1,5 +1,6 @@
 // Importações das dependências necessárias, incluindo métodos de armazenamento,
 // autenticação e o modelo de usuário.
+import 'package:eats/data/model/recipes.dart';
 import 'package:eats/data/model/user.dart' as model;
 import 'package:eats/services/auth_service.dart';
 import 'package:eats/services/storage_service.dart';
@@ -119,6 +120,10 @@ class UserProvider with ChangeNotifier {
     } else {
       debugPrint('UserProvider: Nenhuma mudança na imagem de perfil.');
     }
+  }
+
+  Future<List<Recipes>> getMyRecipes() async {
+    return _userService.getMyRecipes(_user!.uid);
   }
 
   /// Atualiza o username do usuário se houver uma mudança no valor atual.

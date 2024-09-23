@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../core/style/strings_app.dart';
-
 /// [PreferenceOptionsWidget] é um widget que exibe uma opção de preferência em um layout de botão.
 /// Este widget mostra um título e um ícone de seta apontando para a direita, indicando uma ação possível.
 ///
