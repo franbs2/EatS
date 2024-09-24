@@ -292,6 +292,8 @@ class _AddRecipePageState extends State<AddRecipePage> {
                               _createRecipe(recipesRepository);
                               recipesProvider.fetchRecipes(null);
                               Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
                             }),
                       ],
                     ),
