@@ -2,18 +2,25 @@ import 'package:eats/core/routes/routes.dart';
 import 'package:eats/data/model/recipes.dart';
 import 'package:eats/presentation/args/recipe_arguments.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/style/color.dart';
+import '../providers/user_provider.dart';
 
 class RecipeCardListWidget extends StatelessWidget {
   final String imageUrl;
   final Recipes recipe;
+  final Function() updatePage;
 
   const RecipeCardListWidget(
-      {super.key, required this.imageUrl, required this.recipe});
+      {super.key,
+      required this.imageUrl,
+      required this.recipe,
+      required this.updatePage});
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     return Card(
       elevation: 0,
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -151,7 +158,25 @@ class RecipeCardListWidget extends StatelessWidget {
                           ),
                           // Opção para sair da conta.
                           PopupMenuItem(
-                            onTap: () {},
+                            onTap: () {
+                              _showConfirmationDialog(
+                                context,
+                                title: 'Confirmação de exclusão',
+                                content:
+                                    'Deseja realmente excluir esta receita?',
+                                onConfirm: () async {
+                                  final result =
+                                      await userProvider.deletMyRecipe(
+                                          recipe.id); // Captura o resultado
+                                  updatePage();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              result))); // Exibe a mensagem
+                                },
+                                textButton: 'Deletar',
+                              );
+                            },
                             child: const Text('Deletar',
                                 style: TextStyle(
                                     color: AppTheme.atencionRed,
@@ -165,6 +190,46 @@ class RecipeCardListWidget extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  void _showConfirmationDialog(BuildContext context,
+      {required String title,
+      required String content,
+      required String textButton,
+      String textButtonCancel = 'Cancelar',
+      Color colorButton = AppTheme.atencionRed,
+      Color colorButtonCancel = AppTheme.primaryColor,
+      required Function() onConfirm}) {
+    debugPrint('Chamando o modal de confirmação');
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text(title),
+          content: Text(content),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Fecha o diálogo
+              },
+              child: Text(textButtonCancel,
+                  style: TextStyle(color: colorButtonCancel)),
+            ),
+            TextButton(
+              onPressed: () {
+                onConfirm();
+                Navigator.of(context).pop(); // Fecha o diálogo
+              },
+              child: Text(
+                textButton,
+                style: TextStyle(color: colorButton),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

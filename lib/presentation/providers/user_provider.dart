@@ -137,6 +137,15 @@ class UserProvider with ChangeNotifier {
     }
   }
 
+  Future<String> deletMyRecipe(String id) async {
+    try {
+      String result = await _userService.deletMyRecipe(id);
+      return result;
+    } catch (e) {
+      return "Erro ao deletar receita: $e"; // Retorna uma mensagem de erro
+    }
+  }
+
   /// Limpa os dados do usuário atual, incluindo o perfil e as imagens.
   /// Notifica os ouvintes para redefinir o estado.
   void clearUser() {

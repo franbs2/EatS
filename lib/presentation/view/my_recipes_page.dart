@@ -57,7 +57,7 @@ class _MyRecipesPageState extends State<MyRecipesPage> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.of(context).pop();
                         },
                         icon: const Icon(Icons.arrow_back_ios),
                         color: Colors.white,
@@ -85,10 +85,7 @@ class _MyRecipesPageState extends State<MyRecipesPage> {
                   Padding(
                     padding: const EdgeInsets.all(6.0),
                     // Opção 4: Envolver o SearchBarWidget em um Flexible
-                    child: Flexible(
-                      child:
-                          SearchBarWidget(controller: TextEditingController()),
-                    ),
+                    child: SearchBarWidget(controller: TextEditingController()),
                   ),
                 ],
               ),
@@ -119,6 +116,12 @@ class _MyRecipesPageState extends State<MyRecipesPage> {
                             return RecipeCardListWidget(
                               recipe: recipe,
                               imageUrl: snapshot.data ?? '',
+                              updatePage: () {
+                                setState(() {
+                                  listRecipes!.remove(
+                                      recipe); // Atualiza a lista ao deletar
+                                });
+                              },
                             );
                           }
                         },

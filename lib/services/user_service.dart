@@ -85,8 +85,6 @@ class UserService {
     }
 
     if (file != null) {
-      
-
       if (photoURL != 'profilePics/default.jpg' &&
           !photoURL.startsWith("http")) {
         debugPrint("AuthMethods: trocando imagem do perfil no Storage");
@@ -128,13 +126,14 @@ class UserService {
     return snap.docs.isEmpty;
   }
 
-    /// Cria um usuário no Firestore se ele não existir
+  /// Cria um usuário no Firestore se ele não existir
   Future<model.User?> createUserInFirestoreIfNotExists() async {
     final currentUser = _auth.currentUser;
 
     if (currentUser == null) return null;
 
-    final snap = await _firestore.collection('users').doc(currentUser.uid).get();
+    final snap =
+        await _firestore.collection('users').doc(currentUser.uid).get();
 
     if (!snap.exists) {
       final newUser = model.User(
@@ -161,5 +160,12 @@ class UserService {
     return await recipeRepository.getMyRecipes(id);
   }
 
+  Future<String> deletMyRecipe(String recipeId) async {
+    try {
+      await _firestore.collection('recipes').doc(recipeId).delete();
+      return "Receita deletada com sucesso.";
+    } catch (e) {
+      throw Exception("Erro ao deletar receita: $e");
+    }
+  }
 }
-

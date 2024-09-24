@@ -1,10 +1,12 @@
 import 'package:eats/data/model/recipes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:uuid/uuid.dart';
 
 /// [AIRepository] - Repositorio responsável por gerar receitas culinárias.
 class AIRepository {
   final GenerativeModel _generativeModel;
+  final uuid = const Uuid();
 
   /// Construtor que inicializa o [AIRepository] com um [GenerativeModel].
   /// O [GenerativeModel] é usado para gerar receitas culinárias.
@@ -185,6 +187,7 @@ $prompt
 
     // Retorna uma instância de [Recipes] com os dados da receita
     return Recipes(
+      id: uuid.v4(),
       name: title,
       category: categoriesList as List<String>,
       image: 'recipePics/default_recipe.jpg',

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// [Recipes] - Model para armazenar os dados das receitas no Firestore.
 class Recipes {
+  final String id;
   final String name;
   final List<String> category;
   late final String image;
@@ -14,6 +15,7 @@ class Recipes {
   bool? public;
 
   Recipes({
+    required this.id,
     required this.image,
     required this.description,
     required this.ingredients,
@@ -24,13 +26,13 @@ class Recipes {
     required this.value,
     this.public,
     this.authorId,
-    
   });
 
   /// [fromFirestore] - Cria uma instância de [Recipes] a partir de um documento do Firestore.
   factory Recipes.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Recipes(
+      id: doc.id,
       name: data['name'] ?? '',
       category: List<String>.from(data['category']),
       image: data['image'] ?? '',
@@ -49,6 +51,7 @@ class Recipes {
   /// - Retorna um Map<String, Object> com todos os campos da receita.
   Map<String, Object> toMap() {
     return {
+      'id': id,
       'name': name,
       'category': category,
       'image': image,

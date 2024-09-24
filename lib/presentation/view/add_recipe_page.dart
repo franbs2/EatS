@@ -45,18 +45,21 @@ class _AddRecipePageState extends State<AddRecipePage> {
     if (imageBytes != null) {
       if (recipe?.image != 'recipePics/default_recipe.jpg') {
         debugPrint("AuthMethods: trocando imagem do perfil no Storage");
-        await StorageService().replaceImageAtStorage(recipe!.image, imageBytes!);
+        await StorageService()
+            .replaceImageAtStorage(recipe!.image, imageBytes!);
       } else {
         debugPrint("AuthMethods: Adicionando imagem do perfil no Storage");
-        await StorageService()
-            .uploadImageToStorage('recipePics', "${recipe!.authorId}_${recipe!.name}", imageBytes!);
+        await StorageService().uploadImageToStorage(
+            'recipePics', "${recipe!.authorId}_${recipe!.name}", imageBytes!);
         newImage = 'recipePics/${recipe!.authorId}_${recipe!.name}';
       }
     }
 
     recipesRepository.saveRecipe(
       Recipes(
-        image: newImage ?? 'recipePics/default_recipe.jpg', // Update this if you have an image picker
+        id: recipe?.id ?? '',
+        image: newImage ??
+            'recipePics/default_recipe.jpg', // Update this if you have an image picker
         description: _descriptionController.text,
         name: _nameController.text,
         category:
@@ -132,7 +135,8 @@ class _AddRecipePageState extends State<AddRecipePage> {
 
   @override
   Widget build(BuildContext context) {
-    final recipesProvider = Provider.of<RecipesProvider>(context, listen: false);
+    final recipesProvider =
+        Provider.of<RecipesProvider>(context, listen: false);
     final recipesRepository =
         Provider.of<RecipesRepository>(context, listen: false);
 
@@ -280,19 +284,15 @@ class _AddRecipePageState extends State<AddRecipePage> {
                           ],
                         ),
                         ButtonDefaultlWidget(
-                          text: StringsApp.save,
-                          color: AppTheme.loginYellow,
-                          width: 0.1 / 2,
-                          height: 14,
-                          onPressed: () {
-                            _createRecipe(recipesRepository);
-                            recipesProvider.fetchRecipes(null);
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
-                            
-                            }
-                        ),
+                            text: StringsApp.save,
+                            color: AppTheme.loginYellow,
+                            width: 0.1 / 2,
+                            height: 14,
+                            onPressed: () {
+                              _createRecipe(recipesRepository);
+                              recipesProvider.fetchRecipes(null);
+                              Navigator.of(context).pop();
+                            }),
                       ],
                     ),
                     const SizedBox(height: 16),
