@@ -3,18 +3,36 @@ import 'package:eats/presentation/widget/recipe_card_list_widget.dart';
 import 'package:eats/presentation/widget/search_bar_widget.dart';
 import 'package:eats/services/storage_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../data/model/recipes.dart';
+import '../providers/user_provider.dart';
 
-class MyRecipesPage extends StatelessWidget {
+class MyRecipesPage extends StatefulWidget {
   const MyRecipesPage({super.key});
 
   @override
+  State<MyRecipesPage> createState() => _MyRecipesPageState();
+}
+
+class _MyRecipesPageState extends State<MyRecipesPage> {
+  List<Recipes>? listRecipes;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserRecipes();
+  }
+
+  Future<void> _loadUserRecipes() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    listRecipes = await userProvider.getMyRecipes();
+    setState(() {}); // Atualiza o estado após carregar as receitas
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final List<Recipes>? listRecipes =
-        ModalRoute.of(context)?.settings.arguments as List<Recipes>?;
     final StorageService storageService = StorageService();
-    debugPrint(listRecipes.toString());
 
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
@@ -68,7 +86,8 @@ class MyRecipesPage extends StatelessWidget {
                     padding: const EdgeInsets.all(6.0),
                     // Opção 4: Envolver o SearchBarWidget em um Flexible
                     child: Flexible(
-                      child: SearchBarWidget(controller: TextEditingController()),
+                      child:
+                          SearchBarWidget(controller: TextEditingController()),
                     ),
                   ),
                 ],
@@ -76,25 +95,26 @@ class MyRecipesPage extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: FutureBuilder<List<Recipes>?>(
-              future: Future.value(listRecipes),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return const Center(child: Text('Erro ao carregar receitas'));
-                } else {
-                  return ListView.builder(
-                    itemCount: snapshot.data?.length ?? 0,
+            child: listRecipes == null
+                ? const Center(child: Text('Nenhuma receita encontrada.'))
+                : ListView.builder(
+                    itemCount: listRecipes!.length,
                     itemBuilder: (context, index) {
-                      Recipes recipe = snapshot.data![index];
+                      Recipes recipe = listRecipes![index];
                       return FutureBuilder<String>(
-                        future: storageService.loadImageInURL(recipe.image, true),
+                        future:
+                            storageService.loadImageInURL(recipe.image, true),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const Center(child: LinearProgressIndicator(color: AppTheme.homeColorOne, backgroundColor: AppTheme.secondaryColor,));
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: LinearProgressIndicator(
+                              color: AppTheme.homeColorOne,
+                              backgroundColor: AppTheme.secondaryColor,
+                            ));
                           } else if (snapshot.hasError) {
-                            return const Center(child: Text('Erro ao carregar imagem'));
+                            return const Center(
+                                child: Text('Erro ao carregar imagem'));
                           } else {
                             return RecipeCardListWidget(
                               recipe: recipe,
@@ -104,10 +124,7 @@ class MyRecipesPage extends StatelessWidget {
                         },
                       );
                     },
-                  );
-                }
-              },
-            ),
+                  ),
           ),
         ],
       ),

@@ -88,8 +88,11 @@ class PerfilPage extends StatelessWidget {
                                 ),
                                 // Opção para visualizar dados pessoais (não implementada).
                                 PopupMenuItem(
-                                  onTap: () => {},
-                                  child: const Text('Meus dados',
+                                  onTap: () => {
+                                    Navigator.pushNamed(
+                                        context, RoutesApp.termsOfUsePage)
+                                  },
+                                  child: const Text('Termos de Uso',
                                       style: TextStyle(
                                           color: AppTheme.primaryColor,
                                           fontWeight: FontWeight.normal)),
@@ -126,13 +129,7 @@ class PerfilPage extends StatelessWidget {
                     PreferenceOptionsWidget(
                         title: 'Minhas Receitas',
                         onTap: () async {
-                          Navigator.pushNamed(
-                              // ignore: use_build_context_synchronously
-                              context,
-                              RoutesApp.myRecipesPage
-                              // Passa a lista de receitas como argumento.
-                              ,
-                              arguments: await userProvider.getMyRecipes());
+                          Navigator.pushNamed(context, RoutesApp.myRecipesPage);
                         },
                         subtitle: 'Ver todas'),
                     const SizedBox(height: 18),

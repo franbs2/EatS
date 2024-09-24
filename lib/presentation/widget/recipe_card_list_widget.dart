@@ -3,15 +3,14 @@ import 'package:eats/data/model/recipes.dart';
 import 'package:eats/presentation/args/recipe_arguments.dart';
 import 'package:flutter/material.dart';
 
+import '../../core/style/color.dart';
+
 class RecipeCardListWidget extends StatelessWidget {
   final String imageUrl;
   final Recipes recipe;
 
-  const RecipeCardListWidget({
-    super.key,
-    required this.imageUrl,
-    required this.recipe
-  });
+  const RecipeCardListWidget(
+      {super.key, required this.imageUrl, required this.recipe});
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +22,11 @@ class RecipeCardListWidget extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(12.0),
         onTap: () {
-        Navigator.of(context).pushNamed(
-          RoutesApp.detailRecipePage,
-          arguments: RecipeArguments(recipe: recipe, isRecipeGenerated: false),
-        );
+          Navigator.of(context).pushNamed(
+            RoutesApp.detailRecipePage,
+            arguments:
+                RecipeArguments(recipe: recipe, isRecipeGenerated: false),
+          );
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -94,17 +94,16 @@ class RecipeCardListWidget extends StatelessWidget {
                           style: const TextStyle(fontSize: 14.0),
                         ),
                         const SizedBox(width: 16.0),
-
                         Icon(
-                          recipe.public == true ?
-                          Icons.public : Icons.lock,
+                          recipe.public == true ? Icons.public : Icons.lock,
                           color: Colors.grey[600],
                           size: 16.0,
                         ),
                         const SizedBox(width: 4.0),
-                         Text(
-                          recipe.public == true ?
-                          'Público' : 'Privado', // Exemplo de tempo
+                        Text(
+                          recipe.public == true
+                              ? 'Público'
+                              : 'Privado', // Exemplo de tempo
                           style: const TextStyle(fontSize: 14.0),
                         ),
                       ],
@@ -113,22 +112,54 @@ class RecipeCardListWidget extends StatelessWidget {
                 ),
               ),
               // Ícone de menu
-              PopupMenuButton<String>(
-                icon: const Icon(
-                  Icons.more_vert,
-                  color: Colors.black54,
-                ),
-                onSelected: (value) {
-                  // Ações do menu
-                },
-                itemBuilder: (BuildContext context) {
-                  return {'Editar', 'Excluir'}.map((String choice) {
-                    return PopupMenuItem<String>(
-                      value: choice,
-                      child: Text(choice),
-                    );
-                  }).toList();
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  // Menu de opções no canto superior direito.
+                  PopupMenuButton(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(16),
+                              bottomLeft: Radius.circular(16),
+                              bottomRight: Radius.circular(16))),
+                      icon: const Icon(
+                        Icons.more_vert,
+                        size: 28,
+                        color: Colors.black,
+                      ),
+                      itemBuilder: (context) {
+                        return [
+                          // Opção para editar o perfil.
+                          PopupMenuItem(
+                            onTap: () {},
+                            child: const SizedBox(
+                              child: Text(
+                                'Editar',
+                                style: TextStyle(
+                                    color: AppTheme.primaryColor,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ),
+                          ),
+                          // Opção para visualizar dados pessoais (não implementada).
+                          PopupMenuItem(
+                            onTap: () {},
+                            child: const Text('Publicar',
+                                style: TextStyle(
+                                    color: AppTheme.primaryColor,
+                                    fontWeight: FontWeight.normal)),
+                          ),
+                          // Opção para sair da conta.
+                          PopupMenuItem(
+                            onTap: () {},
+                            child: const Text('Deletar',
+                                style: TextStyle(
+                                    color: AppTheme.atencionRed,
+                                    fontWeight: FontWeight.normal)),
+                          ),
+                        ];
+                      }),
+                ],
               ),
             ],
           ),
