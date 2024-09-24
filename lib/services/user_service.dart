@@ -168,4 +168,17 @@ class UserService {
       throw Exception("Erro ao deletar receita: $e");
     }
   }
+
+  Future<String> toggleRecipeVisibility(String recipeId, bool isPublic) async {
+    try {
+      // Atualiza o campo 'public' da receita no Firestore
+      await _firestore.collection('recipes').doc(recipeId).update({
+        'public': !isPublic, // Alterna entre verdadeiro e falso
+      });
+
+      return isPublic ? "A receita agora é privada." : "A receita agora é pública.";
+    } catch (e) {
+      throw Exception("Erro ao alternar a visibilidade da receita: $e");
+    }
+  }
 }

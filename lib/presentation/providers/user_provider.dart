@@ -146,6 +146,15 @@ class UserProvider with ChangeNotifier {
     }
   }
 
+  Future<String> toggleRecipeVisibility(String id, bool isPublic) async {
+    try {
+      String result = await _userService.toggleRecipeVisibility(id, isPublic);
+      return result;
+    } catch (e) {
+      return "Erro ao alterar visibilidade da receita: $e"; // Retorna uma mensagem de erro
+    }
+  }
+
   /// Limpa os dados do usuário atual, incluindo o perfil e as imagens.
   /// Notifica os ouvintes para redefinir o estado.
   void clearUser() {

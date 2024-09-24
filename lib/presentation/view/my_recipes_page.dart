@@ -118,8 +118,7 @@ class _MyRecipesPageState extends State<MyRecipesPage> {
                               imageUrl: snapshot.data ?? '',
                               updatePage: () {
                                 setState(() {
-                                  listRecipes!.remove(
-                                      recipe); // Atualiza a lista ao deletar
+                                  _loadUserRecipes();
                                 });
                               },
                             );

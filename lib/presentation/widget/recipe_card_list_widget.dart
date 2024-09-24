@@ -150,9 +150,32 @@ class RecipeCardListWidget extends StatelessWidget {
                           ),
                           // Opção para visualizar dados pessoais (não implementada).
                           PopupMenuItem(
-                            onTap: () {},
-                            child: const Text('Publicar',
-                                style: TextStyle(
+                            onTap: () {
+                              _showConfirmationDialog(context,
+                                  title: recipe.public == true
+                                      ? 'Confirmar a Privação da Receita'
+                                      : 'Confirmar a Publicação',
+                                  content: recipe.public == true
+                                      ? 'Você tem certeza que deseja privar essa receita?'
+                                      : 'Você tem certeza que deseja publicar essa receita?',
+                                  textButton: recipe.public == true
+                                      ? 'Privar'
+                                      : 'Publicar', onConfirm: () async {
+                                final result =
+                                    await userProvider.toggleRecipeVisibility(
+                                        recipe.id, recipe.public!);
+                                updatePage();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            result)));
+                              },
+                                  colorButton: AppTheme.primaryColor,
+                                  colorButtonCancel: Colors.grey);
+                            },
+                            child: Text(
+                                recipe.public == true ? 'Privar' : 'Publicar',
+                                style: const TextStyle(
                                     color: AppTheme.primaryColor,
                                     fontWeight: FontWeight.normal)),
                           ),
@@ -168,6 +191,7 @@ class RecipeCardListWidget extends StatelessWidget {
                                   final result =
                                       await userProvider.deletMyRecipe(
                                           recipe.id); // Captura o resultado
+                                  //Atualiza a pagina
                                   updatePage();
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
