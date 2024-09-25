@@ -45,6 +45,7 @@ class RecipesRepository {
       }).toList();
     }
   }
+
   Future<List<Recipes>> getMyRecipes(String id) async {
     Query<Map<String, dynamic>> recipesCollection =
         _firestore.collection('recipes').where('authorId', isEqualTo: id);
@@ -53,9 +54,22 @@ class RecipesRepository {
         querySnapshot.docs.map((doc) => Recipes.fromFirestore(doc)).toList();
     return allRecipes;
   }
+
   Future<Recipes> saveRecipe(Recipes recipe) async {
-    await _firestore.collection('recipes').add(recipe.toMap());
+    // Referência ao documento da receita no Firestore
+    var docRef = _firestore.collection('recipes').doc(recipe.id);
+
+    // Verifica se a receita com o ID já existe
+    var docSnapshot = await docRef.get();
+
+    if (docSnapshot.exists) {
+      // Se o documento existir, atualiza a receita existente
+      await docRef.update(recipe.toMap());
+    } else {
+      // Caso o documento não exista, cria uma nova receita
+      await docRef.set(recipe.toMap());
+    }
+
     return recipe;
-    
   }
 }

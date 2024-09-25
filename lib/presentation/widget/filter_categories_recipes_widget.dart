@@ -78,7 +78,7 @@ class _FilterCategoriesRecipesWidgetState
                           onSelected: (bool selected) {
                             // Atualiza o estado da seleção ao clicar no chip.
                             setState(() {
-                              _selectedCategory = selected ? category : null;
+                              _selectedCategory = selected ? category : 'Todos';
                             });
                             // Filtra as receitas com base na categoria selecionada.
                             recipesProvider

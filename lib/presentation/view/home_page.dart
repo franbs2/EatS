@@ -69,6 +69,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           child: RefreshIndicator(
+            color: AppTheme.primaryColor,
             onRefresh:
                 _fetchData, // Chama a função para buscar dados ao atualizar
             child: CustomScrollView(

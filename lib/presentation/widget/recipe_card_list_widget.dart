@@ -138,7 +138,16 @@ class RecipeCardListWidget extends StatelessWidget {
                         return [
                           // Opção para editar o perfil.
                           PopupMenuItem(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                RoutesApp.addRecipePage,
+                                arguments: RecipeArguments(
+                                    recipe: recipe, isRecipeGenerated: false),
+                              ).then((_) {
+                                updatePage();
+                              });
+                            },
                             child: const SizedBox(
                               child: Text(
                                 'Editar',
@@ -166,9 +175,7 @@ class RecipeCardListWidget extends StatelessWidget {
                                         recipe.id, recipe.public!);
                                 updatePage();
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            result)));
+                                    SnackBar(content: Text(result)));
                               },
                                   colorButton: AppTheme.primaryColor,
                                   colorButtonCancel: Colors.grey);

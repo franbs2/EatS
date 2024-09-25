@@ -206,7 +206,8 @@ class DetailRecipesPage extends StatelessWidget {
                             recipe.changeVisibility(false);
                             Navigator.of(context).pushNamed(
                                 RoutesApp.addRecipePage,
-                                arguments: recipe);
+                                arguments: RecipeArguments(
+                                    recipe: recipe, isRecipeGenerated: true));
                           },
                         ),
                       ],

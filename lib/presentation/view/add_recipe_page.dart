@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:eats/data/datasources/recipes_repository.dart';
 import 'package:eats/data/model/recipes.dart';
+import 'package:eats/presentation/args/recipe_arguments.dart';
 import 'package:eats/presentation/providers/recipes_provider.dart';
 import 'package:eats/services/storage_service.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _valueController = TextEditingController();
   Uint8List? imageBytes;
-  Recipes? recipe;
+  RecipeArguments? args;
 
   void _uploadImage() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -41,6 +42,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
   Future<void> _createRecipe(RecipesRepository recipesRepository) async {
     double parsedValue = double.tryParse(_valueController.text) ?? 0.0;
     String? newImage;
+    Recipes? recipe = args?.recipe;
 
     if (imageBytes != null) {
       if (recipe?.image != 'recipePics/default_recipe.jpg') {
@@ -50,8 +52,8 @@ class _AddRecipePageState extends State<AddRecipePage> {
       } else {
         debugPrint("AuthMethods: Adicionando imagem do perfil no Storage");
         await StorageService().uploadImageToStorage(
-            'recipePics', "${recipe!.authorId}_${recipe!.name}", imageBytes!);
-        newImage = 'recipePics/${recipe!.authorId}_${recipe!.name}';
+            'recipePics', "${recipe!.authorId}_${recipe.name}", imageBytes!);
+        newImage = 'recipePics/${recipe.authorId}_${recipe.name}';
       }
     }
 
@@ -78,13 +80,15 @@ class _AddRecipePageState extends State<AddRecipePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    recipe = ModalRoute.of(context)?.settings.arguments as Recipes?;
+
+    args = ModalRoute.of(context)?.settings.arguments as RecipeArguments?;
+    final recipe = args?.recipe;
 
     if (recipe != null) {
-      _nameController.text = recipe!.name;
-      _categoryController.text = recipe!.category.join(", ");
-      _descriptionController.text = recipe!.description;
-      _valueController.text = recipe!.value.toString();
+      _nameController.text = recipe.name;
+      _categoryController.text = recipe.category.join(", ");
+      _descriptionController.text = recipe.description;
+      _valueController.text = recipe.value.toString();
     }
 
     if (_controllersIngredients.isEmpty && recipe?.ingredients != null) {
@@ -291,9 +295,13 @@ class _AddRecipePageState extends State<AddRecipePage> {
                             onPressed: () {
                               _createRecipe(recipesRepository);
                               recipesProvider.fetchRecipes(null);
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
+                              if (args?.isRecipeGenerated ?? false) {
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                              } else {
+                                Navigator.of(context).pop(true);
+                              }
                             }),
                       ],
                     ),
