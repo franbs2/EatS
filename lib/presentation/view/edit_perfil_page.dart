@@ -12,7 +12,6 @@ import '../../core/utils/utils.dart';
 import '../widget/alergies_list_widget.dart';
 import '../widget/button_default_widget.dart';
 import '../widget/diets_list_widget.dart';
-import '../widget/location_widget.dart';
 import '../widget/preference_options_widget.dart';
 import '../widget/text_username_input_widget.dart';
 import '../widget/upload_widget.dart';

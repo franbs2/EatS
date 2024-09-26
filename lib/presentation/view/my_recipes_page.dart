@@ -80,13 +80,6 @@ class _MyRecipesPageState extends State<MyRecipesPage> {
                       ),
                     ],
                   ),
-                  // Opção 3: Reduzir o SizedBox de 16 para 8
-                  const SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    // Opção 4: Envolver o SearchBarWidget em um Flexible
-                    child: SearchBarWidget(controller: TextEditingController()),
-                  ),
                 ],
               ),
             ),

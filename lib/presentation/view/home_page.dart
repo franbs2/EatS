@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,11 +25,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController _searchController = TextEditingController();
+  Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
-    // Busca receitas e banners após o layout ser construído.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _fetchData();
     });
@@ -35,19 +37,41 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _fetchData() async {
     await Provider.of<RecipesProvider>(context, listen: false)
-        .fetchRecipes(null);
+        .fetchRecipes(null, null);
     await Provider.of<BannersProvider>(context, listen: false).fetchBanners();
   }
 
+  void _onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) {
+      _debounce?.cancel();
+    }
+
+    _debounce = Timer(const Duration(milliseconds: 800), () {
+      _searchRecipes(query);
+    });
+  }
+
   void _searchRecipes(String query) {
-    Provider.of<RecipesProvider>(context, listen: false).fetchRecipes(query);
+    final recipesProvider =
+        Provider.of<RecipesProvider>(context, listen: false);
+
+    if (query.isEmpty) {
+      recipesProvider.filterRecipesByCategory(recipesProvider.selectedCategory);
+    } else {
+      recipesProvider.fetchRecipes(query, recipesProvider.selectedCategory);
+    }
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // Obtém a lista de categorias de filtro a partir de strings constantes.
     const categories = StringsApp.listFilterCategories;
-    // Obtém o provedor de dados do usuário para acessar as informações do perfil.
     final userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
@@ -70,8 +94,7 @@ class _HomePageState extends State<HomePage> {
           ),
           child: RefreshIndicator(
             color: AppTheme.primaryColor,
-            onRefresh:
-                _fetchData, // Chama a função para buscar dados ao atualizar
+            onRefresh: _fetchData,
             child: CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(
@@ -117,18 +140,11 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(horizontal: 26.0),
                       child: SearchBarWidget(
                         controller: _searchController,
-                        onChanged: (value) {
-                          // Implementando debounce para a busca
-                          Future.delayed(
-                            const Duration(milliseconds: 800),
-                            () => _searchRecipes(value),
-                          );
-                        },
+                        onChanged: _onSearchChanged,
                       ),
                     ),
                   ),
                 ),
-                // Renderiza o banner e o slider de banners.
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 12),
@@ -156,7 +172,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                // Renderiza as categorias de filtro.
                 SliverToBoxAdapter(
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
@@ -205,6 +220,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 );
                               }
+
                               return Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 24, vertical: 10),

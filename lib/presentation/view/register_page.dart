@@ -145,8 +145,8 @@ class RegisterPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 TextButtonHaveAccountWidget(
-                  onPressed: () => Navigator.of(context).pushNamed(
-                      RoutesApp.loginPage), // Navega para a página de login.
+                  onPressed: () =>
+                      Navigator.pop(context), // Navega para a página de login.
                   title: StringsApp
                       .haveAccount, // Texto do botão para usuários que já possuem uma conta.
                 ),

@@ -174,6 +174,7 @@ class RecipeCardListWidget extends StatelessWidget {
                                     await userProvider.toggleRecipeVisibility(
                                         recipe.id, recipe.public!);
                                 updatePage();
+                                // ignore: use_build_context_synchronously
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text(result)));
                               },
@@ -200,6 +201,7 @@ class RecipeCardListWidget extends StatelessWidget {
                                           recipe.id); // Captura o resultado
                                   //Atualiza a pagina
                                   updatePage();
+                                  // ignore: use_build_context_synchronously
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                           content: Text(

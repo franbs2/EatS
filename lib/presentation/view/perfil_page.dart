@@ -38,12 +38,17 @@ class PerfilPage extends StatelessWidget {
               Stack(
                 children: [
                   // Exibe a imagem de perfil do usuário como um fundo de tela.
-                  SizedBox(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.55,
-                    child: Image.memory(
-                      userProvider.profileImage!,
-                      fit: BoxFit.cover,
+                  ConstrainedBox(
+                    // TAMANHO DE ALTURA DA IMAGEM DE PERFIL MAXIMO
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height * 0.55,
+                    ),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Image.memory(
+                        userProvider.profileImage!,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   Padding(
