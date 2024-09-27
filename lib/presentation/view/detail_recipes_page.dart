@@ -52,6 +52,33 @@ class DetailRecipesPage extends StatelessWidget {
               ),
             ),
             centerTitle: true,
+            actions: [
+              PopupMenuButton(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          bottomLeft: Radius.circular(16),
+                          bottomRight: Radius.circular(16))),
+                  icon: const Icon(
+                    Icons.more_vert,
+                    color: Colors.black,
+                  ),
+                  itemBuilder: (context) {
+                    return [
+                      PopupMenuItem(
+                        onTap: () {},
+                        child: const SizedBox(
+                          child: Text(
+                            'Denunciar',
+                            style: TextStyle(
+                                color: AppTheme.atencionRed,
+                                fontWeight: FontWeight.normal),
+                          ),
+                        ),
+                      ),
+                    ];
+                  }),
+            ],
           ),
           body: SingleChildScrollView(
             child: Column(
@@ -73,7 +100,7 @@ class DetailRecipesPage extends StatelessWidget {
   /// [context] - O contexto BuildContext utilizado para exibir a UI.
   Widget _buildErrorContent(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
+      backgroundColor: Colors.white,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),

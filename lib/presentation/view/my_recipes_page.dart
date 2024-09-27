@@ -38,9 +38,7 @@ class _MyRecipesPageState extends State<MyRecipesPage> {
       backgroundColor: AppTheme.backgroundColor,
       body: Column(
         children: [
-          // Opção 1: Remover a altura fixa do Container
           Container(
-            // height: MediaQuery.of(context).size.height * 0.21,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.bottomLeft,
@@ -50,7 +48,6 @@ class _MyRecipesPageState extends State<MyRecipesPage> {
             child: Padding(
               padding: const EdgeInsets.all(24),
               child: Column(
-                // Opção 2: Definir mainAxisSize como MainAxisSize.min
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(

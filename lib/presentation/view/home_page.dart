@@ -148,26 +148,30 @@ class _HomePageState extends State<HomePage> {
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 12),
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Colors.transparent, Color(0xffF9F9F9)],
-                          stops: [0.5, 0.5],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Color(0xffF9F9F9),
-                            width: 2.0,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {},
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.transparent, Color(0xffF9F9F9)],
+                            stops: [0.5, 0.5],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Color(0xffF9F9F9),
+                              width: 2.0,
+                            ),
                           ),
                         ),
-                      ),
-                      child: Consumer<BannersProvider>(
-                        builder: (context, bannersProvider, child) {
-                          return CarouselWidget(
-                              banners: bannersProvider.banners);
-                        },
+                        child: Consumer<BannersProvider>(
+                          builder: (context, bannersProvider, child) {
+                            return CarouselWidget(
+                                banners: bannersProvider.banners);
+                          },
+                        ),
                       ),
                     ),
                   ),

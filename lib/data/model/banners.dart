@@ -8,6 +8,7 @@ class Banners {
   final List<String> content;
   final DateTime startDate;
   final DateTime endDate;
+  final String link;
 
   Banners({
     required this.title,
@@ -16,6 +17,7 @@ class Banners {
     required this.content,
     required this.startDate,
     required this.endDate,
+    required this.link,
   });
 
   /// [fromFirestore] - Cria uma instância de [Banners] a partir de um documento do Firestore.
@@ -29,6 +31,7 @@ class Banners {
       content: List<String>.from(data['content']),
       startDate: (data['startDate'] as Timestamp).toDate(),
       endDate: (data['endDate'] as Timestamp).toDate(),
+      link: data['link'] ?? '',
     );
   }
 }
