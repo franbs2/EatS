@@ -39,9 +39,9 @@ class PerfilPage extends StatelessWidget {
                 children: [
                   // Exibe a imagem de perfil do usuário como um fundo de tela.
                   ConstrainedBox(
-                    // TAMANHO DE ALTURA DA IMAGEM DE PERFIL MAXIMO
                     constraints: BoxConstraints(
                       maxHeight: MediaQuery.of(context).size.height * 0.55,
+                      minHeight: MediaQuery.of(context).size.height * 0.5,
                     ),
                     child: SizedBox(
                       width: double.infinity,

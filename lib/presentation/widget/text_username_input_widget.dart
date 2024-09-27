@@ -1,4 +1,6 @@
+import 'package:eats/core/style/color.dart';
 import 'package:eats/core/style/strings_app.dart';
+import 'package:eats/presentation/widget/text_username_widget.dart';
 import 'package:flutter/material.dart';
 
 /// [TextUsernameInputWidget] é um widget que exibe um campo de entrada de texto para o nome de usuário.
@@ -57,16 +59,16 @@ class _TextUsernameInputWidgetState extends State<TextUsernameInputWidget> {
       children: [
         // Exibe o texto de dica quando o campo de texto está vazio.
         if (widget.controller.text.isEmpty)
-          const Text(
-            StringsApp.username,
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
+          const TextUsernameWidget(
+            username: StringsApp.username,
+            color: Colors.grey,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
           ),
         // Campo de entrada de texto.
         TextFormField(
+          enableSuggestions: false,
+          cursorColor: AppTheme.perfilYellow,
           controller: widget.controller,
           decoration: const InputDecoration(
             focusedBorder: InputBorder.none,

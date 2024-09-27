@@ -46,6 +46,7 @@ class _TextPasswordInputWidgetState extends State<TextPasswordInputWidget> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      cursorColor: AppTheme.primaryColor,
       controller: widget.controller,
       validator: widget.validator,
       obscureText: _obscureText,

@@ -15,19 +15,27 @@ import 'package:flutter/material.dart';
 /// - [TextStyle]: Classe que define o estilo visual do texto.
 class TextUsernameWidget extends StatelessWidget {
   final String username;
+  final Color color;
+  final double fontSize;
+  final FontWeight fontWeight;
 
   /// Construtor do widget que aceita um nome de usuário opcional.
   /// Se o nome de usuário não for fornecido, o valor padrão será [Username].
-  const TextUsernameWidget({super.key, this.username = StringsApp.username});
+  const TextUsernameWidget(
+      {super.key,
+      this.username = StringsApp.username,
+      this.color = const Color(0xff624242),
+      this.fontSize = 20,
+      this.fontWeight = FontWeight.bold});
 
   @override
   Widget build(BuildContext context) {
     return Text(
       username,
-      style: const TextStyle(
-        color: Color(0xff624242),
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
+      style: TextStyle(
+        color: color,
+        fontSize: fontSize,
+        fontWeight: fontWeight,
       ),
     );
   }

@@ -220,7 +220,8 @@ class DetailRecipesPage extends StatelessWidget {
                             recipe.changeVisibility(true);
                             Navigator.of(context).pushNamed(
                                 RoutesApp.addRecipePage,
-                                arguments: recipe);
+                                arguments: RecipeArguments(
+                                    recipe: recipe, isRecipeGenerated: true));
                           },
                         ),
                         const SizedBox(width: 8),
@@ -287,7 +288,10 @@ class DetailRecipesPage extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.18,
       width: double.infinity,
       color: Colors.grey.shade200,
-      child: const Center(child: CircularProgressIndicator()),
+      child: const Center(
+          child: CircularProgressIndicator(
+        color: AppTheme.primaryColor,
+      )),
     );
   }
 
@@ -348,18 +352,21 @@ class DetailRecipesPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: recipe.steps
-          .map(
-            (step) => Column(
-              children: [
-                Text(
-                  step,
-                  style: const TextStyle(fontSize: 16, color: Colors.black),
-                  softWrap: true,
+          .asMap()
+          .map((index, step) => MapEntry(
+                index,
+                Column(
+                  children: [
+                    Text(
+                      '${index + 1}. $step',
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
+                      softWrap: true,
+                    ),
+                    const SizedBox(height: 8),
+                  ],
                 ),
-                const SizedBox(height: 8),
-              ],
-            ),
-          )
+              ))
+          .values
           .toList(),
     );
   }

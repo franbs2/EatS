@@ -111,6 +111,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           ),
           Expanded(
             child: TextField(
+              cursorColor: AppTheme.secondaryColor,
               controller: widget.controller,
               // Campo de texto para inserir o termo de busca.
               decoration: const InputDecoration(

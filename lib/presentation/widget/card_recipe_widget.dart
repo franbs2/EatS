@@ -70,7 +70,10 @@ class CardRecipeWidget extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * 0.18,
                         width: double.infinity,
                         color: AppTheme.secondaryColor,
-                        child: const Center(child: CircularProgressIndicator()),
+                        child: const Center(
+                            child: CircularProgressIndicator(
+                          color: AppTheme.primaryColor,
+                        )),
                       );
                     } else if (snapshot.hasError) {
                       // Exibe uma mensagem de erro se ocorrer um problema ao carregar a imagem.

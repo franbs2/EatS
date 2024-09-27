@@ -36,6 +36,7 @@ class TextInputWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      cursorColor: AppTheme.primaryColor,
       controller: controller,
       validator: validator,
       decoration: InputDecoration(

@@ -193,9 +193,12 @@ class _HomePageState extends State<HomePage> {
                           Consumer<RecipesProvider>(
                             builder: (context, recipesProvider, child) {
                               if (recipesProvider.isLoading) {
-                                return const Center(
-                                  child: CircularProgressIndicator(
-                                    color: AppTheme.primaryColor,
+                                return const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 32),
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: AppTheme.primaryColor,
+                                    ),
                                   ),
                                 );
                               }

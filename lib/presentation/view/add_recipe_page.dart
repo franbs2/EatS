@@ -31,6 +31,14 @@ class _AddRecipePageState extends State<AddRecipePage> {
   Uint8List? imageBytes;
   RecipeArguments? args;
 
+  // Variáveis para armazenar os valores iniciais
+  String? initialName;
+  String? initialCategory;
+  String? initialDescription;
+  String? initialValue;
+  List<String> initialIngredients = [];
+  List<String> initialSteps = [];
+
   void _uploadImage() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     final bytes = await image!.readAsBytes();
@@ -57,26 +65,36 @@ class _AddRecipePageState extends State<AddRecipePage> {
       }
     }
 
+    // Filtrar ingredientes e passos vazios
+    List<String> ingredients = _controllersIngredients
+        .map((controller) => controller.text.trim())
+        .where((text) => text.isNotEmpty)
+        .toList();
+
+    List<String> steps = _controllersSteps
+        .map((controller) => controller.text.trim())
+        .where((text) => text.isNotEmpty)
+        .toList();
+
     recipesRepository.saveRecipe(
       Recipes(
         id: recipe?.id ?? '',
-        image: newImage ??
-            'recipePics/default_recipe.jpg', // Update this if you have an image picker
+        image: newImage ?? 'recipePics/default_recipe.jpg',
         description: _descriptionController.text,
         name: _nameController.text,
         category:
             _categoryController.text.split(',').map((e) => e.trim()).toList(),
-        ingredients: _controllersIngredients.map((e) => e.text).toList(),
-        steps: _controllersSteps.map((e) => e.text).toList(),
+        ingredients: ingredients,
+        steps: steps,
         rating: 0,
         value: parsedValue,
         authorId: recipe?.authorId ?? '',
         public: recipe?.public ?? false,
       ),
     );
-    // Additional actions after saving the recipe
   }
 
+  @override
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -85,26 +103,30 @@ class _AddRecipePageState extends State<AddRecipePage> {
     final recipe = args?.recipe;
 
     if (recipe != null) {
-      _nameController.text = recipe.name;
-      _categoryController.text = recipe.category.join(", ");
-      _descriptionController.text = recipe.description;
-      _valueController.text = recipe.value.toString();
-    }
+      // Armazena os valores iniciais
+      initialName = recipe.name;
+      initialCategory = recipe.category.join(", ");
+      initialDescription = recipe.description;
+      initialValue = recipe.value.toString();
+      initialIngredients = List.from(recipe.ingredients);
+      initialSteps = List.from(recipe.steps);
 
-    if (_controllersIngredients.isEmpty && recipe?.ingredients != null) {
-      for (var ingredient in recipe!.ingredients) {
+      // Define os controladores com os valores da receita
+      _nameController.text = initialName!;
+      _categoryController.text = initialCategory!;
+      _descriptionController.text = initialDescription!;
+      _valueController.text = initialValue!;
+
+      // Adiciona os controladores para ingredientes e passos
+      _controllersIngredients.clear();
+      for (var ingredient in initialIngredients) {
         _controllersIngredients.add(TextEditingController(text: ingredient));
       }
-    } else {
-      _addField(_controllersIngredients);
-    }
 
-    if (_controllersSteps.isEmpty && recipe?.steps != null) {
-      for (var step in recipe!.steps) {
+      _controllersSteps.clear();
+      for (var step in initialSteps) {
         _controllersSteps.add(TextEditingController(text: step));
       }
-    } else {
-      _addField(_controllersSteps);
     }
   }
 
@@ -212,6 +234,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
+                      cursorColor: Colors.grey,
                       controller: _categoryController,
                       decoration: const InputDecoration(
                         hintText: 'Adicionar tag',
@@ -226,6 +249,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
                     const Divider(),
                     const SizedBox(height: 12),
                     TextFormField(
+                      cursorColor: AppTheme.primaryColor,
                       controller: _descriptionController,
                       maxLines: null,
                       decoration: const InputDecoration(
@@ -234,11 +258,24 @@ class _AddRecipePageState extends State<AddRecipePage> {
                           color: Colors.black,
                           fontSize: 16,
                         ),
-                        border: UnderlineInputBorder(),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: AppTheme.primaryColor,
+                            width: 1.0,
+                          ),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: AppTheme.primaryColor,
+                            width: 2.0,
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
+                      cursorErrorColor: AppTheme.primaryColor,
+                      cursorColor: AppTheme.primaryColor,
                       controller: _valueController,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
@@ -247,7 +284,18 @@ class _AddRecipePageState extends State<AddRecipePage> {
                           color: Colors.black,
                           fontSize: 16,
                         ),
-                        border: UnderlineInputBorder(),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: AppTheme.primaryColor,
+                            width: 1.0,
+                          ),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: AppTheme.primaryColor,
+                            width: 2.0,
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -279,13 +327,36 @@ class _AddRecipePageState extends State<AddRecipePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Row(
-                          children: [
-                            Icon(Icons.undo, color: Color(0xffB2B2B2)),
-                            SizedBox(width: 8),
-                            Icon(Icons.redo, color: Color(0xffB2B2B2)),
-                            SizedBox(width: 8),
-                          ],
+                        IconButton(
+                          icon: const Icon(
+                            Icons.refresh_rounded,
+                            size: 28,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            // Restaura os valores iniciais dos campos simples
+                            _nameController.text = initialName ?? '';
+                            _categoryController.text = initialCategory ?? '';
+                            _descriptionController.text =
+                                initialDescription ?? '';
+                            _valueController.text = initialValue ?? '';
+
+                            // Restaurar controladores de ingredientes
+                            _controllersIngredients.clear();
+                            for (var ingredient in initialIngredients) {
+                              _controllersIngredients
+                                  .add(TextEditingController(text: ingredient));
+                            }
+
+                            // Restaurar controladores de passos
+                            _controllersSteps.clear();
+                            for (var step in initialSteps) {
+                              _controllersSteps
+                                  .add(TextEditingController(text: step));
+                            }
+
+                            setState(() {});
+                          },
                         ),
                         ButtonDefaultlWidget(
                             text: StringsApp.save,
@@ -329,6 +400,9 @@ class _AddRecipePageState extends State<AddRecipePage> {
                 controller: controllers[index],
                 decoration: InputDecoration(
                   labelText: '$label ${index + 1}',
+                  labelStyle: const TextStyle(
+                    color: AppTheme.searchBarColor,
+                  ),
                   enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: AppTheme.primaryColor,

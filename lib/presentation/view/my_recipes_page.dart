@@ -82,7 +82,7 @@ class _MyRecipesPageState extends State<MyRecipesPage> {
             ),
           ),
           Expanded(
-            child: listRecipes == null
+            child: listRecipes!.isEmpty
                 ? const Center(child: Text('Nenhuma receita encontrada.'))
                 : ListView.builder(
                     itemCount: listRecipes!.length,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../core/style/color.dart';
+
 class LoadScreenWidget extends StatelessWidget {
   const LoadScreenWidget({super.key});
 
@@ -10,8 +12,9 @@ class LoadScreenWidget extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Center(
-          child: CircularProgressIndicator(color: Color(0xff529536)),
-        ),
+            child: CircularProgressIndicator(
+          color: AppTheme.primaryColor,
+        )),
       ),
     );
   }

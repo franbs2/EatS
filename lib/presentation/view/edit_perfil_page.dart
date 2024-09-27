@@ -83,89 +83,91 @@ class _EditPerfilPageState extends State<EditPerfilPage> {
       backgroundColor: AppTheme.secondaryColor, // Cor de fundo da página.
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                // Widget para fazer o upload da imagem de perfil.
-                UploadWidget(
-                  backgroundImage: imageBytes ?? profileImage,
-                  ontap:
-                      _uploadImage, // Função chamada ao tocar na área de upload.
-                ),
-                // Exibe o botão de voltar se necessário.
-                if (arrowBack)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 36, horizontal: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.arrow_back_ios,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black,
-                                blurRadius: 10,
-                              ),
-                            ],
-                          ),
-                          onPressed: () => Navigator.pop(
-                              context), // Volta para a página anterior.
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
-                  ),
-                // Conteúdo da página principal de edição do perfil.
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
                 children: [
-                  Form(
-                    key: widget._formKey, // Chave do formulário para validação.
-                    child: TextUsernameInputWidget(
-                      controller: widget
-                          .username, // Controlador para o campo de nome de usuário.
+                  // Widget para fazer o upload da imagem de perfil.
+                  UploadWidget(
+                    backgroundImage: imageBytes ?? profileImage,
+                    ontap:
+                        _uploadImage, // Função chamada ao tocar na área de upload.
+                  ),
+                  // Exibe o botão de voltar se necessário.
+                  if (arrowBack)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 36, horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.arrow_back_ios,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black,
+                                  blurRadius: 10,
+                                ),
+                              ],
+                            ),
+                            onPressed: () => Navigator.pop(
+                                context), // Volta para a página anterior.
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 18),
-                  // Botão para selecionar alergias.
-                  PreferenceOptionsWidget(
-                    title: 'Alergias',
-                    onTap: () => _showAllergiesModal(context),
-                    subtitle: StringsApp.add,
-                  ),
-                  const SizedBox(height: 18),
-                  // Botão para selecionar dietas.
-                  PreferenceOptionsWidget(
-                    title: 'Dietas',
-                    onTap: () => _showDietsModal(context),
-                    subtitle: StringsApp.add,
-                  ),
-                  const SizedBox(height: 20),
-                  // Botão para salvar as alterações do perfil.
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ButtonDefaultlWidget(
+                  // Conteúdo da página principal de edição do perfil.
+                ],
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Form(
+                      key: widget
+                          ._formKey, // Chave do formulário para validação.
+                      child: TextUsernameInputWidget(
+                        controller: widget
+                            .username, // Controlador para o campo de nome de usuário.
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    // Botão para selecionar alergias.
+                    PreferenceOptionsWidget(
+                      title: 'Alergias',
+                      onTap: () => _showAllergiesModal(context),
+                      subtitle: StringsApp.add,
+                    ),
+                    const SizedBox(height: 18),
+                    // Botão para selecionar dietas.
+                    PreferenceOptionsWidget(
+                      title: 'Dietas',
+                      onTap: () => _showDietsModal(context),
+                      subtitle: StringsApp.add,
+                    ),
+                    const SizedBox(height: 48),
+
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: ButtonDefaultlWidget(
                         text: 'Salvar',
                         width: 0.1,
                         height: 16,
                         color: AppTheme.perfilYellow,
                         onPressed: () => _updateProfile(context, userProvider),
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

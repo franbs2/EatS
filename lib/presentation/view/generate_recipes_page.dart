@@ -209,10 +209,9 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
                             width: 0.1 / 2, // Largura do botão.
                             height: 14, // Altura do botão.
                             onPressed: () async {
-                              Recipes? recipe =
-                                  await _generateRecipe(
-                                    userProvider.user!.uid,
-                                  ); // Gera a receita e aguarda o resultado.
+                              Recipes? recipe = await _generateRecipe(
+                                userProvider.user!.uid,
+                              ); // Gera a receita e aguarda o resultado.
                               debugPrint(recipe.toString());
                               if (recipe == null) {
                                 // ignore: use_build_context_synchronously
@@ -256,10 +255,14 @@ class _GenerateRecipesPageState extends State<GenerateRecipesPage> {
           children: [
             Expanded(
               child: TextField(
+                cursorColor: AppTheme.primaryColor,
                 controller: controllers[index],
                 decoration: InputDecoration(
                   labelText:
                       '$label ${index + 1}', // Rótulo do campo de texto com número do ingrediente ou instrumento.
+                  labelStyle: const TextStyle(
+                    color: AppTheme.searchBarColor,
+                  ),
                   enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: AppTheme
