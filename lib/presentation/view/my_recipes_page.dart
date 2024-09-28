@@ -51,13 +51,6 @@ class _MyRecipesPageState extends State<MyRecipesPage> {
                 children: [
                   Row(
                     children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        icon: const Icon(Icons.arrow_back_ios),
-                        color: Colors.white,
-                      ),
                       const Expanded(
                         child: Align(
                           alignment: Alignment.center,
@@ -70,9 +63,6 @@ class _MyRecipesPageState extends State<MyRecipesPage> {
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 48,
                       ),
                     ],
                   ),

@@ -4,7 +4,7 @@ import '../../core/routes/routes.dart';
 import '../../core/style/color.dart';
 import '../../core/style/images_app.dart';
 import 'view/home_page.dart';
-import 'view/perfil_page.dart';
+import 'view/my_recipes_page.dart';
 
 /// [MainScreen] é um widget Stateful que serve como a tela principal do aplicativo.
 /// Ele gerencia a navegação entre a página inicial e a página de perfil usando
@@ -23,7 +23,7 @@ class _MainScreenState extends State<MainScreen> {
   // Lista de páginas para alternar na tela principal.
   final List<Widget> _pages = [
     const HomePage(), // Página inicial.
-    const PerfilPage(), // Página de perfil.
+    MyRecipesPage(), 
   ];
 
   /// Atualiza o índice da página selecionada quando um item do BottomNavigationBar é tocado.
@@ -52,7 +52,8 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex, // Define o item atualmente selecionado.
         onTap: _onItemTapped, // Função chamada quando um item é tocado.
-        backgroundColor: AppTheme.secondaryColor, // Cor de fundo do BottomNavigationBar.
+        backgroundColor:
+            AppTheme.secondaryColor, // Cor de fundo do BottomNavigationBar.
         selectedItemColor: AppTheme.primaryColor, // Cor do item selecionado.
         unselectedItemColor: Colors.grey, // Cor dos itens não selecionados.
         items: const [
@@ -61,8 +62,8 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Início', // Rótulo para a página inicial.
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person), // Ícone para a página de perfil.
-            label: 'Perfil', // Rótulo para a página de perfil.
+            icon: Icon(Icons.receipt), // Ícone para a página de perfil.
+            label: 'Minhas Receitas', // Rótulo para a página de perfil.
           ),
         ],
       ),
@@ -84,7 +85,8 @@ class _MainScreenState extends State<MainScreen> {
           borderRadius: BorderRadius.all(
               Radius.circular(50)), // Forma arredondada do botão.
         ),
-        backgroundColor: AppTheme.secondaryColor, // Cor de fundo do botão flutuante.
+        backgroundColor:
+            AppTheme.secondaryColor, // Cor de fundo do botão flutuante.
         child: Image.asset(
           ImageApp.appMiniIcon, // Imagem exibida no botão flutuante.
           height: 35, // Altura da imagem do botão.

@@ -19,7 +19,7 @@ class RecipesProvider extends ChangeNotifier {
   bool _isLoading = false; // Estado de carregamento para exibir na UI.
   String? _errorMessage; // Mensagem de erro exibida em caso de falha.
 
-  String? _selectedCategory; // Categoria selecionada para filtragem.
+  String? _selectedCategory = 'Todos'; // Categoria selecionada para filtragem.
 
   /// Construtor que inicializa o [RecipesProvider] com um [RecipesRepository].
   RecipesProvider(RecipesRepository recipeRepository) {
