@@ -1,9 +1,12 @@
 import 'package:eats/core/style/color.dart';
 import 'package:eats/core/style/images_app.dart';
+import 'package:eats/data/datasources/recipes_repository.dart';
 import 'package:eats/data/model/recipes.dart';
+import 'package:eats/presentation/providers/user_provider.dart';
 import 'package:eats/presentation/widget/rating_bar_widget.dart';
 import 'package:eats/services/storage_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/routes/routes.dart';
 import '../../core/style/strings_app.dart';
@@ -27,8 +30,11 @@ class DetailRecipesPage extends StatelessWidget {
         ModalRoute.of(context)?.settings.arguments as RecipeArguments?;
 
     if (args != null) {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
       final Recipes recipe = args.recipe;
       final bool isRecipeGenerated = args.isRecipeGenerated;
+      final recipesRepository =
+          Provider.of<RecipesRepository>(context, listen: false);
 
       return Scaffold(
           backgroundColor: AppTheme.backgroundColor,
@@ -54,6 +60,7 @@ class DetailRecipesPage extends StatelessWidget {
             centerTitle: true,
             actions: [
               PopupMenuButton(
+                  color: AppTheme.secondaryColor,
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(16),
@@ -63,6 +70,7 @@ class DetailRecipesPage extends StatelessWidget {
                     Icons.more_vert,
                     color: Colors.black,
                   ),
+                  offset: const Offset(0, 50),
                   itemBuilder: (context) {
                     return [
                       PopupMenuItem(
@@ -71,17 +79,34 @@ class DetailRecipesPage extends StatelessWidget {
                               title: 'Denunciar Receita',
                               content:
                                   'Tem certeza que deseja denunciar esta receita?',
-                              textButton: 'Denunciar', onConfirm: () {
-                            _showConfirmationDialog(context,
-                                desativeCancel: true,
-                                title: 'Denúncia Enviada',
-                                content:
-                                    'Sua denúncia foi enviada com sucesso.',
-                                textButton: 'OK',
-                                colorButton: AppTheme.primaryColor,
-                                onConfirm: () {
-                              Navigator.pop(context);
-                            });
+                              textButton: 'Denunciar', onConfirm: () async {
+                            try {
+                              await recipesRepository.reportRecipe(
+                                  recipe.id, userProvider.user!.uid);
+
+                              _showConfirmationDialog(context,
+                                  desativeCancel: true,
+                                  title: 'Denúncia Enviada',
+                                  content:
+                                      'Sua denúncia foi enviada com sucesso.',
+                                  textButton: 'OK',
+                                  colorButton: AppTheme.primaryColor,
+                                  onConfirm: () {
+                                Navigator.pop(context);
+                              });
+
+                            } catch (e) {
+                              _showConfirmationDialog(context,
+                                  desativeCancel: true,
+                                  title: 'Denúncia duplicada',
+                                  content:
+                                      'Você já denunciou esta receita.',
+                                  textButton: 'OK',
+                                  colorButton: AppTheme.primaryColor,
+                                  onConfirm: () {
+                                Navigator.pop(context);
+                              });
+                            }
                           });
                         },
                         child: const SizedBox(
@@ -176,6 +201,20 @@ class DetailRecipesPage extends StatelessWidget {
       StorageService storageService, bool isRecipeGenerated) {
     return Column(
       children: [
+        if (recipe.blocked == true)
+
+          /// adicionar tarja de bloqueio
+          Container(
+              width: double.infinity,
+              color: AppTheme.atencionRed,
+              child: const Text(
+                'Receita Bloqueada',
+                style: TextStyle(
+                    fontSize: 18,
+                    color: AppTheme.backgroundColor,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              )),
         if (recipe.image != '')
           _buildRecipeImage(context, recipe, storageService),
         Padding(

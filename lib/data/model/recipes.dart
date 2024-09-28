@@ -12,6 +12,7 @@ class Recipes {
   final double rating;
   final double value;
   final String? authorId;
+  bool? blocked;
   bool? public;
 
   Recipes({
@@ -25,6 +26,7 @@ class Recipes {
     required this.rating,
     required this.value,
     this.public,
+    this.blocked,
     this.authorId,
   });
 
@@ -43,6 +45,7 @@ class Recipes {
       value: (data['value'] ?? 0.0).toDouble(),
       authorId: data['authorId'] ?? '',
       public: data['public'] ?? true,
+      blocked: data['blocked'] ?? false,
     );
   }
 
@@ -62,6 +65,7 @@ class Recipes {
       'value': value,
       'authorId': authorId ?? '',
       'public': public ?? true,
+      'blocked': blocked ?? false,
     };
   }
 

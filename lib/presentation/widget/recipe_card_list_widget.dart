@@ -2,6 +2,7 @@ import 'package:eats/core/routes/routes.dart';
 import 'package:eats/data/model/recipes.dart';
 import 'package:eats/presentation/args/recipe_arguments.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/style/color.dart';
@@ -102,15 +103,21 @@ class RecipeCardListWidget extends StatelessWidget {
                         ),
                         const SizedBox(width: 16.0),
                         Icon(
-                          recipe.public == true ? Icons.public : Icons.lock,
+                          recipe.blocked == true
+                              ? Icons.block
+                              : recipe.public == true
+                                  ? Icons.public
+                                  : Icons.lock,
                           color: Colors.grey[600],
                           size: 16.0,
                         ),
                         const SizedBox(width: 4.0),
                         Text(
-                          recipe.public == true
-                              ? 'Público'
-                              : 'Privado', // Exemplo de tempo
+                          recipe.blocked == true
+                              ? 'Bloqueado'
+                              : recipe.public == true
+                                  ? 'Público'
+                                  : 'Privado', // Exemplo de tempo
                           style: const TextStyle(fontSize: 14.0),
                         ),
                       ],
@@ -123,7 +130,8 @@ class RecipeCardListWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   // Menu de opções no canto superior direito.
-                  PopupMenuButton(
+                  PopupMenuButton<String>(
+                      color: AppTheme.secondaryColor,
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(16),
@@ -134,9 +142,11 @@ class RecipeCardListWidget extends StatelessWidget {
                         size: 28,
                         color: Colors.black,
                       ),
+                      offset: const Offset(0, 50),
                       itemBuilder: (context) {
                         return [
                           // Opção para editar o perfil.
+
                           PopupMenuItem(
                             onTap: () {
                               Navigator.pushNamed(
@@ -158,35 +168,45 @@ class RecipeCardListWidget extends StatelessWidget {
                             ),
                           ),
                           // Opção para visualizar dados pessoais (não implementada).
-                          PopupMenuItem(
-                            onTap: () {
-                              _showConfirmationDialog(context,
-                                  title: recipe.public == true
-                                      ? 'Confirmar a Privação da Receita'
-                                      : 'Confirmar a Publicação',
-                                  content: recipe.public == true
-                                      ? 'Você tem certeza que deseja privar essa receita?'
-                                      : 'Você tem certeza que deseja publicar essa receita?',
-                                  textButton: recipe.public == true
-                                      ? 'Privar'
-                                      : 'Publicar', onConfirm: () async {
-                                final result =
-                                    await userProvider.toggleRecipeVisibility(
-                                        recipe.id, recipe.public!);
-                                updatePage();
-                                // ignore: use_build_context_synchronously
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(result)));
-                              },
-                                  colorButton: AppTheme.primaryColor,
-                                  colorButtonCancel: Colors.grey);
-                            },
-                            child: Text(
-                                recipe.public == true ? 'Privar' : 'Publicar',
-                                style: const TextStyle(
-                                    color: AppTheme.primaryColor,
-                                    fontWeight: FontWeight.normal)),
-                          ),
+                          recipe.blocked == false
+                              ? PopupMenuItem(
+                                  onTap: () {
+                                    _showConfirmationDialog(context,
+                                        title: recipe.public == true
+                                            ? 'Confirmar a Privação da Receita'
+                                            : 'Confirmar a Publicação',
+                                        content: recipe.public == true
+                                            ? 'Você tem certeza que deseja privar essa receita?'
+                                            : 'Você tem certeza que deseja publicar essa receita?',
+                                        textButton: recipe.public == true
+                                            ? 'Privar'
+                                            : 'Publicar', onConfirm: () async {
+                                      final result = await userProvider
+                                          .toggleRecipeVisibility(
+                                              recipe.id, recipe.public!);
+                                      updatePage();
+                                      // ignore: use_build_context_synchronously
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                              SnackBar(content: Text(result)));
+                                    },
+                                        colorButton: AppTheme.primaryColor,
+                                        colorButtonCancel: Colors.grey);
+                                  },
+                                  child: Text(
+                                      recipe.public == true
+                                          ? 'Privar'
+                                          : 'Publicar',
+                                      style: const TextStyle(
+                                          color: AppTheme.primaryColor,
+                                          fontWeight: FontWeight.normal)),
+                                )
+                              : const PopupMenuItem(
+                                  child: Text('Bloqueado',
+                                      style: TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.normal)),
+                                ),
                           // Opção para sair da conta.
                           PopupMenuItem(
                             onTap: () {

@@ -19,9 +19,11 @@ class RecipesRepository {
   ///
   /// - Retorna: Uma lista de receitas.
   Future<List<Recipes>> getRecipes(String? query) async {
-    // Recupera todas as receitas com public = true
-    Query<Map<String, dynamic>> recipesCollection =
-        _firestore.collection('recipes').where('public', isEqualTo: true);
+    // Recupera todas as receitas com public = true e que n tem a coluna blocked
+    Query<Map<String, dynamic>> recipesCollection = _firestore
+        .collection('recipes')
+        .where('public', isEqualTo: true)
+        .where('blocked', isEqualTo: false);
 
     // Obtém todos os documentos da coleção
     var querySnapshot = await recipesCollection.get();
@@ -71,5 +73,41 @@ class RecipesRepository {
     }
 
     return recipe;
+  }
+
+  // Criar denuncia de receita
+  Future<void> reportRecipe(String recipeId, String userId) async {
+    // Criar instancia de denuncia de receita
+
+    var docRefReport =
+        _firestore.collection('recipe_reports').doc("${recipeId}_report");
+
+    var docSnapshot = await docRefReport.get();
+
+    if (docSnapshot.exists) {
+      if (!docSnapshot.data()!['list_uids'].contains(userId)) {
+        // Se o documento existir, atualiza a receita existente
+        await docRefReport.update({
+          'reports': FieldValue.increment(1),
+          'list_uids': FieldValue.arrayUnion([userId]),
+        });
+
+        if (docSnapshot.data()!['reports'] >= 5) {
+          // Se o documento existir, atualiza a receita existente
+          var docRecipe = _firestore.collection('recipes').doc(recipeId);
+          await docRecipe.update({
+            'blocked': true,
+          });
+        }
+      } else {
+        throw Exception("Receita ja foi denunciada");
+      }
+    } else {
+      // Caso o documento não exista, cria uma nova receita
+      await docRefReport.set({
+        'reports': FieldValue.increment(1),
+        'list_uids': FieldValue.arrayUnion([userId]),
+      });
+    }
   }
 }

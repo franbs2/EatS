@@ -95,6 +95,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
         value: parsedValue,
         authorId: recipe?.authorId ?? '',
         public: recipe?.public ?? false,
+        blocked: recipe?.blocked ?? false,
       ),
     );
   }
