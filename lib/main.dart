@@ -40,6 +40,11 @@ void main() async {
     options: DefaultFirebaseOptions
         .currentPlatform, // Inicializa o Firebase com as opções específicas da plataforma.
   );
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.dark,
+  ));
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp
   ]); // Define a orientação da tela para retrato.
@@ -113,6 +118,7 @@ class MyApp extends StatelessWidget {
       ],
       // Configura o MaterialApp com tema, rotas e a tela inicial.
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           textTheme: GoogleFonts.soraTextTheme(
             Theme.of(context).textTheme,

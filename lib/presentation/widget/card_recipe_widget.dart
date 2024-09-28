@@ -106,9 +106,9 @@ class CardRecipeWidget extends StatelessWidget {
                 children: [
                   Text(
                     recipe.name,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Color(0xff2F2D2C),
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.04,
+                      color: const Color(0xff2F2D2C),
                       fontWeight: FontWeight.w600,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -116,9 +116,9 @@ class CardRecipeWidget extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     recipe.description,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Color(0xffB7B7B7),
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.03,
+                      color: const Color(0xffB7B7B7),
                       fontWeight: FontWeight.normal,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -127,9 +127,9 @@ class CardRecipeWidget extends StatelessWidget {
                   const SizedBox(height: 12),
                   Text(
                     'R\$ ${recipe.value.toStringAsFixed(2)}', // Exibe o valor da receita formatado em reais.
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Color(0xff2F2D2C),
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.045,
+                      color: const Color(0xff2F2D2C),
                       fontWeight: FontWeight.w600,
                     ),
                   ),

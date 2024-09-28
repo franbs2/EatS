@@ -1,6 +1,5 @@
 import 'package:eats/core/style/color.dart';
 import 'package:eats/presentation/widget/recipe_card_list_widget.dart';
-import 'package:eats/presentation/widget/search_bar_widget.dart';
 import 'package:eats/services/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
