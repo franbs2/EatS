@@ -52,11 +52,24 @@ class PerfilPage extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 36, horizontal: 12),
+                    padding: EdgeInsets.symmetric(vertical: 36, horizontal: 12),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(
+                            Icons.arrow_back_ios,
+                            size: 28,
+                            color: Colors.white,
+                            shadows: [
+                              Shadow(
+                                color: Colors.black,
+                                blurRadius: 10,
+                              ),
+                            ],
+                          ),
+                        ), // Ícone de voltar.
                         // Menu de opções no canto superior direito.
                         PopupMenuButton(
                             shape: const RoundedRectangleBorder(
@@ -122,7 +135,7 @@ class PerfilPage extends StatelessWidget {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -130,14 +143,8 @@ class PerfilPage extends StatelessWidget {
                     TextUsernameWidget(
                       username: userProvider.user!.username,
                     ),
-                    const SizedBox(height: 14),
-                    PreferenceOptionsWidget(
-                        title: 'Minhas Receitas',
-                        onTap: () async {
-                          Navigator.pushNamed(context, RoutesApp.myRecipesPage);
-                        },
-                        subtitle: 'Ver todas'),
-                    const SizedBox(height: 18),
+
+                    const SizedBox(height: 26),
                     // Widget para exibir opções de alergias.
                     PreferenceOptionsWidget(
                       title: 'Alergias',

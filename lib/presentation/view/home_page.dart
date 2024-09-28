@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:eats/core/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -121,7 +122,15 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                       const Spacer(),
-                      const ImgPerfilWidget(),
+                      InkWell(
+                        child: const ImgPerfilWidget(),
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            RoutesApp.perfilPage,
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -223,8 +232,8 @@ class _HomePageState extends State<HomePage> {
                             }
 
                             return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24),
                               child: GridViewRecipesWidget(
                                 listRecipes: recipesProvider.recipes,
                               ),

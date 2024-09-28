@@ -100,7 +100,7 @@ class CardRecipeWidget extends StatelessWidget {
             ),
             Padding(
               // Adiciona espaçamento ao redor do conteúdo do cartão.
-              padding: const EdgeInsets.all(12.0),
+              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -113,7 +113,7 @@ class CardRecipeWidget extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: MediaQuery.of(context).size.width * 0.01),
                   Text(
                     recipe.description,
                     style: TextStyle(
