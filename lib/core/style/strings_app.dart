@@ -52,7 +52,7 @@ class StringsApp {
     'Todos',
     'Lanche',
     'Jantar',
-    'Almoço',
-    'Café da Manhã',
+    'Almoco',
+    'Cafe da Manha',
   ];
 }

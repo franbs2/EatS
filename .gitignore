@@ -6,6 +6,8 @@
 /macos
 /lib/firebase
 .env
+/web
+/test
 
 # Miscellaneous
 *.class

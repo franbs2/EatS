@@ -66,7 +66,11 @@ class _FilterCategoriesRecipesWidgetState
                           showCheckmark:
                               false, // Oculta o checkmark que indica a seleção do chip.
                           label: Text(
-                            category,
+                            (category == 'Almoco')
+                                ? 'Almoço'
+                                : (category == 'Cafe da Manha')
+                                    ? 'Café da Manhã'
+                                    : category,
                             style: TextStyle(
                               fontSize: 16,
                               color: _selectedCategory == category

@@ -89,7 +89,7 @@ class CardRecipeWidget extends StatelessWidget {
                       return Image.network(
                         snapshot.data ?? '', // URL da imagem.
                         fit: BoxFit
-                            .fill, // Ajusta a imagem para preencher o espaço disponível.
+                            .cover, // Ajusta a imagem para preencher o espaço disponível.
                         height: MediaQuery.of(context).size.height * 0.18,
                         width: double.infinity,
                       );

@@ -65,6 +65,12 @@ class _AddRecipePageState extends State<AddRecipePage> {
       }
     }
 
+    String categoryText = _categoryController.text
+        .replaceAll('Almoço', 'Almoco')
+        .replaceAll('almoço', 'Almoco')
+        .replaceAll('Café da Manhã', 'Cafe da Manha')
+        .replaceAll('Café da manhã', 'Cafe da Manha');
+
     // Filtrar ingredientes e passos vazios
     List<String> ingredients = _controllersIngredients
         .map((controller) => controller.text.trim())
@@ -82,8 +88,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
         image: newImage ?? 'recipePics/default_recipe.jpg',
         description: _descriptionController.text,
         name: _nameController.text,
-        category:
-            _categoryController.text.split(',').map((e) => e.trim()).toList(),
+        category: categoryText.split(',').map((e) => e.trim()).toList(),
         ingredients: ingredients,
         steps: steps,
         rating: 0,

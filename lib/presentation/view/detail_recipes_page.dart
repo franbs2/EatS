@@ -174,7 +174,10 @@ class DetailRecipesPage extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                recipe.category.join(", "),
+                recipe.category
+                    .join(', ')
+                    .replaceAll('Almoco', 'Almoço')
+                    .replaceAll('Cafe da Manha', 'Café da Manhã'),
                 style:
                     const TextStyle(fontSize: 16, color: AppTheme.primaryColor),
               ),
@@ -270,8 +273,9 @@ class DetailRecipesPage extends StatelessWidget {
             } else {
               return Image.network(
                 snapshot.data ?? '',
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
                 width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.3,
               );
             }
           },

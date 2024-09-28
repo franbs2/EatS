@@ -208,8 +208,7 @@ class _HomePageState extends State<HomePage> {
                                     children: [
                                       const SizedBox(height: 24),
                                       Text(
-                                        recipesProvider.errorMessage!
-                                            .toLowerCase(),
+                                        recipesProvider.errorMessage!,
                                         style: const TextStyle(
                                           color: AppTheme.primaryColor,
                                           fontSize: 16,
