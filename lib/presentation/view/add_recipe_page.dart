@@ -370,7 +370,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
                             height: 14,
                             onPressed: () {
                               _createRecipe(recipesRepository);
-                              recipesProvider.fetchRecipes(null, null);
+                              recipesProvider.fetchRecipes(null);
                               if (args?.isRecipeGenerated ?? false) {
                                 Navigator.of(context).pop();
                                 Navigator.of(context).pop();

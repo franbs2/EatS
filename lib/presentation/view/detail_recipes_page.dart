@@ -66,7 +66,24 @@ class DetailRecipesPage extends StatelessWidget {
                   itemBuilder: (context) {
                     return [
                       PopupMenuItem(
-                        onTap: () {},
+                        onTap: () {
+                          _showConfirmationDialog(context,
+                              title: 'Denunciar Receita',
+                              content:
+                                  'Tem certeza que deseja denunciar esta receita?',
+                              textButton: 'Denunciar', onConfirm: () {
+                            _showConfirmationDialog(context,
+                                desativeCancel: true,
+                                title: 'Denúncia Enviada',
+                                content:
+                                    'Sua denúncia foi enviada com sucesso.',
+                                textButton: 'OK',
+                                colorButton: AppTheme.primaryColor,
+                                onConfirm: () {
+                              Navigator.pop(context);
+                            });
+                          });
+                        },
                         child: const SizedBox(
                           child: Text(
                             'Denunciar',
@@ -372,6 +389,48 @@ class DetailRecipesPage extends StatelessWidget {
               ))
           .values
           .toList(),
+    );
+  }
+
+  void _showConfirmationDialog(BuildContext context,
+      {required String title,
+      required String content,
+      required String textButton,
+      bool desativeCancel = false,
+      String textButtonCancel = 'Cancelar',
+      Color colorButton = AppTheme.atencionRed,
+      Color colorButtonCancel = AppTheme.primaryColor,
+      required Function() onConfirm}) {
+    debugPrint('Chamando o modal de confirmação');
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text(title),
+          content: Text(content),
+          actions: <Widget>[
+            if (!desativeCancel)
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Fecha o diálogo
+                },
+                child: Text(textButtonCancel,
+                    style: TextStyle(color: colorButtonCancel)),
+              ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                onConfirm();
+              },
+              child: Text(
+                textButton,
+                style: TextStyle(color: colorButton),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

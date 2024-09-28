@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _fetchData() async {
     await Provider.of<RecipesProvider>(context, listen: false)
-        .fetchRecipes(null, null);
+        .fetchRecipes(null);
     await Provider.of<BannersProvider>(context, listen: false).fetchBanners();
   }
 
@@ -55,11 +55,7 @@ class _HomePageState extends State<HomePage> {
     final recipesProvider =
         Provider.of<RecipesProvider>(context, listen: false);
 
-    if (query.isEmpty) {
-      recipesProvider.filterRecipesByCategory(recipesProvider.selectedCategory);
-    } else {
-      recipesProvider.fetchRecipes(query, recipesProvider.selectedCategory);
-    }
+    recipesProvider.fetchRecipes(query);
   }
 
   @override

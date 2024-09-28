@@ -35,9 +35,6 @@ class FilterCategoriesRecipesWidget extends StatefulWidget {
 
 class _FilterCategoriesRecipesWidgetState
     extends State<FilterCategoriesRecipesWidget> {
-  /// Armazena a categoria atualmente selecionada.
-  String? _selectedCategory = 'Todos';
-
   @override
   Widget build(BuildContext context) {
     // Obtém a instância de RecipesProvider do contexto atual para gerenciar o estado das receitas.
@@ -49,48 +46,45 @@ class _FilterCategoriesRecipesWidgetState
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Row(
-          children:
-              widget.categories // Itera sobre a lista de categorias fornecida.
-                  .map((category) => Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: FilterChip(
-                          // Exibe cada categoria como um chip.
-                          selectedColor: AppTheme.primaryColor,
-                          side: BorderSide.none,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          labelPadding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 4),
-                          backgroundColor: Colors.white,
-                          showCheckmark:
-                              false, // Oculta o checkmark que indica a seleção do chip.
-                          label: Text(
-                            (category == 'Almoco')
-                                ? 'Almoço'
-                                : (category == 'Cafe da Manha')
-                                    ? 'Café da Manhã'
-                                    : category,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: _selectedCategory == category
-                                  ? Colors.white
-                                  : const Color(0xff2F4B4E),
-                            ),
-                          ),
-                          selected: _selectedCategory == category,
-                          onSelected: (bool selected) {
-                            // Atualiza o estado da seleção ao clicar no chip.
-                            setState(() {
-                              _selectedCategory = selected ? category : 'Todos';
-                            });
-                            // Filtra as receitas com base na categoria selecionada.
-                            recipesProvider
-                                .filterRecipesByCategory(_selectedCategory);
-                          },
+          children: widget
+              .categories // Itera sobre a lista de categorias fornecida.
+              .map((category) => Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: FilterChip(
+                      // Exibe cada categoria como um chip.
+                      selectedColor: AppTheme.primaryColor,
+                      side: BorderSide.none,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      labelPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 4),
+                      backgroundColor: Colors.white,
+                      showCheckmark:
+                          false, // Oculta o checkmark que indica a seleção do chip.
+                      label: Text(
+                        (category == 'Almoco')
+                            ? 'Almoço'
+                            : (category == 'Cafe da Manha')
+                                ? 'Café da Manhã'
+                                : category,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: recipesProvider.selectedCategory == category
+                              ? Colors.white
+                              : const Color(0xff2F4B4E),
                         ),
-                      ))
-                  .toList(), // Converte as categorias em uma lista de chips.
+                      ),
+                      selected: recipesProvider.selectedCategory == category,
+                      onSelected: (bool selected) {
+                        // Atualiza o estado da seleção ao clicar no chip.
+                        recipesProvider
+                            .setSelectedCategory(selected ? category : 'Todos');
+                        recipesProvider.fetchRecipes(null);
+                      },
+                    ),
+                  ))
+              .toList(), // Converte as categorias em uma lista de chips.
         ),
       ),
     );

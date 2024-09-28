@@ -2,6 +2,7 @@
 // e o modelo de receitas.
 import 'package:eats/data/datasources/recipes_repository.dart';
 import 'package:eats/data/model/recipes.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// [RecipesProvider] é um [ChangeNotifier] que gerencia o estado das receitas,
@@ -18,7 +19,7 @@ class RecipesProvider extends ChangeNotifier {
   bool _isLoading = false; // Estado de carregamento para exibir na UI.
   String? _errorMessage; // Mensagem de erro exibida em caso de falha.
 
-  String? selectedCategory; // Categoria selecionada para filtragem.
+  String? _selectedCategory; // Categoria selecionada para filtragem.
 
   /// Construtor que inicializa o [RecipesProvider] com um [RecipesRepository].
   RecipesProvider(RecipesRepository recipeRepository) {
@@ -36,7 +37,7 @@ class RecipesProvider extends ChangeNotifier {
   /// Retorna a lista de receitas filtradas ou todas as receitas,
   /// dependendo da categoria selecionada.
   List<Recipes> get recipes =>
-      selectedCategory == null || selectedCategory == 'Todos'
+      _selectedCategory == null || _selectedCategory == 'Todos'
           ? _recipes
           : _filteredRecipes;
 
@@ -46,9 +47,11 @@ class RecipesProvider extends ChangeNotifier {
   /// Retorna a mensagem de erro atual, se houver.
   String? get errorMessage => _errorMessage;
 
+  String? get selectedCategory => _selectedCategory;
+
   /// [fetchRecipes] busca as receitas do repositório e atualiza o estado do provedor.
   /// Em caso de erro, define uma mensagem de erro apropriada.
-  Future<void> fetchRecipes(String? query, String? category) async {
+  Future<void> fetchRecipes(String? query) async {
     _isLoading = true; // Indica que o carregamento está em andamento.
     notifyListeners(); // Notifica ouvintes para atualizações de UI.
 
@@ -57,9 +60,9 @@ class RecipesProvider extends ChangeNotifier {
           .getRecipes(query); // Obtém receitas do repositório.
 
       // Filtra as receitas com base na categoria, se especificada.
-      if (category != null && category != 'Todos') {
+      if (_selectedCategory != null && _selectedCategory != 'Todos') {
         _filteredRecipes = _recipes
-            .where((recipe) => recipe.category.contains(category))
+            .where((recipe) => recipe.category.contains(_selectedCategory))
             .toList();
       } else {
         _filteredRecipes = [
@@ -68,7 +71,7 @@ class RecipesProvider extends ChangeNotifier {
       }
 
       if (_filteredRecipes.isEmpty) {
-        _errorMessage = 'Sem receitas de $category neste momento.';
+        _errorMessage = 'Sem receitas de $_selectedCategory neste momento.';
       } else {
         _errorMessage = null; // Reseta qualquer mensagem de erro.
       }
@@ -81,12 +84,8 @@ class RecipesProvider extends ChangeNotifier {
     }
   }
 
-  /// [filterRecipesByCategory] filtra as receitas com base na categoria selecionada.
-  void filterRecipesByCategory(String? category) {
-    selectedCategory = category;
-
-    fetchRecipes(null, selectedCategory);
-
+  void setSelectedCategory(category) {
+    _selectedCategory = category;
     notifyListeners();
   }
 
