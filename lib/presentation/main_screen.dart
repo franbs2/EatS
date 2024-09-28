@@ -63,7 +63,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt), // Ícone para a página de perfil.
-            label: 'Minhas Receitas', // Rótulo para a página de perfil.
+            label: 'Minhas', // Rótulo para a página de perfil.
           ),
         ],
       ),

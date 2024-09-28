@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:eats/core/routes/routes.dart';
 import 'package:eats/core/style/strings_app.dart';
 import 'package:eats/presentation/providers/preferences_provider.dart';
@@ -52,7 +54,8 @@ class PerfilPage extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 36, horizontal: 12),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 36, horizontal: 12),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -117,9 +120,15 @@ class PerfilPage extends StatelessWidget {
                                 ),
                                 // Opção para sair da conta.
                                 PopupMenuItem(
-                                  onTap: () {
+                                  onTap: () async {
                                     googleSignIn.signOutFromGoogle();
-                                    userProvider.clearUser();
+                                    Navigator.of(context).pop();
+                                    Timer(const Duration(milliseconds: 500),
+                                        () {
+                                      if (context.mounted) {
+                                        userProvider.clearUser();
+                                      }
+                                    });
                                   },
                                   child: const Text('Sair',
                                       style: TextStyle(

@@ -1,3 +1,4 @@
+import 'package:eats/core/style/color.dart';
 import 'package:flutter/material.dart';
 
 class TermsOfUsePage extends StatelessWidget {
@@ -6,7 +7,10 @@ class TermsOfUsePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
+        surfaceTintColor: AppTheme.secondaryColor,
+        backgroundColor: AppTheme.secondaryColor,
         title: const Text('Termos de Uso'),
       ),
       body: const Padding(
