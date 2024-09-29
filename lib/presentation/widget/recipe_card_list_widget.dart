@@ -88,20 +88,8 @@ class RecipeCardListWidget extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 8.0),
-                    // Informações adicionais (exemplo: rating, tempo)
                     Row(
                       children: [
-                        Icon(
-                          Icons.star,
-                          color: Colors.amber[600],
-                          size: 16.0,
-                        ),
-                        const SizedBox(width: 4.0),
-                        Text(
-                          recipe.rating.toString(), // Exemplo de rating
-                          style: const TextStyle(fontSize: 14.0),
-                        ),
-                        const SizedBox(width: 16.0),
                         Icon(
                           recipe.blocked == true
                               ? Icons.block
