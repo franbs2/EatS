@@ -75,6 +75,7 @@ class PerfilPage extends StatelessWidget {
                         ), // Ícone de voltar.
                         // Menu de opções no canto superior direito.
                         PopupMenuButton(
+                            offset: const Offset(0, 50),
                             shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(16),

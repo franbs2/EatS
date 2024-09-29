@@ -62,8 +62,8 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Início', // Rótulo para a página inicial.
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.receipt), // Ícone para a página de perfil.
-            label: 'Minhas', // Rótulo para a página de perfil.
+            icon: Icon(Icons.restaurant_menu_rounded), // Ícone para a página de perfil.
+            label: 'Meu catálogo', // Rótulo para a página de perfil.
           ),
         ],
       ),

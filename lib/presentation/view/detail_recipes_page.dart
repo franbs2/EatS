@@ -316,7 +316,7 @@ class DetailRecipesPage extends StatelessWidget {
   Widget _buildRecipeImage(
       BuildContext context, Recipes recipe, StorageService storageService) {
     return Padding(
-      padding: const EdgeInsets.all(28.0),
+      padding: const EdgeInsets.all(6),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: FutureBuilder<String>(

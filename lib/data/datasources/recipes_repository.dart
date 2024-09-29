@@ -75,6 +75,14 @@ class RecipesRepository {
     return recipe;
   }
 
+  // Avaliar receita
+  Future<void> rateRecipe(String recipeId, double rating) async {
+    var docRef = _firestore.collection('recipes').doc(recipeId);
+
+    // adicionar 
+    await docRef.update({'rating': FieldValue.increment(rating)});
+  }
+
   // Criar denuncia de receita
   Future<void> reportRecipe(String recipeId, String userId) async {
     // Criar instancia de denuncia de receita

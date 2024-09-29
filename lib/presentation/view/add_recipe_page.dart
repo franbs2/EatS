@@ -369,14 +369,18 @@ class _AddRecipePageState extends State<AddRecipePage> {
                             color: AppTheme.loginYellow,
                             width: 0.1 / 2,
                             height: 14,
-                            onPressed: () {
-                              _createRecipe(recipesRepository);
+                            onPressed: () async {
+                              await _createRecipe(recipesRepository);
                               recipesProvider.fetchRecipes(null);
                               if (args?.isRecipeGenerated ?? false) {
+                                // ignore: use_build_context_synchronously
                                 Navigator.of(context).pop();
+                                // ignore: use_build_context_synchronously
                                 Navigator.of(context).pop();
+                                // ignore: use_build_context_synchronously
                                 Navigator.of(context).pop();
                               } else {
+                                // ignore: use_build_context_synchronously
                                 Navigator.of(context).pop(true);
                               }
                             }),
