@@ -44,29 +44,35 @@ class _MyRecipesPageState extends State<MyRecipesPage> {
                 colors: [Color(0xffEFC136), Color(0xff539F33)],
               ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      const Expanded(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Minhas Receitas',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+            child: RefreshIndicator(
+              color: AppTheme.primaryColor,
+              onRefresh: () async {
+                await _loadUserRecipes();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Minhas Receitas',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
