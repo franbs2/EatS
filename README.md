@@ -14,6 +14,22 @@
 - **Edição de perfil:** Personalize seu perfil com informações como nome e imagem.
 - **Autenticação e criação de conta:** Sistema seguro de criação de contas e login.
 
+## Baixe nossa aplicação
+**[Apk do EatS](https://drive.google.com/file/d/16K312vstw3ltIjT1DW_yWlqNvw0o9o2-/view?usp=sharing)**
+
+![EatS Image](https://drive.google.com/uc?id=14vvgnXcgMk_qzEZHsYYbN4qOqzUpntlz)
+
+## Documentação
+
+Para mais detalhes, acesse nossa documentação:
+
+[Documentação EatS](https://www.canva.com/design/DAGPwLQO71U/rU9KVVoxYlM9mCiq72fXqw/view?utm_content=DAGPwLQO71U&utm_campaign=designshare&utm_medium=link&utm_source=editor)
+
+
+## Instalação
+
+Para instalar o EatS, siga os passos abaixo:
+
 ## Instalação
 
 Para instalar o EatS, siga os passos abaixo:
@@ -32,25 +48,20 @@ Para instalar o EatS, siga os passos abaixo:
     ```bash
     flutter pub get
     ```
+4. Adicione o firebase no projeto:
+- Siga o tutorial disponibilizado pela documentação: [Documentação do Firebase](https://firebase.google.com/docs/flutter/setup?hl=pt-br&platform=android)
 
-4. Execute o aplicativo:
+5. Adicione o gemini no projeto:
+- Siga o tutorial disponibilizado pela documentação: [Documentação do Gemini](https://ai.google.dev/gemini-api/docs/get-started/tutorial?hl=pt-br&lang=dart#set-up-project)
+
+6. Execute o aplicativo:
     ```bash
     flutter run
     ```
 
-## Documentação
-
-Para mais detalhes, acesse nossa documentação:
-
-[Documentação EatS](https://www.canva.com/design/DAGPwLQO71U/rU9KVVoxYlM9mCiq72fXqw/view?utm_content=DAGPwLQO71U&utm_campaign=designshare&utm_medium=link&utm_source=editor)
-
 ## Contribuição
 
 Contribuições são bem-vindas! Se você deseja contribuir para o desenvolvimento do EatS, sinta-se à vontade para abrir uma issue ou enviar um pull request.
-
-## EatS
-
-[Apk do EatS](https://drive.google.com/file/d/16K312vstw3ltIjT1DW_yWlqNvw0o9o2-/view?usp=sharing)
 
 ## Agradecimentos
 
