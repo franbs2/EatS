@@ -48,6 +48,10 @@ Para mais detalhes, acesse nossa documentação:
 
 Contribuições são bem-vindas! Se você deseja contribuir para o desenvolvimento do EatS, sinta-se à vontade para abrir uma issue ou enviar um pull request.
 
+## EatS
+
+[Apk do EatS](https://drive.google.com/file/d/16K312vstw3ltIjT1DW_yWlqNvw0o9o2-/view?usp=sharing)
+
 ## Agradecimentos
 
 Agradecemos a **[Fran (@franbs2 )](https://github.com/franbs2)**, **[Artur Malcher (@ArturMalcher )](https://github.com/ArturMalcher)**, **[Joanna Marieli (@marij0anna )](https://github.com/marij0anna)** e **[Isabelle (@isbllvt  )](https://github.com/isbllvt)**, por suas valiosas contribuições ao projeto. O apoio de vocês foi essencial para o desenvolvimento desta versão.
